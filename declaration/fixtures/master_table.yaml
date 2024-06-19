@@ -1,0 +1,47 @@
+- model: declaration.RegimeType
+  fields:
+    name: dummyregim1
+
+- model: declaration.RegimeType
+  fields:
+    name: dummyregim2
+
+- model: declaration.TradeType
+  fields:
+    name: dummyTradeType1
+
+- model: declaration.TradeType
+  fields:
+    name: dummyTradeType2
+   
+- model: declaration.TransactionType
+  fields:
+    name: dummyTransactionType1
+
+- model: declaration.TransactionType
+  fields:
+    name: dummyTransactionType2      
+
+- model: declaration.CargoChannel
+  fields:
+    name: dummyCargoChannel1
+
+- model: declaration.CargoChannel
+  fields:
+    name: dummyCargoChannel2   
+
+- model: declaration.DeclarationType
+  fields:
+    name: dummyDeclarationType1
+
+- model: declaration.DeclarationType
+  fields:
+    name: dummyDeclarationType2
+
+- model: declaration.CargoType
+  fields:
+    name: dummyCargoType1
+
+- model: declaration.CargoType
+  fields:
+    name: dummyCargoType2

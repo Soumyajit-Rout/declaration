@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Declaration List</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .header-container{
+        display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0; /* Adjust padding as needed */
+    }
+</style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="header-container">
+        <h1 class="my-4">Declarations</h1>
+        <a href="{% url 'create_declaration' %}" class="btn btn-primary" role="button">Create Declaration</a>
+       </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>S no</th>
+                    <th>Declaration Date</th>
+                    <th>Request No</th>
+                    <th>Declaration No</th>
+                    <th>Net Weight</th>
+                    <th>Gross Weight</th>
+                    <th>Measurements</th>
+                    <th>Number of Packages</th>
+                    <th>Cargo Type</th>
+                    <th>Declaration Type</th>
+                    <th>Cargo Channel</th>
+                    <th>Transaction Type</th>
+                    <th>Trade Type</th>
+                    <th>Regime Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for declaration in declarations %}
+                {% if declaration.is_deleted == False %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ declaration.declaration_date }}</td>
+                    <td>{{ declaration.request_no }}</td>
+                    <td>{{ declaration.declaration_no }}</td>
+                    <td>{{ declaration.net_weight }}</td>
+                    <td>{{ declaration.gross_weight }}</td>
+                    <td>{{ declaration.measurements }}</td>
+                    <td>{{ declaration.nmbr_of_packages }}</td>
+                    <td>{{ declaration.cargo_type.name }}</td>
+                    <td>{{ declaration.declaration_type.name }}</td>
+                    <td>{{ declaration.cargo_channel.name }}</td>
+                    <td>{{ declaration.transaction_type.name }}</td>
+                    <td>{{ declaration.trade_type.name }}</td>
+                    <td>{{ declaration.regime_type.name }}</td>
+                    <td>
+                        <a href="{% url 'update_declaration' declaration.pk %}" class="btn btn-warning btn-sm">Update</a>
+                        <form action="{% url 'delete_declaration' declaration.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

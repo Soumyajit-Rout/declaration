@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Declaration</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-header h4 {
+            margin: 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .delete-row {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Create Declaration</h1>
+        <div class="card">
+            <div class="card-header">
+                <h4>Declaration Details</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_declaration_date">Declaration Date:</label>
+                                {{ form.declaration_date }}
+                                {{ form.declaration_date.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_request_no">Request No:</label>
+                                {{ form.request_no }}
+                                {{ form.request_no.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_declaration_no">Declaration No:</label>
+                                {{ form.declaration_no }}
+                                {{ form.declaration_no.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_net_weight">Net Weight:</label>
+                                {{ form.net_weight }}
+                                {{ form.net_weight.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_gross_weight">Gross Weight:</label>
+                                {{ form.gross_weight }}
+                                {{ form.gross_weight.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_measurements">Measurements:</label>
+                                {{ form.measurements }}
+                                {{ form.measurements.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_nmbr_of_packages">Number of Packages:</label>
+                                {{ form.nmbr_of_packages }}
+                                {{ form.nmbr_of_packages.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_cargo_type">Cargo Type:</label>
+                                {{ form.cargo_type }}
+                                {{ form.cargo_type.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_declaration_type">Declaration Type:</label>
+                                {{ form.declaration_type }}
+                                {{ form.declaration_type.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_cargo_channel">Cargo Channel:</label>
+                                {{ form.cargo_channel }}
+                                {{ form.cargo_channel.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_transaction_type">Transaction Type:</label>
+                                {{ form.transaction_type }}
+                                {{ form.transaction_type.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_trade_type">Trade Type:</label>
+                                {{ form.trade_type }}
+                                {{ form.trade_type.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_regime_type">Regime Type:</label>
+                                {{ form.regime_type }}
+                                {{ form.regime_type.errors }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Items</h2>
+                    <div class="table-responsive">
+                        <table id="item-table" class="table table-responsive table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Static Quantity Unit</th>
+                                    <th>Supplementary Quantity Unit</th>
+                                    <th>Unit Weight</th>
+                                    <th>Goods Value</th>
+                                    <th>CIF Value</th>
+                                    <th>Duty Fee</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ item_formset.management_form }}
+                                {% for form in item_formset %}
+                                {% if form.instance.is_deleted == False %}
+                                    <tr>
+                                        {% for hidden in form.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+                                        {% for field in form.visible_fields %}
+                                        {% if field.name != 'DELETE' %} 
+                                            <td>
+                                                {{ field.errors }}
+                                                {{ field }}
+                                            </td>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <td>
+                                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">
+                                            {% if form.instance.pk %}
+                                                <a href="" class=" delete-btn btn btn-danger btn-sm">Delete</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="button" id="add-row" class=" btn btn-primary">Add Item</button>
+                        <div class="form-group mb-0 text-right">
+                            <button type="submit" class="btn btn-primary mr-1">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var addButton = document.getElementById('add-row');
+            var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
+            var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
+            var currentFormCount = parseInt(formCountInput.value);
+
+            addButton.addEventListener('click', function() {
+                var newForm = tableBody.rows[0].cloneNode(true); 
+                var regex = new RegExp(`items_set-\\d+-`, 'g');  
+
+                newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`); 
+
+                tableBody.appendChild(newForm);
+                currentFormCount++;
+                formCountInput.value = currentFormCount; 
+
+                var inputs = newForm.querySelectorAll('input, textarea');
+                inputs.forEach(function(input) {
+                    if (input.type === 'hidden') {
+                        input.value = '';
+                    } else {
+                        input.value = '';
+                    }
+                });
+            });
+            tableBody.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-btn')) {
+                    e.preventDefault();
+                    var row = e.target.closest('tr');
+                    var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
+                    deleteCheckbox.checked = true; 
+                    row.style.display = 'none';
+                    addButton.style.display = 'none';
+
+                    console.log(deleteCheckbox.name + " is checked: " + deleteCheckbox.checked);
+                }
+            });
+        });
+
+        
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
