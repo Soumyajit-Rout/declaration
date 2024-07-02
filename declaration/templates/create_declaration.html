@@ -17,6 +17,11 @@
         .card-header h4 {
             margin: 0;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -78,6 +83,7 @@
                                 <label for="id_net_weight">Net Weight:</label>
                                 {{ form.net_weight }}
                                 {{ form.net_weight.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                     </div>
@@ -87,6 +93,7 @@
                                 <label for="id_gross_weight">Gross Weight:</label>
                                 {{ form.gross_weight }}
                                 {{ form.gross_weight.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -94,6 +101,7 @@
                                 <label for="id_measurements">Measurements:</label>
                                 {{ form.measurements }}
                                 {{ form.measurements.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                     </div>
@@ -103,6 +111,7 @@
                                 <label for="id_nmbr_of_packages">Number of Packages:</label>
                                 {{ form.nmbr_of_packages }}
                                 {{ form.nmbr_of_packages.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -174,13 +183,13 @@
                             {{ item_formset.management_form }}
                             {% for form in item_formset %}
                                 <tr>
-                                    <td>{{ form.goods_description }} {{ form.goods_description.errors }}</td>
-                                    <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }}</td>
-                                    <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }}</td>
-                                    <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}</td>
-                                    <td>{{ form.goods_value }}  {{ form.goods_value.errors }}</td>
-                                    <td>{{ form.cif_value }} {{ form.goods_value.errors }}</td>
-                                    <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}</td>
+                                    <td>{{ form.goods_description }} {{ form.goods_description.errors }} </td>
+                                    <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
+                                    <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
+                                    <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}<span class="error-message">Please enter a valid number.</span></td>
+                                    <td>{{ form.goods_value }}  {{ form.goods_value.errors }}<span class="error-message">Please enter a valid number.</span></td>
+                                    <td>{{ form.cif_value }} {{ form.goods_value.errors }}<span class="error-message">Please enter a valid number.</span></td>
+                                    <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}<span class="error-message">Please enter a valid number.</span></td>
                                     <td>
                                         {% if form.instance.pk %}
                                             <button type="button" class="delete-row btn btn-danger">Delete</button>
@@ -208,6 +217,9 @@
                     <div class="form-group mb-0 text-right">
                         <button type="submit" class="btn btn-primary mr-1">Save</button>
                     </div>
+                    <div class="form-group mt-5 text-left">
+                        <a href="{% url 'view_declaration' %}"  role="button"> <- Back</a>
+                    </div>
                 </form>
             </div>
         </div>
@@ -220,18 +232,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var currentFormCount = parseInt(formCountInput.value);
 
     addButton.addEventListener('click', function() {
-        var newForm = tableBody.rows[0].cloneNode(true);  // Clone the first row
-
-        // Update the form prefix in all input elements
+        var newForm = tableBody.rows[0].cloneNode(true); 
         updateFormPrefix(newForm, currentFormCount);
-
-        // Clear the values of the cloned form
         clearFormValues(newForm);
-
-        // Append the new form to the table body
         tableBody.appendChild(newForm);
-
-        // Increment and update the form count input
         currentFormCount++;
         formCountInput.value = currentFormCount;
     });
@@ -277,6 +281,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Custom validation for numeric fields
+var numericFields = document.querySelectorAll('input[type="number"]');
+
+numericFields.forEach(function(field) {
+    field.addEventListener('input', function() {
+        
+        if (!field.checkValidity()) {
+            field.nextElementSibling.style.display = 'inline';
+        } 
+        else {
+            field.nextElementSibling.style.display = 'none';
+        }
+    });
+});
 
     </script>
     

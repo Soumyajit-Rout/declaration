@@ -27,7 +27,7 @@ def create_declaration(request):
                 declaration = declaration_form.save()
                 item_formset.instance = declaration 
                 item_formset.save()
-            return redirect('create_declaration')
+            return redirect('view_declaration')
          
          except Exception as e:
                 

@@ -23,6 +23,11 @@
         .delete-row {
             display: none;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +69,7 @@
                                 <label for="id_net_weight">Net Weight:</label>
                                 {{ form.net_weight }}
                                 {{ form.net_weight.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                     </div>
@@ -73,6 +79,7 @@
                                 <label for="id_gross_weight">Gross Weight:</label>
                                 {{ form.gross_weight }}
                                 {{ form.gross_weight.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -80,6 +87,7 @@
                                 <label for="id_measurements">Measurements:</label>
                                 {{ form.measurements }}
                                 {{ form.measurements.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                     </div>
@@ -89,6 +97,7 @@
                                 <label for="id_nmbr_of_packages">Number of Packages:</label>
                                 {{ form.nmbr_of_packages }}
                                 {{ form.nmbr_of_packages.errors }}
+                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -96,6 +105,7 @@
                                 <label for="id_cargo_type">Cargo Type:</label>
                                 {{ form.cargo_type }}
                                 {{ form.cargo_type.errors }}
+
                             </div>
                         </div>
                     </div>
@@ -169,6 +179,7 @@
                                             <td>
                                                 {{ field.errors }}
                                                 {{ field }}
+                                                <span class="error-message">Please enter a valid number.</span>
                                             </td>
                                             {% endif %}
                                         {% endfor %}
@@ -187,6 +198,9 @@
                         <div class="form-group mb-0 text-right">
                             <button type="submit" class="btn btn-primary mr-1">Save</button>
                         </div>
+                    </div>
+                    <div class="form-group mt-5 text-left">
+                        <a href="{% url 'view_declaration' %}"  role="button"> <- Back</a>
                     </div>
                 </form>
             </div>
@@ -231,8 +245,21 @@
                 }
             });
         });
+        // Custom validation for numeric fields
+        var numericFields = document.querySelectorAll('input[type="number"]');
 
-        
+        numericFields.forEach(function(field) {
+            field.addEventListener('input', function() {
+                
+                if (!field.checkValidity()) {
+                    field.nextElementSibling.style.display = 'inline';
+                } 
+                else {
+                    field.nextElementSibling.style.display = 'none';
+                }
+            });
+        });
+                
     </script>
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
