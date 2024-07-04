@@ -1,17 +1,17 @@
 [Unit]
 Description=gunicorn daemon
-Requires=warehouse_management.socket
+Requires=declaration-management.socket
 After=network.target
 
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/var/lib/jenkins/workspace/finloge-warehouse/warehouse_management/
-ExecStart=/var/lib/jenkins/workspace/finloge-warehouse/warehouse_management/venv/bin/gunicorn \
+WorkingDirectory=/var/lib/jenkins/workspace/finloge-declaration/declaration-management/
+ExecStart=/var/lib/jenkins/workspace/finloge-declaration/declaration-management/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
-          --bind unix:/var/lib/jenkins/workspace/finloge-warehouse/warehouse_management/app.sock \
-          warehouse_management.wsgi:application
+          --bind unix:/var/lib/jenkins/workspace/finloge-declaration/declaration-management/app.sock \
+          DeclarationManagement.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
