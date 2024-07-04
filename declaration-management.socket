@@ -2,7 +2,7 @@
 Description=gunicorn socket
 
 [Socket]
-ListenStream=/run/warehouse_management.sock
+ListenStream=/run/declaration-management.sock
 
 [Install]
 WantedBy=sockets.target
