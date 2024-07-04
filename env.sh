@@ -4,8 +4,7 @@
 ENV_DIR="venv"
 
 # Function to create and activate the virtual environment
-install_dependencies() {
-cd warehouse_management    
+install_dependencies() {    
 source $ENV_DIR/bin/activate
     pip install --upgrade pip
     pip install -r requirements.txt
