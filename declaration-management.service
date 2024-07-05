@@ -6,12 +6,13 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/var/lib/jenkins/workspace/finloge-declaration/declaration-management/
-ExecStart=/var/lib/jenkins/workspace/finloge-declaration/declaration-management/venv/bin/gunicorn \
+WorkingDirectory=/var/lib/jenkins/workspace/finloge-declaration/
+ExecStart=/var/lib/jenkins/workspace/finloge-declaration/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
-          --bind unix:/var/lib/jenkins/workspace/finloge-declaration/declaration-management/app.sock \
+          --bind unix:/var/lib/jenkins/workspace/finloge-declaration/app.sock \
           DeclarationManagement.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
+
