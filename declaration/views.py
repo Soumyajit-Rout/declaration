@@ -3,7 +3,11 @@ from .models import *
 from .forms import DeclarationForm,ItemFormSet,ItemUpdateFormSet
 from django.db import transaction
 from django.db import transaction
-
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+import re
 
 """
 This function is to create a declaration form along with the items,here with each
@@ -90,3 +94,27 @@ def delete_declaration(request, pk):
     return redirect('view_declaration')
 
 
+@csrf_exempt
+@require_POST
+def search_hscode(request):
+    data = json.loads(request.body)
+    description = data.get('description', '')
+    description_data = re.findall(r'\b\w+\b', description)
+    hs_codes_set = set()
+    for word in description_data:
+        matching_hs_codes = HsCode.objects.filter(
+            keywords__icontains=word  
+        )
+        for hs_code in matching_hs_codes:
+            if word in hs_code.keywords.split(','):
+                hs_codes_set.add(hs_code)
+
+    hs_codes = []
+    for hs_code in hs_codes_set:
+        hs_codes.append({
+            'id': hs_code.id,
+            'hs_code': hs_code.hs_code,
+            'description': hs_code.description
+        })
+    
+    return JsonResponse({'hs_codes': hs_codes})

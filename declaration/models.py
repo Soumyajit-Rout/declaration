@@ -52,6 +52,14 @@ class Declaration(TimestampedUUIDModel):
      trade_type = models.ForeignKey(TradeType,on_delete=models.SET_NULL, null=True)
      regime_type = models.ForeignKey(RegimeType,on_delete=models.SET_NULL, null=True)
 
+class HsCode(TimestampedUUIDModel):
+    keywords = models.TextField(max_length=200,null=True,blank=False)  
+    hs_code = models.CharField(max_length=15,null=True,blank=False)
+    description = models.TextField(max_length=200,null=True,blank=False)
+
+    def __str__(self):
+        return f'{self.hs_code} - { self.description}'
+
 class Items(TimestampedUUIDModel):
     goods_description = models.TextField(max_length=200,null=True,blank=False)
     static_quantity_unit = models.FloatField(null=True,blank=False)
@@ -61,4 +69,5 @@ class Items(TimestampedUUIDModel):
     cif_value = models.FloatField(null=True,blank=False)   
     duty_fee = models.FloatField(null=True,blank=False)
     declaration = models.ForeignKey(Declaration,on_delete=models.CASCADE)
+    hs_code = models.ForeignKey(HsCode,on_delete=models.SET_NULL, null=True)
 

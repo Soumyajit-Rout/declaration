@@ -50,6 +50,7 @@ class ItemForm(forms.ModelForm):
                   'cif_value',
                   'duty_fee',
                   'declaration',
+                  'hs_code',
                   ]  
         
 class ItemUpdateForm(forms.ModelForm):
@@ -57,13 +58,14 @@ class ItemUpdateForm(forms.ModelForm):
         model = Items
         fields = [
             'goods_description',
+            'hs_code',
             'static_quantity_unit',
             'supp_quantity_unit',
             'unit_weight',
             'goods_value',
             'cif_value',
             'duty_fee',
-            'declaration',
+            'declaration',         
         ]
     
 ItemFormSet = inlineformset_factory(Declaration, Items,extra=1,form=ItemForm, can_delete=True)

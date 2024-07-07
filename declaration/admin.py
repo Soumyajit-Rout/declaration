@@ -75,6 +75,14 @@ class ItemsAdmin(admin.ModelAdmin):
           'is_deleted'
      )
 
+class HsCodeAdmin(admin.ModelAdmin):
+     list_display = (
+          'created_at',
+          'updated_at',
+          'id',
+          'hs_code',
+     )
+
 admin.site.register(Declaration, DeclarationAdmin)
 admin.site.register(CargoType, CargoTypeAdmin)
 admin.site.register(DeclarationType, DeclarationTypeAdmin)
@@ -83,6 +91,8 @@ admin.site.register(TradeType, TradeTypeAdmin)
 admin.site.register(TransactionType, TransactionTypeAdmin)
 admin.site.register(RegimeType, RegimeTypeAdmin)
 admin.site.register(Items, ItemsAdmin)
+admin.site.register(HsCode, HsCodeAdmin)
+
 
 
 

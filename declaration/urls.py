@@ -6,4 +6,6 @@ urlpatterns = [
      path('', views.declaration_list, name='view_declaration'),
      path('update/<uuid:pk>/', views.update_declaration, name='update_declaration'),
      path('delete/<uuid:pk>/', views.delete_declaration, name='delete_declaration'),
+     path('search-hscode/', views.search_hscode, name='search_hscode'),
+
 ]

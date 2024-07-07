@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Create Declaration</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
     <style>
         .container {
             max-width: 800px;
@@ -157,6 +159,7 @@
                             <thead>
                                 <tr>
                                     <th>Description</th>
+                                    <th>HsCode</th>
                                     <th>Static Quantity Unit</th>
                                     <th>Supplementary Quantity Unit</th>
                                     <th>Unit Weight</th>
@@ -179,6 +182,9 @@
                                             <td>
                                                 {{ field.errors }}
                                                 {{ field }}
+                                                {% if field.name == 'goods_description' %}
+                                                <button type="button" class="btn btn-primary" id="search-hscode">Search</button>
+                                                {% endif %}
                                                 <span class="error-message">Please enter a valid number.</span>
                                             </td>
                                             {% endif %}
@@ -196,7 +202,7 @@
                         </table>
                         <button type="button" id="add-row" class=" btn btn-primary">Add Item</button>
                         <div class="form-group mb-0 text-right">
-                            <button type="submit" class="btn btn-primary mr-1">Save</button>
+                            <button type="submit" class="btn btn-primary mr-1"style="float: right;">Save</button>
                         </div>
                     </div>
                     <div class="form-group mt-5 text-left">
@@ -212,6 +218,36 @@
             var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
             var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
             var currentFormCount = parseInt(formCountInput.value);
+
+             // Search functionality
+            tableBody.addEventListener('click', function(e) {
+             if (e.target.id === 'search-hscode') {
+                var row = e.target.closest('tr');
+                var descriptionField = row.querySelector('textarea');
+                var descriptionData = descriptionField.value;
+                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+
+                fetch('/search-hscode/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'  
+                    },
+                    body: JSON.stringify({ description: descriptionData })
+                    })
+                .then(response => response.json())
+                .then(data => {
+                    hsCodeDropdown.innerHTML = '';
+                    data.hs_codes.forEach(function(hsCode) {
+                        var option = document.createElement('option');
+                        option.value = hsCode.id;
+                        option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+                        hsCodeDropdown.appendChild(option);
+                    });
+            })
+                .catch(error => console.error('Error:', error));
+        }
+    });
 
             addButton.addEventListener('click', function() {
                 var newForm = tableBody.rows[0].cloneNode(true); 
@@ -262,8 +298,10 @@
                 
     </script>
     
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </body>
 </html>
