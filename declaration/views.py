@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import *
+from .serializers import *
 from .forms import DeclarationForm,ItemFormSet,ItemUpdateFormSet
 from django.db import transaction
 from django.db import transaction
@@ -8,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 import re
+from rest_framework import generics
+from .permissions import StaticTokenPermission
 
 """
 This function is to create a declaration form along with the items,here with each
@@ -93,7 +96,11 @@ def delete_declaration(request, pk):
     declaration.save()
     return redirect('view_declaration')
 
-
+"""
+This function is to search for the hscodes based on the description text here we will convert 
+the text into a list of items and query the database to match the list of words with the 
+keywords in the hscode 
+"""
 @csrf_exempt
 @require_POST
 def search_hscode(request):
@@ -118,3 +125,29 @@ def search_hscode(request):
         })
     
     return JsonResponse({'hs_codes': hs_codes})
+
+"""
+Basic api to list the declarations 
+"""
+class ListDeclarations(generics.ListAPIView):
+    permission_classes = [StaticTokenPermission]
+    serializer_class = DeclarationSerializer
+    queryset = Declaration.objects.filter(is_verified = 0)
+
+"""
+Basic api to retrieve the declarations based on id 
+"""
+class RetrieveDeclaration(generics.RetrieveAPIView):
+    permission_classes = [StaticTokenPermission]
+    serializer_class = DeclarationSerializer
+    queryset = Declaration.objects.filter(is_verified = 0)
+    lookup_field = "id"
+    
+"""
+Basic api to update the declarations based on id 
+"""
+class UpdateDeclaration(generics.UpdateAPIView):
+    permission_classes = [StaticTokenPermission]
+    queryset = Declaration.objects.all()
+    serializer_class = UpdateDeclarationSerializer
+    lookup_field = "id"
