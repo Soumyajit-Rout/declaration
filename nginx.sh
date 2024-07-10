@@ -7,3 +7,4 @@ sudo systemctl enable declaration-management
 sudo systemctl status declaration-management
 
 sudo systemctl restart nginx
+sudo supervisorctl restart declaration_group:declaration-management
