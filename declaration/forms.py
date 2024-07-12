@@ -1,5 +1,5 @@
 from django import forms
-from .models import Declaration,Items
+from .models import Declaration,Items,Document
 from django.forms import inlineformset_factory
 
 class DeclarationForm(forms.ModelForm):
@@ -67,9 +67,19 @@ class ItemUpdateForm(forms.ModelForm):
             'duty_fee',
             'declaration',         
         ]
-    
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = [
+            "file",
+            "item",
+        ]
+
+
+
+
 ItemFormSet = inlineformset_factory(Declaration, Items,extra=1,form=ItemForm, can_delete=True)
 ItemUpdateFormSet = inlineformset_factory(Declaration, Items, form=ItemUpdateForm, extra=0, can_delete=True)
-
-
+DocumentFormSet = inlineformset_factory(Items,Document,extra=1,form=DocumentForm, can_delete=True)
 

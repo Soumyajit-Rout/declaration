@@ -83,6 +83,22 @@ class HsCodeAdmin(admin.ModelAdmin):
           'hs_code',
      )
 
+class RequiredDocAdmin(admin.ModelAdmin):
+     list_display = (
+          'created_at',
+          'updated_at',
+          'id',
+          'name',
+     )
+
+class DocumentAdmin(admin.ModelAdmin):
+     list_display = (
+          'created_at',
+          'updated_at',
+          'id',
+          'file',
+     )
+
 admin.site.register(Declaration, DeclarationAdmin)
 admin.site.register(CargoType, CargoTypeAdmin)
 admin.site.register(DeclarationType, DeclarationTypeAdmin)
@@ -92,6 +108,10 @@ admin.site.register(TransactionType, TransactionTypeAdmin)
 admin.site.register(RegimeType, RegimeTypeAdmin)
 admin.site.register(Items, ItemsAdmin)
 admin.site.register(HsCode, HsCodeAdmin)
+admin.site.register(RequiredDoc, RequiredDocAdmin)
+admin.site.register(Document, DocumentAdmin)
+
+
 
 
 

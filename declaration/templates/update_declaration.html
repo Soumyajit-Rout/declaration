@@ -212,14 +212,38 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             var addButton = document.getElementById('add-row');
             var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
             var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
             var currentFormCount = parseInt(formCountInput.value);
+            var originalDescriptions = {};
 
-             // Search functionality
+            tableBody.addEventListener('click',function(e) {
+                console.log("hello",`id_items_set-${currentFormCount-1}-hs_code`)
+                console.log("hai",e.target.id)
+                if (e.target.id === `id_items_set-${currentFormCount-1}-hs_code`) {
+                    console.log("hello i am in")
+                    var row = e.target.closest('tr');
+                    var descriptionField = row.querySelector('textarea');
+                    var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+                    descriptionField.dataset.originalValue = descriptionField.value;
+                    hsCodeDropdown.addEventListener('click', function() {
+                        originalDescriptions[descriptionField.name] = descriptionField.value;
+                    console.log("orginal",originalDescriptions)
+                    });
+
+                    hsCodeDropdown.addEventListener('change', function() {
+                        originalDescriptions[descriptionField.name] = descriptionField.value;
+                        console.log("orginal",originalDescriptions)
+                
+            });
+
+        }
+    });
+
+            // Search functionality
             tableBody.addEventListener('click', function(e) {
              if (e.target.id === 'search-hscode') {
                 var row = e.target.closest('tr');
@@ -244,6 +268,23 @@
                         option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
                         hsCodeDropdown.appendChild(option);
                     });
+                    descriptionField.dataset.originalValue = descriptionField.value;
+            
+                hsCodeDropdown.addEventListener('click', function() {
+                    
+                    originalDescriptions[descriptionField.name] = descriptionField.value;
+
+                    console.log("orginal",originalDescriptions)
+                    
+                });
+
+                hsCodeDropdown.addEventListener('change', function() {
+                    
+                    originalDescriptions[descriptionField.name] = descriptionField.value;
+
+                    console.log("orginal",originalDescriptions)
+                    
+                });
             })
                 .catch(error => console.error('Error:', error));
         }
@@ -295,8 +336,166 @@
                 }
             });
         });
-                
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        var isValid = true;
+        for (var key in originalDescriptions) {
+            console.log("in1")
+            var descriptionField = document.querySelector(`[name="${key}"]`);
+            if (descriptionField.value !== originalDescriptions[key]) {
+              console.log("in2")
+
+                isValid = false;
+                break;
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('You cannot change the description after selecting an HS code.');
+        }
+    });
+   
+    </script> -->
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var addButton = document.getElementById('add-row');
+            var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
+            var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
+            var currentFormCount = parseInt(formCountInput.value);
+            var originalDescriptions = {};
+    
+            tableBody.addEventListener('click', function(e) {
+                console.log("hello", `id_items_set-${currentFormCount - 1}-hs_code`);
+                console.log("hai", e.target.id);
+                if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
+                    console.log("hello I am in");
+                    var row = e.target.closest('tr');
+                    var descriptionField = row.querySelector('textarea');
+                    var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+                    descriptionField.dataset.originalValue = descriptionField.value;
+    
+                    hsCodeDropdown.addEventListener('click', function() {
+                        originalDescriptions[descriptionField.name] = descriptionField.value;
+                        console.log("original", originalDescriptions);
+                    });
+    
+                    hsCodeDropdown.addEventListener('change', function() {
+                        originalDescriptions[descriptionField.name] = descriptionField.value;
+                        console.log("original", originalDescriptions);
+                    });
+                }
+            });
+    
+            // Search functionality
+            tableBody.addEventListener('click', function(e) {
+                if (e.target.id === 'search-hscode') {
+                    var row = e.target.closest('tr');
+                    var descriptionField = row.querySelector('textarea');
+                    var descriptionData = descriptionField.value;
+                    var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+    
+                    fetch('/search-hscode/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ description: descriptionData })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        hsCodeDropdown.innerHTML = '';
+                        data.hs_codes.forEach(function(hsCode) {
+                            var option = document.createElement('option');
+                            option.value = hsCode.id;
+                            option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+                            hsCodeDropdown.appendChild(option);
+                        });
+                        descriptionField.dataset.originalValue = descriptionField.value;
+    
+                        hsCodeDropdown.addEventListener('click', function() {
+                            originalDescriptions[descriptionField.name] = descriptionField.value;
+                            console.log("original", originalDescriptions);
+                        });
+    
+                        hsCodeDropdown.addEventListener('change', function() {
+                            originalDescriptions[descriptionField.name] = descriptionField.value;
+                            console.log("original", originalDescriptions);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+    
+            addButton.addEventListener('click', function() {
+                var newForm = tableBody.rows[0].cloneNode(true);
+                var regex = new RegExp(`items_set-\\d+-`, 'g');
+    
+                newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
+    
+                tableBody.appendChild(newForm);
+                currentFormCount++;
+                formCountInput.value = currentFormCount;
+    
+                var inputs = newForm.querySelectorAll('input, textarea');
+                inputs.forEach(function(input) {
+                    if (input.type === 'hidden') {
+                        input.value = '';
+                    } else {
+                        input.value = '';
+                    }
+                });
+            });
+    
+            tableBody.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-btn')) {
+                    e.preventDefault();
+                    var row = e.target.closest('tr');
+                    var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
+                    deleteCheckbox.checked = true;
+                    row.style.display = 'none';
+                    addButton.style.display = 'none';
+    
+                    console.log(deleteCheckbox.name + " is checked: " + deleteCheckbox.checked);
+                }
+            });
+    
+            // Custom validation for numeric fields
+            var numericFields = document.querySelectorAll('input[type="number"]');
+            numericFields.forEach(function(field) {
+                field.addEventListener('input', function() {
+                    if (!field.checkValidity()) {
+                        field.nextElementSibling.style.display = 'inline';
+                    } else {
+                        field.nextElementSibling.style.display = 'none';
+                    }
+                });
+            });
+    
+            // Form submission validation
+            document.querySelector('form').addEventListener('submit', function(e) {
+                var isValid = true;
+                for (var key in originalDescriptions) {
+                    console.log("in1");
+                    var descriptionField = document.querySelector(`[name="${key}"]`);
+                    if (descriptionField.value !== originalDescriptions[key]) {
+                        console.log("in2");
+    
+                        isValid = false;
+                        break;
+                    }
+                }
+    
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('You cannot change the description after selecting an HS code.');
+                }
+            });
+        });
     </script>
+    
     
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

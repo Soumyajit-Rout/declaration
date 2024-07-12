@@ -10,7 +10,7 @@ urlpatterns = [
      path('search-hscode/', search_hscode, name='search_hscode'),
      path('api/DeclarationRegistration/verification/getDeclarationRegistrationData',ListDeclarations.as_view(),name='list_declaration'),
      path('api/DeclarationRegistration/verification/getDeclarationRegistrationDatabyId',RetrieveDeclaration.as_view(),name='retrieve_declaration'),
-     path('api/DeclarationRegistration/verification/updateDeclarationRegistrationData',UpdateDeclaration.as_view(),name='retrieve_declaration')
-
+     path('api/DeclarationRegistration/verification/updateDeclarationRegistrationData',UpdateDeclaration.as_view(),name='retrieve_declaration'),
+     path('get-required-docs/', get_required_docs, name='get_required_docs'),
 
 ]
