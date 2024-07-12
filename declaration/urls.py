@@ -9,8 +9,8 @@ urlpatterns = [
      path('delete/<uuid:pk>/', delete_declaration, name='delete_declaration'),
      path('search-hscode/', search_hscode, name='search_hscode'),
      path('api/DeclarationRegistration/verification/getDeclarationRegistrationData',ListDeclarations.as_view(),name='list_declaration'),
-     path('api/DeclarationRegistration/verification/getDeclarationRegistrationDatabyId/<uuid:id>',RetrieveDeclaration.as_view(),name='retrieve_declaration'),
-     path('api/DeclarationRegistration/verification/updateDeclarationRegistrationData/<uuid:id>',UpdateDeclaration.as_view(),name='retrieve_declaration')
+     path('api/DeclarationRegistration/verification/getDeclarationRegistrationDatabyId',RetrieveDeclaration.as_view(),name='retrieve_declaration'),
+     path('api/DeclarationRegistration/verification/updateDeclarationRegistrationData',UpdateDeclaration.as_view(),name='retrieve_declaration')
 
 
 ]
