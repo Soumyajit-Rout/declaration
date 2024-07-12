@@ -11,6 +11,11 @@ import json
 import re
 from rest_framework import generics
 from .permissions import StaticTokenPermission
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+
 
 """
 This function is to create a declaration form along with the items,here with each
@@ -137,17 +142,39 @@ class ListDeclarations(generics.ListAPIView):
 """
 Basic api to retrieve the declarations based on id 
 """
-class RetrieveDeclaration(generics.RetrieveAPIView):
+
+class RetrieveDeclaration(APIView):
     permission_classes = [StaticTokenPermission]
-    serializer_class = DeclarationSerializer
-    queryset = Declaration.objects.filter(is_verified = 0)
-    lookup_field = "id"
+
+    def get(self, request):
+        id = request.query_params.get("id")
+        if not id:
+            return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            declaration = Declaration.objects.get(is_verified=0, id=id)
+        except Declaration.DoesNotExist:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DeclarationSerializer(declaration)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 """
 Basic api to update the declarations based on id 
 """
-class UpdateDeclaration(generics.UpdateAPIView):
+class UpdateDeclaration(APIView):
     permission_classes = [StaticTokenPermission]
-    queryset = Declaration.objects.all()
-    serializer_class = UpdateDeclarationSerializer
-    lookup_field = "id"
+
+    def patch(self, request):
+        id = request.query_params.get("id")
+        if not id:
+            return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            declaration = Declaration.objects.get(id=id)
+        except Declaration.DoesNotExist:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = UpdateDeclarationSerializer(declaration, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
