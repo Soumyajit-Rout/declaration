@@ -192,16 +192,17 @@ Basic api to update the declarations based on id
 class UpdateDeclaration(APIView):
     permission_classes = [StaticTokenPermission]
 
-    def patch(self, request):
+    def put(self, request):
         id = request.query_params.get("id")
+        req_data = request.query_params.get("is_verified")
         if not id:
             return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             declaration = Declaration.objects.get(id=id)
         except Declaration.DoesNotExist:
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = UpdateDeclarationSerializer(declaration, data=request.data, partial=True)
+        data = {"is_verified":req_data}
+        serializer = UpdateDeclarationSerializer(declaration, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
