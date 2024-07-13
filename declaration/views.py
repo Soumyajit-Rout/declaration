@@ -121,7 +121,7 @@ keywords in the hscode
 @require_POST
 def search_hscode(request):
     data = json.loads(request.body)
-    description = data.get('description', '')
+    description = data.get('description', '').lower()
     hs_codes = []
     if description:
         description_data = re.findall(r'\b\w+\b', description)
