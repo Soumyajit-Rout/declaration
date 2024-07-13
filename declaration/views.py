@@ -137,7 +137,14 @@ Basic api to list the declarations
 class ListDeclarations(generics.ListAPIView):
     permission_classes = [StaticTokenPermission]
     serializer_class = DeclarationSerializer
-    queryset = Declaration.objects.filter(is_verified = 0)
+
+    def get_queryset(self):
+        return Declaration.objects.filter(is_verified=0)
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"status": status.HTTP_200_OK,"registration_data": serializer.data})
 
 """
 Basic api to retrieve the declarations based on id 
@@ -156,7 +163,7 @@ class RetrieveDeclaration(APIView):
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = DeclarationSerializer(declaration)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"status":status.HTTP_200_OK,"registration_data":serializer.data})
     
 """
 Basic api to update the declarations based on id 

@@ -32,19 +32,36 @@ class CargoTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DeclarationSerializer(serializers.ModelSerializer):
-    regime_type = RegimeTypeSerializer()
-    cargo_type = CargoTypeSerializer()
-    declaration_type = DeclarationTypeSerializer()
-    cargo_channel = CargoChannelSerializer()
-    transaction_type = TransactionTypeSerializer()
-    trade_type = TradeTypeSerializer()
+    regime_type = serializers.SerializerMethodField()
+    cargo_type = serializers.SerializerMethodField()
+    declaration_type = serializers.SerializerMethodField()
+    cargo_channel = serializers.SerializerMethodField()
+    transaction_type = serializers.SerializerMethodField()
+    trade_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Declaration
         fields = ["id","created_at","updated_at","is_deleted","declaration_date","request_no","declaration_no","net_weight",
                   "gross_weight","measurements","nmbr_of_packages","regime_type","cargo_type","declaration_type","cargo_channel",
                   "transaction_type","trade_type","is_verified"]
-
+    
+    def get_regime_type(self, obj):
+        return obj.regime_type.name
+    
+    def get_cargo_type(self, obj):
+        return obj.cargo_type.name
+    
+    def get_declaration_type(self, obj):
+        return obj.declaration_type.name
+    
+    def get_cargo_channel(self, obj):
+        return obj.cargo_channel.name
+    
+    def get_transaction_type(self, obj):
+        return obj.transaction_type.name
+    
+    def get_trade_type(self, obj):
+        return obj.trade_type.name
 class UpdateDeclarationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Declaration
