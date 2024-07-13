@@ -54,7 +54,7 @@
             </div>
             {% endif %}
             <div class="card-body">
-                <form method="post" novalidate>
+                <form method="post" novalidate enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -173,12 +173,14 @@
                             <tr>
                                 <th>Description</th>
                                 <th>HsCode</th>
+                                <th>Documents</th>
                                 <th>Static Quantity Unit</th>
                                 <th>Supplementary Quantity Unit</th>
                                 <th>Unit Weight</th>
                                 <th>Goods Value</th>
                                 <th>CIF Value</th>
                                 <th>Duty Fee</th>
+        
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -188,6 +190,7 @@
                                 <tr>
                                     <td>{{ form.goods_description }} {{ form.goods_description.errors }} <button type="button" class="btn btn-primary" id="search-hscode">Search</button></td>
                                     <td>{{ form.hs_code }}  {{ form.hs_code.errors }}</td>
+                                    <td class="documents"></td>
                                     <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
                                     <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
                                     <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}<span class="error-message">Please enter a valid number.</span></td>
@@ -228,107 +231,197 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+<script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-    var addButton = document.getElementById('add-row');
-    var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
-    var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
-    var currentFormCount = parseInt(formCountInput.value);
+        var addButton = document.getElementById('add-row');
+        var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
+        var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
+        var currentFormCount = parseInt(formCountInput.value);
+        var originalDescriptions = {};
+        let requiredDocsData = {};
 
-    // Search functionality
-    tableBody.addEventListener('click', function(e) {
-        if (e.target.id === 'search-hscode') {
-            var row = e.target.closest('tr');
-            var descriptionField = row.querySelector('textarea');
-            var descriptionData = descriptionField.value;
-            var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+        tableBody.addEventListener('click', function(e) {
+            if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
+                var row = e.target.closest('tr');
+                var descriptionField = row.querySelector('textarea');
+                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+                descriptionField.dataset.originalValue = descriptionField.value;
 
-            fetch('/search-hscode/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'  
-                },
-                body: JSON.stringify({ description: descriptionData })
-            })
-            .then(response => response.json())
-            .then(data => {
-                hsCodeDropdown.innerHTML = '';
-                data.hs_codes.forEach(function(hsCode) {
-                    var option = document.createElement('option');
-                    option.value = hsCode.id;
-                    option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
-                    hsCodeDropdown.appendChild(option);
+                hsCodeDropdown.addEventListener('click', function() {
+                    originalDescriptions[descriptionField.name] = descriptionField.value;
                 });
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    });
 
-    addButton.addEventListener('click', function() {
-        var newForm = tableBody.rows[0].cloneNode(true); 
-        updateFormPrefix(newForm, currentFormCount);
-        clearFormValues(newForm);
-        tableBody.appendChild(newForm);
-        currentFormCount++;
-        formCountInput.value = currentFormCount;
-    });
+                hsCodeDropdown.addEventListener('change', function() {
+                    originalDescriptions[descriptionField.name] = descriptionField.value;
+                });
+            }
+        });
 
-    tableBody.addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-row')) {
-            e.target.closest('tr').remove();
-            currentFormCount--;
+        // Search functionality
+        tableBody.addEventListener('click', function(e) {
+            if (e.target.id === 'search-hscode') {
+                var row = e.target.closest('tr');
+                var descriptionField = row.querySelector('textarea');
+                var descriptionData = descriptionField.value;
+                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+
+                fetch('/search-hscode/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ description: descriptionData })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hsCodeDropdown.innerHTML = '';
+
+                    // Add the "Select your HS code" option
+                    var placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.textContent = 'Select your HS code';
+                    hsCodeDropdown.appendChild(placeholderOption);
+
+                    data.hs_codes.forEach(function(hsCode) {
+                        var option = document.createElement('option');
+                        option.value = hsCode.id;
+                        option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+                        hsCodeDropdown.appendChild(option);
+                    });
+                    descriptionField.dataset.originalValue = descriptionField.value;
+
+                    hsCodeDropdown.addEventListener('click', function() {
+                        originalDescriptions[descriptionField.name] = descriptionField.value;
+                    });
+
+                    hsCodeDropdown.addEventListener('change', function() {
+                        originalDescriptions[descriptionField.name] = descriptionField.value;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        addButton.addEventListener('click', function() {
+            var newForm = tableBody.rows[0].cloneNode(true);
+            var regex = new RegExp(`items_set-\\d+-`, 'g');
+
+            newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
+
+            tableBody.appendChild(newForm);
+            currentFormCount++;
             formCountInput.value = currentFormCount;
 
-            updateAllFormPrefixes();
-        }
-    });
+            var inputs = newForm.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                if (input.type === 'hidden') {
+                    input.value = '';
+                } else {
+                    input.value = '';
+                }
+            });
+        });
 
-   
-    function updateFormPrefix(form, formCount) {
-        var formPrefix = `items_set-${formCount}-`;
-        var regex = new RegExp(`items_set-\\d+-`, 'g');
+        tableBody.addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-btn')) {
+                e.preventDefault();
+                var row = e.target.closest('tr');
+                var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
+                deleteCheckbox.checked = true;
+                row.style.display = 'none';
+                addButton.style.display = 'none';
 
-        var elements = form.querySelectorAll('input, select, textarea');
-        elements.forEach(function(element) {
-            element.name = element.name.replace(regex, formPrefix);
-            if (element.id) {
-                element.id = element.id.replace(regex, formPrefix);
             }
         });
-    }
 
-    function clearFormValues(form) {
-        var elements = form.querySelectorAll('input, select, textarea');
-        elements.forEach(function(element) {
-            if (element.type !== 'hidden') {
-                element.value = '';
+        // Custom validation for numeric fields
+        var numericFields = document.querySelectorAll('input[type="number"]');
+        numericFields.forEach(function(field) {
+            field.addEventListener('input', function() {
+                if (!field.checkValidity()) {
+                    field.nextElementSibling.style.display = 'inline';
+                } else {
+                    field.nextElementSibling.style.display = 'none';
+                }
+            });
+        });
+
+        // Add event listener for hs_code change
+        tableBody.addEventListener('change', function(e) {
+            if (e.target.name.includes('hs_code')) {
+                var row = e.target.closest('tr');
+                var hsCode = e.target.value;
+                var documentField = row.querySelector('.documents');
+
+                fetch(`/get-required-docs/?hs_code=${hsCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        documentField.innerHTML = '';
+
+                        requiredDocsData[hsCode] = data.required_docs;
+                        data.required_docs.forEach(function(doc) {
+                            var fileInput = document.createElement('input');
+                            fileInput.type = 'file';
+                            fileInput.name = `documents_${doc.id}`;
+                            fileInput.required = true;
+                            fileInput.classList.add('required-file');
+                            var label = document.createElement('label');
+                            label.textContent = `${doc.name} (${doc.format})`;
+
+                            documentField.appendChild(label);
+                            documentField.appendChild(fileInput);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
             }
         });
-    }
 
-    function updateAllFormPrefixes() {
-        var rows = tableBody.getElementsByTagName('tr');
-        for (var i = 0; i < rows.length; i++) {
-            updateFormPrefix(rows[i], i);
+        // Form submission validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var isValid = true;
+            
+            // Check for originalDescriptions change
+            for (var key in originalDescriptions) {
+                var descriptionField = document.querySelector(`[name="${key}"]`);
+                if (descriptionField.value !== originalDescriptions[key]) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            // Check for required file inputs
+            var requiredFiles = document.querySelectorAll('.required-file');
+            requiredFiles.forEach(function(input) {
+                if (!input.files.length) {
+                    e.preventDefault();
+                alert(' you must upload all required files.');
+                }
+            });
+
+              
+            for (let hsCode in requiredDocsData) {
+            requiredDocsData[hsCode].forEach(function(doc) {
+                var fileInput = document.querySelector(`input[name="documents_${doc.id}"]`);
+                if (fileInput && fileInput.files.length > 0) {
+                    var file = fileInput.files[0];
+                    var ext = file.name.split('.').pop().toLowerCase();
+                    if (!doc.format.split(',').includes(ext)) {
+                        e.preventDefault();
+                        alert(`Invalid file format for ${doc.name}: ${ext}`);
+                        fileInput.value = ''; 
+                    }
+                }
+            });
         }
-    }
-});
+    
 
-// Custom validation for numeric fields
-var numericFields = document.querySelectorAll('input[type="number"]');
-
-numericFields.forEach(function(field) {
-    field.addEventListener('input', function() {
-        
-        if (!field.checkValidity()) {
-            field.nextElementSibling.style.display = 'inline';
-        } 
-        else {
-            field.nextElementSibling.style.display = 'none';
-        }
+            if (!isValid) {
+                e.preventDefault();
+                alert('You cannot change the description after selecting an HS code');
+            }
+        });
     });
-});
 
     </script>
     

@@ -72,3 +72,13 @@ class Items(TimestampedUUIDModel):
     declaration = models.ForeignKey(Declaration,on_delete=models.CASCADE)
     hs_code = models.ForeignKey(HsCode,on_delete=models.SET_NULL, null=True)
 
+
+class RequiredDoc(TimestampedUUIDModel):
+    name = models.CharField(max_length=25,null=True,blank=False)
+    hs_code = models.ForeignKey(HsCode,on_delete=models.CASCADE)
+    format = models.CharField(max_length=25,null=True,blank=False)
+
+class Document(TimestampedUUIDModel):
+    file = models.FileField(null=True,blank=False)
+    item = models.ForeignKey(Items,on_delete=models.CASCADE)
+    required_doc = models.ForeignKey(RequiredDoc,on_delete=models.CASCADE,null=True)
