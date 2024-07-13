@@ -81,3 +81,4 @@ class RequiredDoc(TimestampedUUIDModel):
 class Document(TimestampedUUIDModel):
     file = models.FileField(null=True,blank=False)
     item = models.ForeignKey(Items,on_delete=models.CASCADE)
+    required_doc = models.ForeignKey(RequiredDoc,on_delete=models.CASCADE,null=True)

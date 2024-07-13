@@ -40,7 +40,7 @@
                 <h4>Declaration Details</h4>
             </div>
             <div class="card-body">
-                <form method="post" novalidate>
+                <form method="post" novalidate enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -160,6 +160,7 @@
                                 <tr>
                                     <th>Description</th>
                                     <th>HsCode</th>
+                                    <th>Documents</th>
                                     <th>Static Quantity Unit</th>
                                     <th>Supplementary Quantity Unit</th>
                                     <th>Unit Weight</th>
@@ -185,10 +186,16 @@
                                                 {% if field.name == 'goods_description' %}
                                                 <button type="button" class="btn btn-primary" id="search-hscode">Search</button>
                                                 {% endif %}
+                                                {% if field.name == 'hs_code' %}
+                                                <td class="documents"></td>
+                                                {% endif %}
+
+
                                                 <span class="error-message">Please enter a valid number.</span>
                                             </td>
                                             {% endif %}
                                         {% endfor %}
+                                        
                                         <td>
                                             <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">
                                             {% if form.instance.pk %}
@@ -212,151 +219,6 @@
             </div>
         </div>
     </div>
-    <!-- <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            var addButton = document.getElementById('add-row');
-            var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
-            var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
-            var currentFormCount = parseInt(formCountInput.value);
-            var originalDescriptions = {};
-
-            tableBody.addEventListener('click',function(e) {
-                console.log("hello",`id_items_set-${currentFormCount-1}-hs_code`)
-                console.log("hai",e.target.id)
-                if (e.target.id === `id_items_set-${currentFormCount-1}-hs_code`) {
-                    console.log("hello i am in")
-                    var row = e.target.closest('tr');
-                    var descriptionField = row.querySelector('textarea');
-                    var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-                    descriptionField.dataset.originalValue = descriptionField.value;
-                    hsCodeDropdown.addEventListener('click', function() {
-                        originalDescriptions[descriptionField.name] = descriptionField.value;
-                    console.log("orginal",originalDescriptions)
-                    });
-
-                    hsCodeDropdown.addEventListener('change', function() {
-                        originalDescriptions[descriptionField.name] = descriptionField.value;
-                        console.log("orginal",originalDescriptions)
-                
-            });
-
-        }
-    });
-
-            // Search functionality
-            tableBody.addEventListener('click', function(e) {
-             if (e.target.id === 'search-hscode') {
-                var row = e.target.closest('tr');
-                var descriptionField = row.querySelector('textarea');
-                var descriptionData = descriptionField.value;
-                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-
-                fetch('/search-hscode/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'  
-                    },
-                    body: JSON.stringify({ description: descriptionData })
-                    })
-                .then(response => response.json())
-                .then(data => {
-                    hsCodeDropdown.innerHTML = '';
-                    data.hs_codes.forEach(function(hsCode) {
-                        var option = document.createElement('option');
-                        option.value = hsCode.id;
-                        option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
-                        hsCodeDropdown.appendChild(option);
-                    });
-                    descriptionField.dataset.originalValue = descriptionField.value;
-            
-                hsCodeDropdown.addEventListener('click', function() {
-                    
-                    originalDescriptions[descriptionField.name] = descriptionField.value;
-
-                    console.log("orginal",originalDescriptions)
-                    
-                });
-
-                hsCodeDropdown.addEventListener('change', function() {
-                    
-                    originalDescriptions[descriptionField.name] = descriptionField.value;
-
-                    console.log("orginal",originalDescriptions)
-                    
-                });
-            })
-                .catch(error => console.error('Error:', error));
-        }
-    });
-
-            addButton.addEventListener('click', function() {
-                var newForm = tableBody.rows[0].cloneNode(true); 
-                var regex = new RegExp(`items_set-\\d+-`, 'g');  
-
-                newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`); 
-
-                tableBody.appendChild(newForm);
-                currentFormCount++;
-                formCountInput.value = currentFormCount; 
-
-                var inputs = newForm.querySelectorAll('input, textarea');
-                inputs.forEach(function(input) {
-                    if (input.type === 'hidden') {
-                        input.value = '';
-                    } else {
-                        input.value = '';
-                    }
-                });
-            });
-            tableBody.addEventListener('click', function(e) {
-                if (e.target.classList.contains('delete-btn')) {
-                    e.preventDefault();
-                    var row = e.target.closest('tr');
-                    var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
-                    deleteCheckbox.checked = true; 
-                    row.style.display = 'none';
-                    addButton.style.display = 'none';
-
-                    console.log(deleteCheckbox.name + " is checked: " + deleteCheckbox.checked);
-                }
-            });
-        });
-        // Custom validation for numeric fields
-        var numericFields = document.querySelectorAll('input[type="number"]');
-
-        numericFields.forEach(function(field) {
-            field.addEventListener('input', function() {
-                
-                if (!field.checkValidity()) {
-                    field.nextElementSibling.style.display = 'inline';
-                } 
-                else {
-                    field.nextElementSibling.style.display = 'none';
-                }
-            });
-        });
-
-    document.querySelector('form').addEventListener('submit', function(e) {
-        var isValid = true;
-        for (var key in originalDescriptions) {
-            console.log("in1")
-            var descriptionField = document.querySelector(`[name="${key}"]`);
-            if (descriptionField.value !== originalDescriptions[key]) {
-              console.log("in2")
-
-                isValid = false;
-                break;
-            }
-        }
-
-        if (!isValid) {
-            e.preventDefault();
-            alert('You cannot change the description after selecting an HS code.');
-        }
-    });
-   
-    </script> -->
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
@@ -365,12 +227,53 @@
             var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
             var currentFormCount = parseInt(formCountInput.value);
             var originalDescriptions = {};
+            var requiredDocsData = {};
+
+
+            function fetchAndDisplayDocuments(row, hsCode,item) {
+        var documentField = row.querySelector('.documents');
+        if (documentField) {
+            fetch(`/get-required-docs/?hs_code=${hsCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    documentField.innerHTML = '';
+                    requiredDocsData[hsCode] = data.required_docs;
+                    data.required_docs.forEach(function(doc) {
+                        var fileInput = document.createElement('input');
+                        fileInput.type = 'file';
+                        fileInput.name = `documents_${doc.id}`;
+                        fileInput.accept = doc.format.split(', ').map(format => `.${format}`).join(',');
+
+                        var label = document.createElement('label');
+                        label.textContent = `${doc.name} (${doc.format})`;
+
+                        documentField.appendChild(label);
+                        documentField.appendChild(fileInput);
+
+                        // Fetch document data and add to input field
+                        fetch(`/get-document-data/?doc_id=${doc.id}&hs_code=${hsCode}&item_id=${item}`)
+                        .then(response => {
+                            const contentDisposition = response.headers.get('Content-Disposition');
+                            console.log("contentDisposition",contentDisposition.filename)
+                            const match = contentDisposition && contentDisposition.match(/filename="([^"]+)"/);
+                            const fileName = match ? match[1] : 'file'; // Default to 'file' if no match found
+                            return response.blob().then(blob => ({ blob, fileName }));
+                        })
+                        .then(({ blob, fileName }) => {
+                            var file = new File([blob], fileName, { type: blob.type });
+                            var dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            fileInput.files = dataTransfer.files;
+                        })
+                        .catch(error => console.error('Error fetching document:', error));
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
     
             tableBody.addEventListener('click', function(e) {
-                console.log("hello", `id_items_set-${currentFormCount - 1}-hs_code`);
-                console.log("hai", e.target.id);
                 if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
-                    console.log("hello I am in");
                     var row = e.target.closest('tr');
                     var descriptionField = row.querySelector('textarea');
                     var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
@@ -378,12 +281,10 @@
     
                     hsCodeDropdown.addEventListener('click', function() {
                         originalDescriptions[descriptionField.name] = descriptionField.value;
-                        console.log("original", originalDescriptions);
                     });
     
                     hsCodeDropdown.addEventListener('change', function() {
                         originalDescriptions[descriptionField.name] = descriptionField.value;
-                        console.log("original", originalDescriptions);
                     });
                 }
             });
@@ -407,6 +308,13 @@
                     .then(response => response.json())
                     .then(data => {
                         hsCodeDropdown.innerHTML = '';
+
+                        // Add the "Select your HS code" option
+                        var placeholderOption = document.createElement('option');
+                        placeholderOption.value = '';
+                        placeholderOption.textContent = 'Select your HS code';
+                        hsCodeDropdown.appendChild(placeholderOption);
+                        
                         data.hs_codes.forEach(function(hsCode) {
                             var option = document.createElement('option');
                             option.value = hsCode.id;
@@ -417,12 +325,10 @@
     
                         hsCodeDropdown.addEventListener('click', function() {
                             originalDescriptions[descriptionField.name] = descriptionField.value;
-                            console.log("original", originalDescriptions);
                         });
     
                         hsCodeDropdown.addEventListener('change', function() {
                             originalDescriptions[descriptionField.name] = descriptionField.value;
-                            console.log("original", originalDescriptions);
                         });
                     })
                     .catch(error => console.error('Error:', error));
@@ -458,7 +364,15 @@
                     row.style.display = 'none';
                     addButton.style.display = 'none';
     
-                    console.log(deleteCheckbox.name + " is checked: " + deleteCheckbox.checked);
+                }
+            });
+
+                // Initialize documents for existing rows
+            tableBody.querySelectorAll('tr').forEach(function(row) {
+                var hsCodeField = row.querySelector('select[name$="-hs_code"]');
+                var itemField = row.querySelector('input[name$="-id"]')
+                if (hsCodeField && hsCodeField.value) {
+                    fetchAndDisplayDocuments(row, hsCodeField.value,itemField.value);
                 }
             });
     
@@ -478,11 +392,8 @@
             document.querySelector('form').addEventListener('submit', function(e) {
                 var isValid = true;
                 for (var key in originalDescriptions) {
-                    console.log("in1");
                     var descriptionField = document.querySelector(`[name="${key}"]`);
                     if (descriptionField.value !== originalDescriptions[key]) {
-                        console.log("in2");
-    
                         isValid = false;
                         break;
                     }
@@ -495,7 +406,7 @@
             });
         });
     </script>
-    
+
     
     <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
