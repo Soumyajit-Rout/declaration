@@ -62,7 +62,14 @@ class DeclarationSerializer(serializers.ModelSerializer):
     
     def get_trade_type(self, obj):
         return obj.trade_type.name
+    
 class UpdateDeclarationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Declaration
         fields = ["is_verified"]
+
+class ListDeclarationLogSerializer(serializers.ModelSerializer):
+    declaration = DeclarationSerializer()
+    class Meta:
+        model = Declaration_log
+        fields = ["status","comment","declaration","id","created_at","updated_at","is_deleted"]

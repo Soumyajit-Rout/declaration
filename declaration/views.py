@@ -93,7 +93,49 @@ def update_declaration(request, pk):
 
         if form.is_valid() and formset.is_valid():
             form.save()
-            formset.save()
+            items = formset.save()
+            print("items",items)
+            for item in items:
+                print("in1")
+                hs_code = item.hs_code
+                required_doc = RequiredDoc.objects.filter(hs_code=hs_code)
+                for doc in required_doc:
+                    print("Processing doc:", doc.id)
+
+                    file_field_name = f'documents_{doc.id}_{item.id}'
+                    if file_field_name in request.FILES:
+                        print("File field found:", file_field_name)
+                        uploaded_file = request.FILES[file_field_name]
+                        print("Uploaded file:", uploaded_file.name)
+
+                        if Document.objects.get(required_doc=doc, item=item):
+                            print("Document exists, updating...")
+                            Document.objects.filter(required_doc=doc, item=item).update(
+                                item=item,
+                                required_doc=doc,
+                                file=uploaded_file
+                            )
+                        else:
+                            print("Creating new document...")
+                            Document.objects.create(
+                                item=item,
+                                required_doc=doc,
+                                file=uploaded_file
+                            )
+            if not items:
+                items = Items.objects.filter(declaration=declaration)
+                print(request.FILES)
+                for item in items:
+                    hs_code = item.hs_code
+                    required_docs = RequiredDoc.objects.filter(hs_code=hs_code)
+                    for doc in required_docs:
+                        file_field_name = f'documents_{doc.id}_{item.id}'
+                        if file_field_name in request.FILES:
+                            Document.objects.update(
+                                required_doc=doc, item=item,
+                                file =request.FILES[file_field_name]
+                            )
+
             return redirect('view_declaration')
     else:
         form = DeclarationForm(instance=declaration)
@@ -195,8 +237,9 @@ class UpdateDeclaration(APIView):
     def put(self, request):
         id = request.query_params.get("id")
         req_data = request.query_params.get("is_verified")
-        if not id:
-            return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+        comment = request.query_params.get("comment")
+        if not id and not req_data:
+            return Response({"detail": "ID and Request Data is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             declaration = Declaration.objects.get(id=id)
         except Declaration.DoesNotExist:
@@ -204,9 +247,24 @@ class UpdateDeclaration(APIView):
         data = {"is_verified":req_data}
         serializer = UpdateDeclarationSerializer(declaration, data=data, partial=True)
         if serializer.is_valid():
-            serializer.save()
+            data = serializer.save()
+            print("data",data)
+            Declaration_log.objects.create(
+                status = data.is_verified,
+                declaration = data,
+                comment = comment,
+            )
+
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ListDeclarationLog(generics.ListAPIView):
+    permission_classes = [StaticTokenPermission]
+    serializer_class = ListDeclarationLogSerializer
+    def get_queryset(self):
+        id = self.request.query_params.get("id")
+        return Declaration_log.objects.filter(declaration = id)
 
 
 def get_required_docs(request):

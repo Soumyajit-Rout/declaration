@@ -187,7 +187,9 @@
                                                 <button type="button" class="btn btn-primary" id="search-hscode">Search</button>
                                                 {% endif %}
                                                 {% if field.name == 'hs_code' %}
-                                                <td class="documents"></td>
+                                                <td class="documents">
+                                                    
+                                                </td>
                                                 {% endif %}
 
 
@@ -230,9 +232,9 @@
             var requiredDocsData = {};
 
 
-            function fetchAndDisplayDocuments(row, hsCode,item) {
-        var documentField = row.querySelector('.documents');
-        if (documentField) {
+          function fetchAndDisplayDocuments(row, hsCode,item) {
+            var documentField = row.querySelector('.documents');
+            if (documentField) {
             fetch(`/get-required-docs/?hs_code=${hsCode}`)
                 .then(response => response.json())
                 .then(data => {
@@ -241,8 +243,8 @@
                     data.required_docs.forEach(function(doc) {
                         var fileInput = document.createElement('input');
                         fileInput.type = 'file';
-                        fileInput.name = `documents_${doc.id}`;
-                        fileInput.accept = doc.format.split(', ').map(format => `.${format}`).join(',');
+                        fileInput.name = `documents_${doc.id}_${item}`;
+                        fileInput.classList.add('required-file');
 
                         var label = document.createElement('label');
                         label.textContent = `${doc.name} (${doc.format})`;
@@ -330,6 +332,11 @@
                         hsCodeDropdown.addEventListener('change', function() {
                             originalDescriptions[descriptionField.name] = descriptionField.value;
                         });
+                        hsCodeDropdown.addEventListener('change', function() {
+                            var hsCode = hsCodeDropdown.value;
+                            var item = row.querySelector('input[name$="-id"]').value;
+                            fetchAndDisplayDocuments(row, hsCode, item);
+                        });
                     })
                     .catch(error => console.error('Error:', error));
                 }
@@ -398,6 +405,31 @@
                         break;
                     }
                 }
+
+                  // Check for required file inputs
+            var requiredFiles = document.querySelectorAll('.required-file');
+            requiredFiles.forEach(function(input) {
+                if (!input.files.length) {
+                    e.preventDefault();
+                alert(' you must upload all required files.');
+                }
+            });
+
+              
+            for (let hsCode in requiredDocsData) {
+            requiredDocsData[hsCode].forEach(function(doc) {
+                var fileInput = document.querySelector(`input[name="documents_${doc.id}"]`);
+                if (fileInput && fileInput.files.length > 0) {
+                    var file = fileInput.files[0];
+                    var ext = file.name.split('.').pop().toLowerCase();
+                    if (!doc.format.split(',').includes(ext)) {
+                        e.preventDefault();
+                        alert(`Invalid file format for ${doc.name}: ${ext}`);
+                        fileInput.value = ''; 
+                    }
+                }
+            });
+        }
     
                 if (!isValid) {
                     e.preventDefault();

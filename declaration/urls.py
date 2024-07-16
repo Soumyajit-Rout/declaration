@@ -11,6 +11,7 @@ urlpatterns = [
      path('api/DeclarationRegistration/verification/getDeclarationRegistrationData',ListDeclarations.as_view(),name='list_declaration'),
      path('api/DeclarationRegistration/verification/getDeclarationRegistrationDatabyId',RetrieveDeclaration.as_view(),name='retrieve_declaration'),
      path('api/DeclarationRegistration/verification/updateDeclarationRegistrationData',UpdateDeclaration.as_view(),name='retrieve_declaration'),
+     path('api/DeclarationRegistration/verification/listDeclarationLogData',ListDeclarationLog.as_view(),name='retrieve_declaration'),
      path('get-required-docs/', get_required_docs, name='get_required_docs'),
      path('get-document-data/', get_document_data, name='get-document-data'),
 

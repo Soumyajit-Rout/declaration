@@ -82,3 +82,14 @@ class Document(TimestampedUUIDModel):
     file = models.FileField(null=True,blank=False)
     item = models.ForeignKey(Items,on_delete=models.CASCADE)
     required_doc = models.ForeignKey(RequiredDoc,on_delete=models.CASCADE,null=True)
+
+class Declaration_log(TimestampedUUIDModel):
+     status_choices = (
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (-1, -1),
+    )
+     declaration = models.ForeignKey(Declaration,on_delete=models.CASCADE)
+     status = models.IntegerField(choices=status_choices,default=0)
+     comment = models.CharField(max_length=250,null=True,blank=True)
