@@ -190,7 +190,7 @@
                                 <tr>
                                     <td>{{ form.goods_description }} {{ form.goods_description.errors }} <button type="button" class="btn btn-primary" id="search-hscode">Search</button></td>
                                     <td>{{ form.hs_code }}  {{ form.hs_code.errors }}</td>
-                                    <td class="documents"></td>
+                                    <td class="documents" data-item-index="{{ forloop.counter0 }}"></td>
                                     <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
                                     <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
                                     <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}<span class="error-message">Please enter a valid number.</span></td>
@@ -304,24 +304,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         addButton.addEventListener('click', function() {
-            var newForm = tableBody.rows[0].cloneNode(true);
-            var regex = new RegExp(`items_set-\\d+-`, 'g');
+    var newForm = tableBody.rows[0].cloneNode(true);
+    var regex = new RegExp(`items_set-\\d+-`, 'g');
 
-            newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
+    newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
+    newForm.dataset.itemIndex = currentFormCount; // Set the item index for the new row
 
-            tableBody.appendChild(newForm);
-            currentFormCount++;
-            formCountInput.value = currentFormCount;
+    tableBody.appendChild(newForm);
+    currentFormCount++;
+    formCountInput.value = currentFormCount;
 
-            var inputs = newForm.querySelectorAll('input, textarea');
-            inputs.forEach(function(input) {
-                if (input.type === 'hidden') {
-                    input.value = '';
-                } else {
-                    input.value = '';
-                }
-            });
-        });
+    var inputs = newForm.querySelectorAll('input, textarea');
+    inputs.forEach(function(input) {
+        if (input.type === 'hidden') {
+            input.value = '';
+        } else {
+            input.value = '';
+        }
+        input.dataset.itemIndex = currentFormCount - 1; // Set the item index for each input
+    });
+    var documentsCell = newForm.querySelector('.documents');
+    if (documentsCell) {
+        documentsCell.dataset.itemIndex = currentFormCount - 1; // Set the item index for the documents cell
+    }
+});
+
 
         tableBody.addEventListener('click', function(e) {
             if (e.target.classList.contains('delete-btn')) {
@@ -353,6 +360,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 var row = e.target.closest('tr');
                 var hsCode = e.target.value;
                 var documentField = row.querySelector('.documents');
+                var itemIndex = documentField.dataset.itemIndex;
+                console.log("itemIndex",itemIndex)
 
                 fetch(`/get-required-docs/?hs_code=${hsCode}`)
                     .then(response => response.json())
@@ -363,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         data.required_docs.forEach(function(doc) {
                             var fileInput = document.createElement('input');
                             fileInput.type = 'file';
-                            fileInput.name = `documents_${doc.id}`;
+                            fileInput.name = `documents_${itemIndex}_${doc.id}`;
                             fileInput.required = true;
                             fileInput.classList.add('required-file');
                             var label = document.createElement('label');

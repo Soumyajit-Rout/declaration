@@ -81,5 +81,5 @@ class DocumentForm(forms.ModelForm):
 
 ItemFormSet = inlineformset_factory(Declaration, Items,extra=1,form=ItemForm, can_delete=True)
 ItemUpdateFormSet = inlineformset_factory(Declaration, Items, form=ItemUpdateForm, extra=0, can_delete=True)
-DocumentFormSet = inlineformset_factory(Items,Document,extra=1,form=DocumentForm, can_delete=True)
+DocumentFormSet = inlineformset_factory(Items,Document,extra=0,form=DocumentForm, can_delete=True)
 

@@ -23,13 +23,22 @@
             display: none;
         }
         .delete-row {
-            display: none;
+            display: non;
         }
         .error-message {
             color: red;
             font-size: 0.9em;
             display: none;
         }
+
+
+        input[name$="-file-clear"] {
+    display: none;
+}
+label[for$="-file-clear_id"]{
+    display: none;
+
+}
     </style>
 </head>
 <body>
@@ -181,14 +190,39 @@
                                         {% for field in form.visible_fields %}
                                         {% if field.name != 'DELETE' %} 
                                             <td>
+                                                
                                                 {{ field.errors }}
                                                 {{ field }}
                                                 {% if field.name == 'goods_description' %}
                                                 <button type="button" class="btn btn-primary" id="search-hscode">Search</button>
                                                 {% endif %}
                                                 {% if field.name == 'hs_code' %}
-                                                <td class="documents">
+                                                <td class="view-documents">
                                                     
+                                            {% for document_formset in document_formsets %}
+                                          
+                                                {{ document_formset.management_form }}
+                                                {% for forms in document_formset %}
+                                                {% if forms.instance.item.id == form.instance.id %}
+                                                {% if not forms.instance.is_deleted %}
+                                                {% for field in forms %}
+                                                
+                                                {% if not field.name == 'DELETE' %}
+                                                    {{ field }}
+
+                                                {% endif %}
+                                            
+                                            {% endfor %}
+                                            {% endif %}
+
+                                            {% endif %}
+
+                                                {% endfor %}
+                                            
+
+                                                {% endfor %}
+                                                
+
                                                 </td>
                                                 {% endif %}
 
@@ -199,7 +233,6 @@
                                         {% endfor %}
                                         
                                         <td>
-                                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">
                                             {% if form.instance.pk %}
                                                 <a href="" class=" delete-btn btn btn-danger btn-sm">Delete</a>
                                             {% endif %}
@@ -232,48 +265,7 @@
             var requiredDocsData = {};
 
 
-          function fetchAndDisplayDocuments(row, hsCode,item) {
-            var documentField = row.querySelector('.documents');
-            if (documentField) {
-            fetch(`/get-required-docs/?hs_code=${hsCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    documentField.innerHTML = '';
-                    requiredDocsData[hsCode] = data.required_docs;
-                    data.required_docs.forEach(function(doc) {
-                        var fileInput = document.createElement('input');
-                        fileInput.type = 'file';
-                        fileInput.name = `documents_${doc.id}_${item}`;
-                        fileInput.classList.add('required-file');
 
-                        var label = document.createElement('label');
-                        label.textContent = `${doc.name} (${doc.format})`;
-
-                        documentField.appendChild(label);
-                        documentField.appendChild(fileInput);
-
-                        // Fetch document data and add to input field
-                        fetch(`/get-document-data/?doc_id=${doc.id}&hs_code=${hsCode}&item_id=${item}`)
-                        .then(response => {
-                            const contentDisposition = response.headers.get('Content-Disposition');
-                            console.log("contentDisposition",contentDisposition.filename)
-                            const match = contentDisposition && contentDisposition.match(/filename="([^"]+)"/);
-                            const fileName = match ? match[1] : 'file'; // Default to 'file' if no match found
-                            return response.blob().then(blob => ({ blob, fileName }));
-                        })
-                        .then(({ blob, fileName }) => {
-                            var file = new File([blob], fileName, { type: blob.type });
-                            var dataTransfer = new DataTransfer();
-                            dataTransfer.items.add(file);
-                            fileInput.files = dataTransfer.files;
-                        })
-                        .catch(error => console.error('Error fetching document:', error));
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    }
-    
             tableBody.addEventListener('click', function(e) {
                 if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
                     var row = e.target.closest('tr');
@@ -335,13 +327,96 @@
                         hsCodeDropdown.addEventListener('change', function() {
                             var hsCode = hsCodeDropdown.value;
                             var item = row.querySelector('input[name$="-id"]').value;
-                            fetchAndDisplayDocuments(row, hsCode, item);
+                        
+                    var documentField = row.querySelector('.view-documents');
+                    console.log("documentField",documentField)
+                    if (documentField) {
+                        fetch(`/get-required-docs/?hs_code=${hsCode}`)
+                            .then(response => response.json())
+                            .then(data => {
+
+                                clearFormset(documentField);
+                                requiredDocsData[hsCode] = data.required_docs;
+                                data.required_docs.forEach(function(doc) {
+                                    var fileInput = document.createElement('input');
+                                    fileInput.type = 'file';
+                                    fileInput.name = `documents_item_${item}_${doc.id}`;
+                                    fileInput.classList.add('required-file');
+
+                                    var label = document.createElement('label');
+                                    label.textContent = `${doc.name} (${doc.format})`;
+
+                                    documentField.appendChild(label);
+                                    documentField.appendChild(fileInput);
+
+
+
+                        // fetch(`/get-document-data/?doc_id=${doc.id}&hs_code=${hsCode}&item_id=${item}`)
+                        //     .then(response => {
+                        //         const contentDisposition = response.headers.get('Content-Disposition');
+                        //         const match = contentDisposition && contentDisposition.match(/filename="([^"]+)"/);
+                        //         const fileName = match ? match[1] : 'file';
+                        //         return response.blob().then(blob => ({ blob, fileName }));
+                        //     })
+                        //     .then(({ blob, fileName }) => {
+                        //         var file = new File([blob], fileName, { type: blob.type });
+                        //         var dataTransfer = new DataTransfer();
+                        //         dataTransfer.items.add(file);
+                        //         fileInput.files = dataTransfer.files;
+                        //     })
+                        //     .catch(error => console.error('Error fetching document:', error));
+                    });
+                                    // Update management form fields
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    
                         });
                     })
                     .catch(error => console.error('Error:', error));
                 }
             });
-    
+            function clearFormset(documentField) {
+    // Remove only the file input elements and labels
+    var inputs = documentField.querySelectorAll('input[type="file"], label');
+    inputs.forEach(function(input) {
+        input.previousElementSibling.remove();
+        input.remove();
+    });
+
+       // Optionally, if you want to remove the existing links and 'Change' text
+       var links = documentField.querySelectorAll('a');
+    links.forEach(function(link) {
+        link.nextElementSibling.remove(); // Remove 'Change' text
+        link.remove(); // Remove the link itself
+    });
+
+    var nodes = documentField.childNodes;
+    nodes.forEach(function(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            if (node.textContent.includes('Currently') || node.textContent.includes('Change')) {
+                node.remove();
+            }
+        }
+    });
+}
+
+            function updateManagementFormFields(row) {
+                var totalFormsField = row.querySelector('input[name$="-TOTAL_FORMS"]');
+                var initialFormsField = row.querySelector('input[name$="-INITIAL_FORMS"]');
+       console.log("totalFormsField",totalFormsField)
+       console.log("Initial Forms Field: ", initialFormsField);
+    if (totalFormsField && initialFormsField) {
+        var totalForms = documentField.querySelectorAll('input[type="file"]').length;
+        totalFormsField.value = totalForms;
+        initialFormsField.value = 0;  // Assuming no initial forms when we replace the formset
+    }else {
+        console.error("Management form fields not found.");
+    }
+}
+
+
+
             addButton.addEventListener('click', function() {
                 var newForm = tableBody.rows[0].cloneNode(true);
                 var regex = new RegExp(`items_set-\\d+-`, 'g');
@@ -367,6 +442,7 @@
                     e.preventDefault();
                     var row = e.target.closest('tr');
                     var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
+                    console.log("deleteCheckbox",deleteCheckbox)
                     deleteCheckbox.checked = true;
                     row.style.display = 'none';
                     addButton.style.display = 'none';

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from .serializers import *
 from .forms import DeclarationForm,ItemFormSet,ItemUpdateFormSet,DocumentFormSet
@@ -37,13 +37,14 @@ def create_declaration(request):
                     item_formset.instance = declaration
                     items = item_formset.save()
                     
-                    for item in items:
+                    for item_index, item in enumerate(items):
                         hs_code = item.hs_code
                         if hs_code:
                             print("in1")
                             required_docs = RequiredDoc.objects.filter(hs_code=hs_code)
                             for req_doc in required_docs:
-                                file_field_name = f'documents_{req_doc.id}'
+                                file_field_name = f'documents_{item_index}_{req_doc.id}'
+                                
                                 if file_field_name in request.FILES:
                                     print("in2")
 
@@ -80,68 +81,82 @@ function expects an id of the declaration object,once the updation is completed,
 page gets redirected to view_declaration page and here the page which is being rendered is
 the update_declaration.html
 """
+
+
 def update_declaration(request, pk):
-    declaration = Declaration.objects.get(id=pk)
+    declaration = get_object_or_404(Declaration, id=pk)
 
     if request.method == 'POST':
         form = DeclarationForm(request.POST, instance=declaration)
         formset = ItemUpdateFormSet(request.POST, instance=declaration)
-        if not form.is_valid():
-            print("Declaration Form Errors:", form.errors)
-        if not formset.is_valid():
-            print("Item Formset Errors:", formset.errors)
+        
+        # Collect document formsets for each item in the declaration
+        document_formsets = []
+        for item in declaration.items_set.all():
+            document_formset = DocumentFormSet(request.POST, request.FILES, instance=item, prefix=f'documents_{item.pk}')
+            document_formsets.append(document_formset)
 
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid() and formset.is_valid() :
             form.save()
-            items = formset.save()
-            print("items",items)
-            for item in items:
-                print("in1")
-                hs_code = item.hs_code
-                required_doc = RequiredDoc.objects.filter(hs_code=hs_code)
-                for doc in required_doc:
-                    print("Processing doc:", doc.id)
+            formset.save()
+            if all(dfs.is_valid() for dfs in document_formsets):
+                for dfs in document_formsets:
+                    # print("dfs",dfs)
+                    # print("request.FILES",request.FILES)
+                    dfs.save()
+                
+                pattern = re.compile(r'documents_item_(?P<item_id>[^_]+)_(?P<doc_id>.+)')
 
-                    file_field_name = f'documents_{doc.id}_{item.id}'
-                    if file_field_name in request.FILES:
-                        print("File field found:", file_field_name)
-                        uploaded_file = request.FILES[file_field_name]
-                        print("Uploaded file:", uploaded_file.name)
+                # Iterate over the keys in request.FILES
+                doc=[]
+                for key in request.FILES:
+                    print("I am in 1")
+                    if key.startswith('documents_item'):
+                        match = pattern.match(key)
+                        if match:
+                            print("I am in 2")
+                            item_id = match.group('item_id')
+                            doc_id = match.group('doc_id')
+                            print(f"Item ID: {item_id}, Document ID: {doc_id}")
+                            item_obj = Items.objects.get(id = item_id)
+                            required_doc = RequiredDoc.objects.get(id = doc_id)
+                            doc.append(required_doc)
+                            print("doc",doc)
+                            existing_documents = Document.objects.filter(item=item_obj).exclude(required_doc__in=doc)
 
-                        if Document.objects.get(required_doc=doc, item=item):
-                            print("Document exists, updating...")
-                            Document.objects.filter(required_doc=doc, item=item).update(
-                                item=item,
-                                required_doc=doc,
-                                file=uploaded_file
-                            )
-                        else:
-                            print("Creating new document...")
-                            Document.objects.create(
-                                item=item,
-                                required_doc=doc,
-                                file=uploaded_file
-                            )
-            if not items:
-                items = Items.objects.filter(declaration=declaration)
-                print(request.FILES)
-                for item in items:
-                    hs_code = item.hs_code
-                    required_docs = RequiredDoc.objects.filter(hs_code=hs_code)
-                    for doc in required_docs:
-                        file_field_name = f'documents_{doc.id}_{item.id}'
-                        if file_field_name in request.FILES:
-                            Document.objects.update(
-                                required_doc=doc, item=item,
-                                file =request.FILES[file_field_name]
-                            )
+                            if existing_documents.exists():
+                                print("in5",existing_documents)
+                                existing_documents.update(is_deleted=True)
 
-            return redirect('view_declaration')
+                            Document.objects.create(item=item_obj, 
+                                                    file=request.FILES[key],
+                                                    required_doc = required_doc
+                                                        )
+
+        else :
+            print("Form errors:", form.errors)
+            print("Formset errors:", formset.errors)
+            for i, dfs in enumerate(document_formsets):
+                print(f"DocumentFormSet {i} errors:", dfs.errors)
+
+            return redirect('view_declaration')  # Adjust as per your URL name
     else:
         form = DeclarationForm(instance=declaration)
         formset = ItemUpdateFormSet(instance=declaration)
+        
+        # Initialize document formsets for each item in the declaration
+        document_formsets = []
+        for item in declaration.items_set.all():
+            document_formset = DocumentFormSet(instance=item, prefix=f'documents_{item.pk}')
+            document_formsets.append(document_formset)
 
-    return render(request, 'update_declaration.html', {'form': form,'item_formset': formset,})
+    context = {
+        'form': form,
+        'item_formset': formset,
+        'document_formsets': document_formsets,
+    }
+    return render(request, 'update_declaration.html', context)
+
 
 """
 This is to soft delete the declaraion object when the delete button in the update html
