@@ -19,7 +19,8 @@ class DeclarationForm(forms.ModelForm):
             'cargo_channel',
             'transaction_type',
             'trade_type',
-            'regime_type'
+            'regime_type',
+            'comments',
         ]
         widgets = {
             'declaration_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
@@ -53,6 +54,8 @@ class ItemForm(forms.ModelForm):
                   'hs_code',
                   ]  
         
+    
+        
 class ItemUpdateForm(forms.ModelForm):
     class Meta:
         model = Items
@@ -67,6 +70,29 @@ class ItemUpdateForm(forms.ModelForm):
             'duty_fee',
             'declaration',         
         ]
+        
+
+        
+class DeclarationUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Declaration
+        fields = [
+            'declaration_date',
+            'request_no',
+            'declaration_no',
+            'net_weight',
+            'gross_weight',
+            'measurements',
+            'nmbr_of_packages',
+            'cargo_type',
+            'declaration_type',
+            'cargo_channel',
+            'transaction_type',
+            'trade_type',
+            'regime_type',
+            'comments',
+        ]
+
 
 class DocumentForm(forms.ModelForm):
     class Meta:

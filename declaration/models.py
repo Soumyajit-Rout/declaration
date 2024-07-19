@@ -52,6 +52,7 @@ class Declaration(TimestampedUUIDModel):
      trade_type = models.ForeignKey(TradeType,on_delete=models.SET_NULL, null=True)
      regime_type = models.ForeignKey(RegimeType,on_delete=models.SET_NULL, null=True)
      is_verified = models.IntegerField(default=0,null=True,blank=True)
+     comments = models.TextField(max_length=200,null=True,blank=True)
 
 class HsCode(TimestampedUUIDModel):
     keywords = models.TextField(max_length=200,null=True,blank=False)  

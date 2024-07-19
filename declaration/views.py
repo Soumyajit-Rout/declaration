@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from .serializers import *
-from .forms import DeclarationForm,ItemFormSet,ItemUpdateFormSet,DocumentFormSet
+from .forms import DeclarationForm,ItemFormSet,ItemUpdateFormSet,DocumentFormSet,DeclarationUpdateForm
 from django.db import transaction
 from django.db import transaction
 from django.views.decorators.http import require_POST
@@ -132,14 +132,18 @@ def update_declaration(request, pk):
                                                     file=request.FILES[key],
                                                     required_doc = required_doc
                                                         )
+            else:
+                for i, dfs in enumerate(document_formsets):
+                    print(f"DocumentFormSet {i} errors:", dfs.errors)
 
+                return redirect('view_declaration')  # Adjust as per your URL name
         else :
             print("Form errors:", form.errors)
             print("Formset errors:", formset.errors)
-            for i, dfs in enumerate(document_formsets):
-                print(f"DocumentFormSet {i} errors:", dfs.errors)
+            # for i, dfs in enumerate(document_formsets):
+            #     print(f"DocumentFormSet {i} errors:", dfs.errors)
 
-            return redirect('view_declaration')  # Adjust as per your URL name
+            # return redirect('view_declaration')  # Adjust as per your URL name
     else:
         form = DeclarationForm(instance=declaration)
         formset = ItemUpdateFormSet(instance=declaration)

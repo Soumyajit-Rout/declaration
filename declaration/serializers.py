@@ -38,12 +38,17 @@ class DeclarationSerializer(serializers.ModelSerializer):
     cargo_channel = serializers.SerializerMethodField()
     transaction_type = serializers.SerializerMethodField()
     trade_type = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Declaration
-        fields = ["id","created_at","updated_at","is_deleted","declaration_date","request_no","declaration_no","net_weight",
+        fields = ["id","created_at","updated_at","is_deleted","declaration_date","name","declaration_no","net_weight",
                   "gross_weight","measurements","nmbr_of_packages","regime_type","cargo_type","declaration_type","cargo_channel",
                   "transaction_type","trade_type","is_verified"]
+    
+
+    def get_name(self, obj):
+        return obj.request_no
     
     def get_regime_type(self, obj):
         return obj.regime_type.name
