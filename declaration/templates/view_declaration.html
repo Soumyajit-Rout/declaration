@@ -38,6 +38,7 @@
                     <th>Transaction Type</th>
                     <th>Trade Type</th>
                     <th>Regime Type</th>
+                    <th>View Log</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -59,6 +60,8 @@
                     <td>{{ declaration.transaction_type.name }}</td>
                     <td>{{ declaration.trade_type.name }}</td>
                     <td>{{ declaration.regime_type.name }}</td>
+                    <td> <a href="{% url 'view-logs' declaration.pk %}" class="">View Logs</a></td>
+
                     <td>
                         <a href="{% url 'update_declaration' declaration.pk %}" class="btn btn-warning btn-sm">Update</a>
                         <form action="{% url 'delete_declaration' declaration.pk %}" method="post" style="display:inline;">

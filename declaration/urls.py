@@ -14,5 +14,8 @@ urlpatterns = [
      path('api/DeclarationRegistration/verification/listDeclarationLogData',ListDeclarationLog.as_view(),name='retrieve_declaration'),
      path('get-required-docs/', get_required_docs, name='get_required_docs'),
      path('get-document-data/', get_document_data, name='get-document-data'),
+     path('delete-item/<uuid:item_id>/',delete_item,name='delete_item'),
+     path('view-logs/<uuid:pk>/',Declaration_Logs_List,name='view-logs'),
+
 
 ]

@@ -24,6 +24,9 @@
             font-size: 0.9em;
             display: none;
         }
+        .delete-row {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -187,6 +190,7 @@
                         <tbody> 
                             {{ item_formset.management_form }}
                             {% for form in item_formset %}
+                            
                                 <tr>
                                     <td>{{ form.goods_description }} {{ form.goods_description.errors }} <button type="button" class="btn btn-primary" id="search-hscode">Search</button></td>
                                     <td>{{ form.hs_code }}  {{ form.hs_code.errors }}</td>
@@ -198,24 +202,13 @@
                                     <td>{{ form.cif_value }} {{ form.goods_value.errors }}<span class="error-message">Please enter a valid number.</span></td>
                                     <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}<span class="error-message">Please enter a valid number.</span></td>
                                     <td>
+                                        <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">  
                                         {% if form.instance.pk %}
-                                            <button type="button" class="delete-row btn btn-danger">Delete</button>
+                                        <a href="" class="delete-btn btn btn-danger btn-sm">Delete</a>
                                         {% endif %}
                                     </td>
                                 </tr>
-                                <!-- <tr>
-                                    <td colspan="8">
-                                        {% if form.non_field_errors %}
-                                            <div class="alert alert-danger">
-                                                <ul>
-                                                    {% for error in form.non_field_errors %}
-                                                        <li>{{ error }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        {% endif %}
-                                    </td>
-                                </tr> -->
+
                             {% endfor %}
                         </tbody>
                     </table>
@@ -336,6 +329,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 var row = e.target.closest('tr');
                 var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
                 deleteCheckbox.checked = true;
+                deleteCheckbox.value = 'true';
+
                 row.style.display = 'none';
                 addButton.style.display = 'none';
 
@@ -361,7 +356,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 var hsCode = e.target.value;
                 var documentField = row.querySelector('.documents');
                 var itemIndex = documentField.dataset.itemIndex;
-                console.log("itemIndex",itemIndex)
 
                 fetch(`/get-required-docs/?hs_code=${hsCode}`)
                     .then(response => response.json())
@@ -389,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Form submission validation
         document.querySelector('form').addEventListener('submit', function(e) {
             var isValid = true;
-            
+            var rows = document.querySelectorAll('#item-table tbody tr');
             // Check for originalDescriptions change
             for (var key in originalDescriptions) {
                 var descriptionField = document.querySelector(`[name="${key}"]`);
@@ -408,21 +402,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-              
-            for (let hsCode in requiredDocsData) {
-            requiredDocsData[hsCode].forEach(function(doc) {
-                var fileInput = document.querySelector(`input[name="documents_${doc.id}"]`);
+
+        rows.forEach(function(row) {
+            var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+            var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
+            var documentField = row.querySelector('.documents');
+            var requiredDocs = requiredDocsData[hsCode] || [];
+            var documentField = row.querySelector('.documents');
+            var itemIndex = documentField.getAttribute('data-item-index');
+
+
+            requiredDocs.forEach(function(doc) {
+                var fileInput = document.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
                 if (fileInput && fileInput.files.length > 0) {
                     var file = fileInput.files[0];
                     var ext = file.name.split('.').pop().toLowerCase();
                     if (!doc.format.split(',').includes(ext)) {
-                        e.preventDefault();
+                        event.preventDefault();
                         alert(`Invalid file format for ${doc.name}: ${ext}`);
-                        fileInput.value = ''; 
+                        fileInput.value = ''; // Clear the invalid file input
                     }
                 }
             });
-        }
+        });
+
     
 
             if (!isValid) {

@@ -28,25 +28,24 @@ def create_declaration(request):
         declaration_form = DeclarationForm(request.POST)
         item_formset = ItemFormSet(request.POST)
         # document_formset = DocumentFormSet(request.POST, request.FILES)
-
         if declaration_form.is_valid() and item_formset.is_valid():
-            print("i anm in")
             try:
                 with transaction.atomic():
                     declaration = declaration_form.save()
                     item_formset.instance = declaration
                     items = item_formset.save()
+
+                    for deleted_item in item_formset.deleted_objects:
+                        deleted_item.delete()
                     
                     for item_index, item in enumerate(items):
                         hs_code = item.hs_code
                         if hs_code:
-                            print("in1")
                             required_docs = RequiredDoc.objects.filter(hs_code=hs_code)
                             for req_doc in required_docs:
                                 file_field_name = f'documents_{item_index}_{req_doc.id}'
                                 
                                 if file_field_name in request.FILES:
-                                    print("in2")
 
                                     Document.objects.create(
                                         item=item,
@@ -72,7 +71,7 @@ This function is to display the declaration objects it is a normal list function
 renders the view_declaration.html page
 """
 def declaration_list(request):
-    declarations = Declaration.objects.all()
+    declarations = Declaration.objects.all().order_by('declaration_date')
     return render(request, 'view_declaration.html', {'declarations': declarations})
 
 """
@@ -82,84 +81,194 @@ page gets redirected to view_declaration page and here the page which is being r
 the update_declaration.html
 """
 
-
 def update_declaration(request, pk):
     declaration = get_object_or_404(Declaration, id=pk)
 
     if request.method == 'POST':
-        form = DeclarationForm(request.POST, instance=declaration)
-        formset = ItemUpdateFormSet(request.POST, instance=declaration)
-        
-        # Collect document formsets for each item in the declaration
-        document_formsets = []
-        for item in declaration.items_set.all():
-            document_formset = DocumentFormSet(request.POST, request.FILES, instance=item, prefix=f'documents_{item.pk}')
-            document_formsets.append(document_formset)
+        # Manually retrieve data from request.POST
+        cargo_type_id = request.POST.get('cargo_type')
+        declaration_type_id = request.POST.get('declaration_type')
+        cargo_channel_id = request.POST.get('cargo_channel')
+        transaction_type_id = request.POST.get('transaction_type')
+        trade_type_id = request.POST.get('trade_type')
+        regime_type_id = request.POST.get('regime_type')
 
-        if form.is_valid() and formset.is_valid() :
-            form.save()
-            formset.save()
-            if all(dfs.is_valid() for dfs in document_formsets):
-                for dfs in document_formsets:
-                    # print("dfs",dfs)
-                    # print("request.FILES",request.FILES)
-                    dfs.save()
-                
-                pattern = re.compile(r'documents_item_(?P<item_id>[^_]+)_(?P<doc_id>.+)')
+        # Fetch model instances
+        cargo_type = CargoType.objects.get(id=cargo_type_id) if cargo_type_id else None
+        declaration_type = DeclarationType.objects.get(id=declaration_type_id) if declaration_type_id else None
+        cargo_channel = CargoChannel.objects.get(id=cargo_channel_id) if cargo_channel_id else None
+        transaction_type = TransactionType.objects.get(id=transaction_type_id) if transaction_type_id else None
+        trade_type = TradeType.objects.get(id=trade_type_id) if trade_type_id else None
+        regime_type = RegimeType.objects.get(id=regime_type_id) if regime_type_id else None
 
-                # Iterate over the keys in request.FILES
-                doc=[]
-                for key in request.FILES:
-                    print("I am in 1")
-                    if key.startswith('documents_item'):
-                        match = pattern.match(key)
-                        if match:
-                            print("I am in 2")
-                            item_id = match.group('item_id')
-                            doc_id = match.group('doc_id')
-                            print(f"Item ID: {item_id}, Document ID: {doc_id}")
-                            item_obj = Items.objects.get(id = item_id)
-                            required_doc = RequiredDoc.objects.get(id = doc_id)
-                            doc.append(required_doc)
-                            print("doc",doc)
-                            existing_documents = Document.objects.filter(item=item_obj).exclude(required_doc__in=doc)
+        declaration_data = {
+            'declaration_date': request.POST.get('declaration_date'),
+            'request_no': request.POST.get('request_no'),
+            'declaration_no': request.POST.get('declaration_no'),
+            'net_weight': request.POST.get('net_weight'),
+            'gross_weight': request.POST.get('gross_weight'),
+            'measurements': request.POST.get('measurements'),
+            'nmbr_of_packages': request.POST.get('nmbr_of_packages'),
+            'cargo_type': cargo_type,
+            'declaration_type': declaration_type,
+            'cargo_channel': cargo_channel,
+            'transaction_type': transaction_type,
+            'trade_type': trade_type,
+            'regime_type': regime_type,
+            'comments': request.POST.get('comments'),
+        }
 
-                            if existing_documents.exists():
-                                print("in5",existing_documents)
-                                existing_documents.update(is_deleted=True)
+        # Manually update declaration object
+        for field, value in declaration_data.items():
+            setattr(declaration, field, value)
+        declaration.save()
 
-                            Document.objects.create(item=item_obj, 
-                                                    file=request.FILES[key],
-                                                    required_doc = required_doc
-                                                        )
-            else:
-                for i, dfs in enumerate(document_formsets):
-                    print(f"DocumentFormSet {i} errors:", dfs.errors)
+        # Update items
+        items_data = []
+        item_ids = request.POST.getlist('items_set-id')
+        for idx, item_id in enumerate(item_ids):
+            hs_code_id = request.POST.get(f'items_set-{idx}-hs_code')
+            hs_code = HsCode.objects.get(id=hs_code_id) if hs_code_id else None
+            item_data = {
+                'description': request.POST.get(f'items_set-{idx}-description'),
+                'hs_code': hs_code,
+                'static_quantity_unit': request.POST.get(f'items_set-{idx}-static_quantity_unit'),
+                'supplementary_quantity_unit': request.POST.get(f'items_set-{idx}-supplementary_quantity_unit'),
+                'unit_weight': request.POST.get(f'items_set-{idx}-unit_weight'),
+                'goods_value': request.POST.get(f'items_set-{idx}-goods_value'),
+                'cif_value': request.POST.get(f'items_set-{idx}-cif_value'),
+                'duty_fee': request.POST.get(f'items_set-{idx}-duty_fee'),
+            }
+            items_data.append((item_id, item_data))
 
-                return redirect('view_declaration')  # Adjust as per your URL name
-        else :
-            print("Form errors:", form.errors)
-            print("Formset errors:", formset.errors)
-            # for i, dfs in enumerate(document_formsets):
-            #     print(f"DocumentFormSet {i} errors:", dfs.errors)
+        for item_id, item_data in items_data:
+            item = get_object_or_404(Items, id=item_id, declaration=declaration)
+            for field, value in item_data.items():
+                setattr(item, field, value)
+            item.save()
 
-            # return redirect('view_declaration')  # Adjust as per your URL name
+        # Handle documents
+        pattern = re.compile(r'documents_item_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
+        new_pattern = re.compile(r'new_documents_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
+        doc = []
+        for key, file in request.FILES.items():
+            if key.startswith('documents_item'):
+                match = pattern.match(key)
+                if match:
+                    item_id = match.group('item_id')
+                    doc_id = match.group('doc_id')
+                    item_obj = get_object_or_404(Items, id=item_id)
+                    required_doc = get_object_or_404(RequiredDoc, id=doc_id)
+
+                    # Check if the document already exists
+                    document, created = Document.objects.get_or_create(
+                        item=item_obj,
+                        required_doc=required_doc,
+                        defaults={'file': file}
+                    )
+
+                    if not created:
+                        # Update the existing document
+                        if document.file != file:
+                            document.file = file
+                            document.save()
+
+            elif key.startswith('new_documents'):
+                match = new_pattern.match(key)
+                if match:
+                    item_id = match.group('item_id')
+                    doc_id = match.group('doc_id')
+                    item_obj = get_object_or_404(Items, id=item_id)
+                    required_doc = get_object_or_404(RequiredDoc, id=doc_id)
+                    doc.append(required_doc)
+                    existing_documents = Document.objects.filter(item=item_obj).exclude(required_doc__in=doc)
+
+
+                    if existing_documents.exists():
+                        existing_documents.update(is_deleted=True)
+
+                    Document.objects.create(item=item_obj,
+                                            file=request.FILES[key],
+                                            required_doc=required_doc
+                                            )
+
+        # Redirect to prevent resubmission
+        return redirect('update_declaration',pk=pk)
+
     else:
-        form = DeclarationForm(instance=declaration)
-        formset = ItemUpdateFormSet(instance=declaration)
-        
-        # Initialize document formsets for each item in the declaration
+        # Populate initial data for the form
+        regime_types = RegimeType.objects.all()
+        trade_types = TradeType.objects.all()
+        transaction_types = TransactionType.objects.all()
+        cargo_channels = CargoChannel.objects.all()
+        declaration_types = DeclarationType.objects.all()
+        cargo_types = CargoType.objects.all()
+        hs_codes = HsCode.objects.all()
+
+        declaration_data = {
+            'declaration_date': declaration.declaration_date,
+            'request_no': declaration.request_no,
+            'declaration_no': declaration.declaration_no,
+            'net_weight': declaration.net_weight,
+            'gross_weight': declaration.gross_weight,
+            'measurements': declaration.measurements,
+            'nmbr_of_packages': declaration.nmbr_of_packages,
+            'cargo_type': declaration.cargo_type,
+            'declaration_type': declaration.declaration_type,
+            'cargo_channel': declaration.cargo_channel,
+            'transaction_type': declaration.transaction_type,
+            'trade_type': declaration.trade_type,
+            'regime_type': declaration.regime_type,
+            'comments': declaration.comments,
+            'regime_types': regime_types,
+            'trade_types': trade_types,
+            'transaction_types': transaction_types,
+            'cargo_channels': cargo_channels,
+            'declaration_types': declaration_types,
+            'cargo_types': cargo_types,
+        }
+        items_data = []
+        for item in declaration.items_set.filter(is_deleted=False):
+            items_data.append({
+                'id': item.id,
+                'description': item.goods_description,
+                'hs_code': item.hs_code,
+                'static_quantity_unit': item.static_quantity_unit,
+                'supplementary_quantity_unit': item.supp_quantity_unit,
+                'unit_weight': item.unit_weight,
+                'goods_value': item.goods_value,
+                'cif_value': item.cif_value,
+                'duty_fee': item.duty_fee,
+            })
+
         document_formsets = []
         for item in declaration.items_set.all():
-            document_formset = DocumentFormSet(instance=item, prefix=f'documents_{item.pk}')
-            document_formsets.append(document_formset)
+            document_formset = []
+            for doc in item.document_set.filter(is_deleted=False):
+                document_formset.append({
+                    'id': doc.id,
+                    'file': doc.file,
+                    'required_doc': doc.required_doc,
+                })
+            document_formsets.append({
+                'item': item,
+                'documents': document_formset,
+            })
 
     context = {
-        'form': form,
-        'item_formset': formset,
+        'declaration_data': declaration_data,
+        'items_data': items_data,
         'document_formsets': document_formsets,
+        'regime_types': regime_types,
+        'trade_types': trade_types,
+        'transaction_types': transaction_types,
+        'cargo_channels': cargo_channels,
+        'declaration_types': declaration_types,
+        'cargo_types': cargo_types,
+        'hs_codes': hs_codes,
     }
-    return render(request, 'update_declaration.html', context)
+
+    return render(request, 'update_declarations.html', context)
 
 
 """
@@ -267,7 +376,6 @@ class UpdateDeclaration(APIView):
         serializer = UpdateDeclarationSerializer(declaration, data=data, partial=True)
         if serializer.is_valid():
             data = serializer.save()
-            print("data",data)
             Declaration_log.objects.create(
                 status = data.is_verified,
                 declaration = data,
@@ -304,3 +412,20 @@ def get_document_data(request):
         return response
     except (Document.DoesNotExist, RequiredDoc.DoesNotExist):
         raise Http404("Document not found")
+
+@require_POST
+def delete_item(request, item_id):
+    try:
+        item = Items.objects.get(id=item_id)
+        item.is_deleted = True
+        item.save()
+        return JsonResponse({'status': 'success'})
+    except Items.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    
+def Declaration_Logs_List(request,pk):
+    declarations = Declaration.objects.get(id = pk)
+    declaration_logs = Declaration_log.objects.filter(declaration = declarations).order_by('created_at')
+    return render(request, 'view_declaration_logs.html', {'logs': declaration_logs})
