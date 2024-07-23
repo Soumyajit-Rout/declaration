@@ -322,6 +322,44 @@ def search_hscode(request):
     
     return JsonResponse({'hs_codes': hs_codes})
 
+
+@csrf_exempt
+@require_POST
+def update_search_hscode(request,pk):
+    item_obj = Items.objects.get(id=pk)
+    hs_code_id  = item_obj.hs_code.id
+    data = json.loads(request.body)
+    description = data.get('description', '').lower()
+    hs_codes = []
+    if description:
+        description_data = re.findall(r'\b\w+\b', description)
+        hs_codes_set = set()
+        for word in description_data:
+            matching_hs_codes = HsCode.objects.filter(
+                keywords__icontains=word  
+            ).exclude(id = hs_code_id)
+            for hs_code in matching_hs_codes:
+                if word in hs_code.keywords.split(','):
+                    hs_codes_set.add(hs_code)
+
+        
+        for hs_code in hs_codes_set:
+            hs_codes.append({
+                'id': hs_code.id,
+                'hs_code': hs_code.hs_code,
+                'description': hs_code.description
+            })
+    else :
+        matching_hs_codes = HsCode.objects.all()
+        for hs_code in matching_hs_codes:
+             hs_codes.append({
+                'id': hs_code.id,
+                'hs_code': hs_code.hs_code,
+                'description': hs_code.description
+            })
+    
+    return JsonResponse({'hs_codes': hs_codes})
+
 """
 Basic api to list the declarations 
 """

@@ -198,11 +198,12 @@
 
         if (e.target.classList.contains('search-btn')) {
             var row = e.target.closest('tr');
+            var itemId = row.dataset.itemId;
             var descriptionField = row.querySelector('textarea');
             var descriptionData = descriptionField.value;
             var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
 
-            fetch('/search-hscode/', {
+            fetch(`/update-search-hscode/${itemId}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
