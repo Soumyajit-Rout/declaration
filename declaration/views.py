@@ -126,6 +126,8 @@ def update_declaration(request, pk):
         # Update items
         items_data = []
         item_ids = request.POST.getlist('items_set-id')
+
+
         for idx, item_id in enumerate(item_ids):
             hs_code_id = request.POST.get(f'items_set-{idx}-hs_code')
             hs_code = HsCode.objects.get(id=hs_code_id) if hs_code_id else None
@@ -133,7 +135,7 @@ def update_declaration(request, pk):
                 'description': request.POST.get(f'items_set-{idx}-description'),
                 'hs_code': hs_code,
                 'static_quantity_unit': request.POST.get(f'items_set-{idx}-static_quantity_unit'),
-                'supplementary_quantity_unit': request.POST.get(f'items_set-{idx}-supplementary_quantity_unit'),
+                'supp_quantity_unit': request.POST.get(f'items_set-{idx}-supp_quantity_unit'),
                 'unit_weight': request.POST.get(f'items_set-{idx}-unit_weight'),
                 'goods_value': request.POST.get(f'items_set-{idx}-goods_value'),
                 'cif_value': request.POST.get(f'items_set-{idx}-cif_value'),
@@ -234,7 +236,7 @@ def update_declaration(request, pk):
                 'description': item.goods_description,
                 'hs_code': item.hs_code,
                 'static_quantity_unit': item.static_quantity_unit,
-                'supplementary_quantity_unit': item.supp_quantity_unit,
+                'supp_quantity_unit': item.supp_quantity_unit,
                 'unit_weight': item.unit_weight,
                 'goods_value': item.goods_value,
                 'cif_value': item.cif_value,

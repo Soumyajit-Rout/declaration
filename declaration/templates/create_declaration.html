@@ -233,6 +233,24 @@ document.addEventListener('DOMContentLoaded', function() {
         var originalDescriptions = {};
         let requiredDocsData = {};
 
+        function attachValidationListeners(row) {
+        var numericFields = row.querySelectorAll('input[type="number"]');
+        numericFields.forEach(function(field) {
+            var errorSpan = document.createElement('span');
+        errorSpan.style.display = 'none';
+        errorSpan.style.color = 'red';
+        errorSpan.textContent = 'Invalid number';
+        field.parentNode.insertBefore(errorSpan, field.nextSibling);
+            field.addEventListener('input', function() {
+                if (!field.checkValidity()) {
+                    field.nextElementSibling.style.display = 'inline';
+                } else {
+                    field.nextElementSibling.style.display = 'none';
+                }
+            });
+        });
+    }
+
         tableBody.addEventListener('click', function(e) {
             if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
                 var row = e.target.closest('tr');
@@ -320,6 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (documentsCell) {
         documentsCell.dataset.itemIndex = currentFormCount - 1; // Set the item index for the documents cell
     }
+    attachValidationListeners(newForm);
 });
 
 
@@ -332,22 +351,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 deleteCheckbox.value = 'true';
 
                 row.style.display = 'none';
-                addButton.style.display = 'none';
 
             }
         });
 
         // Custom validation for numeric fields
-        var numericFields = document.querySelectorAll('input[type="number"]');
-        numericFields.forEach(function(field) {
-            field.addEventListener('input', function() {
-                if (!field.checkValidity()) {
-                    field.nextElementSibling.style.display = 'inline';
-                } else {
-                    field.nextElementSibling.style.display = 'none';
-                }
-            });
-        });
+
+        attachValidationListeners(document);
 
         // Add event listener for hs_code change
         tableBody.addEventListener('change', function(e) {
@@ -425,8 +435,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-
-    
 
             if (!isValid) {
                 e.preventDefault();

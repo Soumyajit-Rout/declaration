@@ -80,7 +80,7 @@ class RequiredDoc(TimestampedUUIDModel):
     format = models.CharField(max_length=25,null=True,blank=False)
 
 class Document(TimestampedUUIDModel):
-    file = models.FileField(null=True,blank=True)
+    file = models.FileField(null=True,blank=True,upload_to="documents")
     item = models.ForeignKey(Items,on_delete=models.CASCADE)
     required_doc = models.ForeignKey(RequiredDoc,on_delete=models.CASCADE,null=True)
 
