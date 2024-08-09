@@ -38,7 +38,18 @@ class DeclarationForm(forms.ModelForm):
             'regime_type': forms.Select(attrs={'class': 'form-control'}),
         }
 
-    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['cargo_type'].empty_label = 'Select your cargo type'
+        self.fields['declaration_type'].empty_label = 'Select your declaration type'
+        self.fields['cargo_channel'].empty_label = 'Select your cargo channel'
+        self.fields['transaction_type'].empty_label = 'Select your transaction type'
+        self.fields['trade_type'].empty_label = 'Select your trade type'
+        self.fields['regime_type'].empty_label = 'Select your regime type'
+
+
+
+
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Items

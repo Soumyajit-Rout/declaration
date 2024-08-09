@@ -284,6 +284,74 @@ def delete_declaration(request, pk):
     declaration.save()
     return redirect('view_declaration')
 
+
+
+def list_declaration(request,pk):
+        declaration = Declaration.objects.get(id=pk)
+      # Populate initial data for the form
+        regime_types = RegimeType.objects.all()
+        trade_types = TradeType.objects.all()
+        transaction_types = TransactionType.objects.all()
+        cargo_channels = CargoChannel.objects.all()
+        declaration_types = DeclarationType.objects.all()
+        cargo_types = CargoType.objects.all()
+        hs_codes = HsCode.objects.all()
+
+        declaration_data = {
+            'declaration_date': declaration.declaration_date,
+            'request_no': declaration.request_no,
+            'declaration_no': declaration.declaration_no,
+            'net_weight': declaration.net_weight,
+            'gross_weight': declaration.gross_weight,
+            'measurements': declaration.measurements,
+            'nmbr_of_packages': declaration.nmbr_of_packages,
+            'cargo_type': declaration.cargo_type,
+            'declaration_type': declaration.declaration_type,
+            'cargo_channel': declaration.cargo_channel,
+            'transaction_type': declaration.transaction_type,
+            'trade_type': declaration.trade_type,
+            'regime_type': declaration.regime_type,
+            'comments': declaration.comments,
+            'declaration_types': declaration.declaration_type,
+            'cargo_types': declaration.cargo_type,
+        }
+        items_data = []
+        for item in declaration.items_set.filter(is_deleted=False):
+            items_data.append({
+                'id': item.id,
+                'description': item.goods_description,
+                'hs_code': item.hs_code,
+                'static_quantity_unit': item.static_quantity_unit,
+                'supp_quantity_unit': item.supp_quantity_unit,
+                'unit_weight': item.unit_weight,
+                'goods_value': item.goods_value,
+                'cif_value': item.cif_value,
+                'duty_fee': item.duty_fee,
+            })
+
+        document_formsets = []
+        for item in declaration.items_set.all():
+            document_formset = []
+            for doc in item.document_set.filter(is_deleted=False):
+                document_formset.append({
+                    'id': doc.id,
+                    'file': doc.file,
+                    'required_doc': doc.required_doc,
+                })
+            document_formsets.append({
+                'item': item,
+                'documents': document_formset,
+            })
+
+        context = {
+            'declaration_data': declaration_data,
+            'items_data': items_data,
+            'document_formsets': document_formsets,
+            'hs_codes': hs_codes,
+        }
+
+        return render(request, 'retrieve_declaration.html', context)
+
 """
 This function is to search for the hscodes based on the description text here we will convert 
 the text into a list of items and query the database to match the list of words with the 

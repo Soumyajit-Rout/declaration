@@ -64,6 +64,8 @@
 
                     <td>
                         <a href="{% url 'update_declaration' declaration.pk %}" class="btn btn-warning btn-sm">Update</a>
+                        <a href="{% url 'list_declaration' declaration.pk %}" class="btn">View</a>
+
                         <form action="{% url 'delete_declaration' declaration.pk %}" method="post" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
