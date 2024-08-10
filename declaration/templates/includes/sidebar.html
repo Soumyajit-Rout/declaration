@@ -1,0 +1,24 @@
+{% block content %}
+{% load static %}
+
+<div class="flex-column flex-shrink-0 p-3 sidebar_wrapper d-none d-lg-inline-block">
+    <!-- Finloge logo -->
+    <a
+        class="d-flex align-items-center justify-content-center mb-4 me-md-auto text-black text-decoration-none">
+        <span class="fs-4 finloge-logo font-29">
+            <img src="{% static 'assets/uploads/logo-dubai.svg' %}" alt="logo">
+    </a>
+    
+    <!-- sidebar content -->
+    <nav class="sidebar mb-4">
+        <ul class="nav flex-column" id="nav_accordion">
+            <li class="nav-item has-submenu">
+                <a class="nav-link"> <img class="me-3" src="" alt="">
+                    <span class=" d-xl-inline font-16">Declaration</span>
+                </a> 
+             </li>
+         
+        </ul>
+    </nav>
+</div>
+{% endblock content %}

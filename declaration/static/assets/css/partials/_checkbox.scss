@@ -1,0 +1,19 @@
+// scss for checkbox
+.checkbox-button{
+    width: 25px;
+    height: 25px;
+}
+.check-remember:checked{
+    background-color: rgba(25, 30, 59, 1);
+    border-color: rgba(25, 30, 59, 1);
+}
+.check-remember:focus,
+.save-details-check:focus,
+.checkbox-button:focus{
+    box-shadow: none;
+}
+.save-details-check:checked,
+.checkbox-button:checked{
+    background-color: rgba(82, 0, 174, 1);
+    border-color: rgba(82, 0, 174, 1);
+}

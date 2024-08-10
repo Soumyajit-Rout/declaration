@@ -1,54 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Declaration Logs</title>
-    <style>
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 16px;
-            margin: 16px 0;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .card-header {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        .card-body {
-            margin-top: 8px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Declaration Logs</h1>
-        {% for log in logs %}
-            <div class="card">
-                <div class="card-header">
-                    {% if log.status == 0 %}
-                    Status:  Under process 
-                    {% endif %}
+{% extends "base.html" %}
+{% load static %}
 
-                    {% if log.status == 1 %}
-                    Status:  Approved 
-                    {% endif %}
+{% block content %}
 
-                    {% if log.status == -1 %}
-                    Status:  Rejected 
-                    {% endif %}
+<section class="section">
+    <div class="section-header bg-white">
+        <h1>Declaration Log</h1>
+    </div>
+    <div class="section-body">
+        <div class="row gx-3">
+            {% for log in logs %}
+            <div class="col-12 col-lg-6 card-container">
+                <div class="card mb-3 status-card">
+                    <div class="card-header bg-white py-3">
+                        <strong>Status : </strong>
+                        {% if log.status == 0 %}
+                        Under process
+                        {% endif %}
 
-                    {% if log.status == 2 %}
-                    Status:  Resubmit for modification 
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <p class="card-date">Date: {{ log.created_at|date:"F j, Y, g:i a" }}</p>
-                    <p>Comment : {{ log.comment }}</p>
+                        {% if log.status == 1 %}
+                        Approved
+                        {% endif %}
+
+                        {% if log.status == -1 %}
+                        Rejected
+                        {% endif %}
+
+                        {% if log.status == 2 %}
+                        Resubmit for modification
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-1"><strong>Date : </strong>{{ log.created_at|date:"F j, Y, g:i a" }}</p>
+                        <p class="card-text mb-1"><strong>Comment : </strong>{{ log.comment }}</p>
+                    </div>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</body>
-</html>
+</section>
+
+
+{% endblock content %}

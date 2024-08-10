@@ -1,0 +1,36 @@
+// scss for cards
+.card-container {
+     .card-body{
+      height: 131px;
+     }
+      .default-card {
+           border-radius: 13.522px;
+           background: #FFF;
+           padding: 26px 32px;
+ 
+           .card-body {
+                padding: 0px;
+ 
+           }
+ 
+           .card-img {
+                width: 50px;
+                height: 50px;
+           }
+      }
+ 
+      .default-large-card {
+           border-radius: 13.522px;
+           background: #FFF;
+           padding: 42px 34px;
+ 
+           .card-body {
+                padding: 0px;
+           }
+ 
+           .card-img {
+                width: 50px;
+                height: 50px;
+           }
+      }
+ }

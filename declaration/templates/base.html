@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Warehouse</title>
+  <link rel="icon" href="{% static 'assets/uploads/favicon.svg' %}" />
+  <!-- General CSS Files -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Template CSS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/theme.css' %}">
+  
+  <style>
+    .fade-out {
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+
+    .fade-out.hidden {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      {% include 'includes/sidebar.html' %}
+      {% include 'includes/header.html' %}
+      
+      <div class="main-content">
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="{% static 'assets/js/jquery.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.alert').forEach(function (element) {
+            setTimeout(function () {
+                element.classList.add('hidden');
+            }, 3000); // 3000 milliseconds = 3 seconds
+        });
+
+        document.querySelectorAll('.sidebar .nav-link').forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                let nextEl = element.nextElementSibling;
+                let parentEl = element.parentElement;
+
+                if (nextEl && nextEl.classList.contains('submenu')) {
+                    e.preventDefault(); // Prevent the default link behavior
+
+                    let mycollapse = new bootstrap.Collapse(nextEl);
+
+                    // Check if the submenu is already shown
+                    if (nextEl.classList.contains('show')) {
+                        mycollapse.hide(); // Hide the submenu
+                        element.classList.remove('active'); // Remove 'active' class from the link
+                        element.querySelector('.toggle-icon').classList.remove('text-primary'); // Remove 'text-primary' class from the toggle icon
+                    } else {
+                        // Find any currently opened submenu
+                        let openedSubmenu = parentEl.parentElement.querySelector('.submenu.show');
+
+                        // If there's an opened submenu that is not the current one, close it
+                        if (openedSubmenu && openedSubmenu !== nextEl) {
+                            new bootstrap.Collapse(openedSubmenu); // Create a Collapse object for the opened submenu
+                            openedSubmenu.parentElement.querySelector('.nav-link .toggle-icon').classList.remove('text-primary'); // Remove 'text-primary' class from the toggle icon of the parent link
+                            openedSubmenu.parentElement.querySelector('.nav-link').classList.remove('active'); // Remove 'active' class from the parent link
+                        }
+
+                        // Show the clicked submenu
+                        mycollapse.show(); // Show the submenu
+                        element.classList.add('active'); // Add 'active' class to the link
+                        element.querySelector('.toggle-icon').classList.add('text-primary'); // Add 'text-primary' class to the toggle icon
+                    }
+                }
+            });
+        });
+    });
+  </script>
+</body>
+</html>

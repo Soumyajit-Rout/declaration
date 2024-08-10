@@ -1,0 +1,47 @@
+{% block content %}
+{% load static %}
+
+
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg custom-navbar shadow-sm fixed-top">
+    <div class="row w-100">
+         <!-- search input feild -->
+          <div class="d-flex justify-content-between align-items-center px-0">
+            <div class="col d-none d-lg-block ms-3">
+              <div class="d-flex justify-content-end align-items-center">
+                <p class="pe-3 font-16">Hi, user</p>
+                <a class="btn navbar-card-button text-white px-4">Back</a>
+              </div>
+            </div>
+                <!-- navbar toggler button -->
+                <button class="navbar-toggler " type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+               
+          </div>
+           <!-- navbar items -->
+           <div class="collapse navbar-collapse" style="width: 300px;" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item py-3">
+                  <a class="nav-link" href="">
+                    <span class=" d-xl-inline font-16">Hi, user</span>
+                  </a> 
+                </li>
+                <li class="nav-item py-3">
+                      <a class="nav-link">
+                        <span class=" d-xl-inline font-16">Dashboard</span>
+                      </a> 
+                </li>
+                <li class="nav-item py-3">
+                      <button class="navbar-card-button">Button</button>
+                <a class="btn navbar-card-button text-white px-4">Back</a>
+
+                </li>
+            </ul>
+            </div>
+    </div>
+</nav>
+
+{% endblock content %}

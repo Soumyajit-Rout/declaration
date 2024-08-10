@@ -1,367 +1,390 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Declaration</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        table#item-table th,
-        table#item-table td {
-            min-width: 220px; /* Adjust the value as needed */
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1 class="mt-5">Update Declaration</h1>
-    <form method="post" enctype="multipart/form-data"  id="update-declaration-form">
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="declaration_date">Declaration Date</label>
-            <input type="date" class="form-control" id="declaration_date" name="declaration_date" value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="request_no">Request Number</label>
-            <input type="text" class="form-control" id="request_no" name="request_no" value="{{ declaration_data.request_no }}" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="declaration_no">Declaration Number</label>
-            <input type="text" class="form-control" id="declaration_no" name="declaration_no" value="{{ declaration_data.declaration_no }}" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="net_weight">Net Weight</label>
-            <input type="number" step="any" class="form-control" id="net_weight" name="net_weight" value="{{ declaration_data.net_weight }}" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="gross_weight">Gross Weight</label>
-            <input type="number" step="any" class="form-control" id="gross_weight" name="gross_weight" value="{{ declaration_data.gross_weight }}" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="measurements">Measurements</label>
-            <input type="number" class="form-control" id="measurements" name="measurements" value="{{ declaration_data.measurements }}" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="nmbr_of_packages">Number of Packages</label>
-            <input type="number" class="form-control" id="nmbr_of_packages" name="nmbr_of_packages" value="{{ declaration_data.nmbr_of_packages }}" required>
-        </div>
-        <div class="form-group">
-            <label for="cargo_type">Cargo Type</label>
-            <select class="form-control" id="cargo_type" name="cargo_type">
-                {% for cargo_type in cargo_types %}
-                    <option value="{{ cargo_type.id }}" {% if cargo_type.id == declaration_data.cargo_type.id %}selected{% endif %}>
-                        {{ cargo_type.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="declaration_type">Declaration Type</label>
-            <select class="form-control" id="declaration_type" name="declaration_type">
-                {% for declaration_type in declaration_types %}
-                    <option value="{{ declaration_type.id }}" {% if declaration_type.id == declaration_data.declaration_type.id %}selected{% endif %}>
-                        {{ declaration_type.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="cargo_channel">Cargo Channel</label>
-            <select class="form-control" id="cargo_channel" name="cargo_channel">
-                {% for cargo_channel in cargo_channels %}
-                    <option value="{{ cargo_channel.id }}" {% if cargo_channel.id == declaration_data.cargo_channel.id %}selected{% endif %}>
-                        {{ cargo_channel.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="transaction_type">Transaction Type</label>
-            <select class="form-control" id="transaction_type" name="transaction_type">
-                {% for transaction_type in transaction_types %}
-                    <option value="{{ transaction_type.id }}" {% if transaction_type.id == declaration_data.transaction_type.id %}selected{% endif %}>
-                        {{ transaction_type.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="trade_type">Trade Type</label>
-            <select class="form-control" id="trade_type" name="trade_type">
-                {% for trade_type in trade_types %}
-                    <option value="{{ trade_type.id }}" {% if trade_type.id == declaration_data.trade_type.id %}selected{% endif %}>
-                        {{ trade_type.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="regime_type">Regime Type</label>
-            <select class="form-control" id="regime_type" name="regime_type">
-                {% for regime_type in regime_types %}
-                    <option value="{{ regime_type.id }}" {% if regime_type.id == declaration_data.regime_type.id %}selected{% endif %}>
-                        {{ regime_type.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="comments">Comments</label>
-            <textarea class="form-control" id="comments" name="comments">{{ declaration_data.comments }}</textarea>
-        </div>
+{% extends "base.html" %}
+{% load static %}
 
-        <h2 class="mt-5">Items</h2>
-        <div class="table-responsive">
-            <table id="item-table" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>HS Code</th>
-                        <th>Documents</th>
-                        <th>Static Quantity Unit</th>
-                        <th>Supplementary Quantity Unit</th>
-                        <th>Unit Weight</th>
-                        <th>Goods Value</th>
-                        <th>CIF Value</th>
-                        <th>Duty Fee</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items_data %}
-                        <tr data-item-id="{{ item.id }}">
-                            <input type="hidden" name="items_set-id" value="{{ item.id }}">
-                            <td>
-                               
-                                <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description">{{ item.description }}</textarea>
-                                <button type="button" class="btn btn-primary search-btn">Search</button>
-                            </td>
-                            <td>
-                                <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
-                                    {% for hs_code in hs_codes %}
-                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
+{% block content %}
+
+<section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
+    <form class="needs-validation" id="update-declaration-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="default-form mb-4">
+            <div class="mb-4 form_heading">
+                <h2 class="font-20 py-2 px-3">Update Declaration</h2>
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="col-12">
+                    <div class="row gx-3 pe-sm-3">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="declaration_date">Declaration Date:</label>
+                                <input type="date" class="form-control" id="declaration_date" name="declaration_date"
+                                    value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="request_noe">Request No:</label>
+                                <input type="text" class="form-control" id="request_no" name="request_no"
+                                    value="{{ declaration_data.request_no }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="declaration_no">Declaration No:</label>
+                                <input type="text" class="form-control" id="declaration_no" name="declaration_no"
+                                    value="{{ declaration_data.declaration_no }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="net_weight">Net Weight:</label>
+                                <input type="number" step="any" class="form-control" id="net_weight" name="net_weight"
+                                    value="{{ declaration_data.net_weight }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="gross_weight">Gross Weight:</label>
+                                <input type="number" step="any" class="form-control" id="gross_weight"
+                                    name="gross_weight" value="{{ declaration_data.gross_weight }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="measurements">Measurements:</label>
+                                <input type="number" class="form-control" id="measurements" name="measurements"
+                                    value="{{ declaration_data.measurements }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="nmbr_of_packages">Number of Packages:</label>
+                                <input type="number" class="form-control" id="nmbr_of_packages" name="nmbr_of_packages"
+                                    value="{{ declaration_data.nmbr_of_packages }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="cargo_type">Cargo Type:</label>
+                                <select class="form-control" id="cargo_type" name="cargo_type">
+                                    {% for cargo_type in cargo_types %}
+                                        <option value="{{ cargo_type.id }}" {% if cargo_type.id == declaration_data.cargo_type.id %}selected{% endif %}>
+                                            {{ cargo_type.name }}
+                                        </option>
                                     {% endfor %}
                                 </select>
-                            </td>
-                            <td class="documents">
-                                {% for document_formset in document_formsets %}
-                                    {% if document_formset.item.id == item.id %}
-                                        {% for doc in document_formset.documents %}
-                                            <input type="file" class="form-control-file" name="documents_item_{{ document_formset.item.id }}_{{ doc.required_doc.id }}">
-                                            {% if doc.file %}
-                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" required></td>
-                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" required></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" required></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" required></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required></td>
-                            <td>
-                                {% if item.id %}
-                                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="declaration_type">Declaration Type:</label>
+                                <select class="form-control" id="declaration_type" name="declaration_type">
+                                    {% for declaration_type in declaration_types %}
+                                        <option value="{{ declaration_type.id }}" {% if declaration_type.id == declaration_data.declaration_type.id %}selected{% endif %}>
+                                            {{ declaration_type.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="cargo_channel">Cargo Channel:</label>
+                                <select class="form-control" id="cargo_channel" name="cargo_channel">
+                                    {% for cargo_channel in cargo_channels %}
+                                        <option value="{{ cargo_channel.id }}" {% if cargo_channel.id == declaration_data.cargo_channel.id %}selected{% endif %}>
+                                            {{ cargo_channel.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="transaction_type">Transaction Type:</label>
+                                <select class="form-control" id="transaction_type" name="transaction_type">
+                                    {% for transaction_type in transaction_types %}
+                                        <option value="{{ transaction_type.id }}" {% if transaction_type.id == declaration_data.transaction_type.id %}selected{% endif %}>
+                                            {{ transaction_type.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="trade_type">Trade Type:</label>
+                                <select class="form-control" id="trade_type" name="trade_type">
+                                    {% for trade_type in trade_types %}
+                                        <option value="{{ trade_type.id }}" {% if trade_type.id == declaration_data.trade_type.id %}selected{% endif %}>
+                                            {{ trade_type.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="regime_type">Regime Type:</label>
+                                <select class="form-control" id="regime_type" name="regime_type">
+                                    {% for regime_type in regime_types %}
+                                        <option value="{{ regime_type.id }}" {% if regime_type.id == declaration_data.regime_type.id %}selected{% endif %}>
+                                            {{ regime_type.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="comments">Comments</label>
+                                <textarea class="form-control" id="comments"
+                                    name="comments">{{ declaration_data.comments }}</textarea>
+                            </div>
+                        </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Update Declaration</button>
+                        <div class="mb-4 form_heading my-4">
+                            <h2 class="font-20 py-2 px-3">Items</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="item-table" class="table table-bordered">
+                                <thead class="default-table-head border">
+                                    <tr>
+                                        <th scope="col" class="font-15 ps-4">Description</th>
+                                        <th scope="col" class="font-15 ps-4">HsCode</th>
+                                        <th scope="col" class="font-15 ps-4">Documents</th>
+                                        <th scope="col" class="font-15 ps-4">Static Quantity Unit</th>
+                                        <th scope="col" class="font-15 ps-4">Supplementary Quantity Unit</th>
+                                        <th scope="col" class="font-15 ps-4">Unit Weight</th>
+                                        <th scope="col" class="font-15 ps-4">Goods Value</th>
+                                        <th scope="col" class="font-15 ps-4">CIF Value</th>
+                                        <th scope="col" class="font-15 ps-4">Duty Fee</th>
+                                        <th scope="col" class="font-15 ps-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items_data %}
+                                        <tr data-item-id="{{ item.id }}">
+                                            <input type="hidden" name="items_set-id" value="{{ item.id }}">
+                                            <td>
+                                               
+                                                <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description">{{ item.description }}</textarea>
+                                                <button type="button" class="submit-button mt-2">Search</button>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
+                                                    {% for hs_code in hs_codes %}
+                                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td class="documents">
+                                                {% for document_formset in document_formsets %}
+                                                    {% if document_formset.item.id == item.id %}
+                                                        {% for doc in document_formset.documents %}
+                                                            <input type="file" class="form-control-file" name="documents_item_{{ document_formset.item.id }}_{{ doc.required_doc.id }}">
+                                                            {% if doc.file %}
+                                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" required></td>
+                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" required></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" required></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" required></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required></td>
+                                            <td>
+                                                {% if item.id %}
+                                                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group mb-0">
+                            <button type="submit" class="submit-button" style="float: right;">Update
+                                Declaration</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
-</div>
+</section>
 
 <script type="text/javascript">
-   document.addEventListener('DOMContentLoaded', function() {
-    var addButton = document.getElementById('add-row');
-    var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
-    var originalDescriptions = {};
-    let requiredDocsData = {};
+    document.addEventListener('DOMContentLoaded', function () {
+        var addButton = document.getElementById('add-row');
+        var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
+        var originalDescriptions = {};
+        let requiredDocsData = {};
 
-    tableBody.addEventListener('click', function(e) {
+        tableBody.addEventListener('click', function (e) {
 
-        if (e.target.classList.contains('search-btn')) {
-            var row = e.target.closest('tr');
-            var itemId = row.dataset.itemId;
-            var descriptionField = row.querySelector('textarea');
-            var descriptionData = descriptionField.value;
-            var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+            if (e.target.classList.contains('search-btn')) {
+                var row = e.target.closest('tr');
+                var itemId = row.dataset.itemId;
+                var descriptionField = row.querySelector('textarea');
+                var descriptionData = descriptionField.value;
+                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
 
-            fetch(`/update-search-hscode/${itemId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ description: descriptionData })
-            })
-            .then(response => response.json())
-            .then(data => {
-                hsCodeDropdown.innerHTML = '';
+                fetch(`/update-search-hscode/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ description: descriptionData })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        hsCodeDropdown.innerHTML = '';
 
-                // Add the "Select your HS code" option
-                var placeholderOption = document.createElement('option');
-                placeholderOption.value = '';
-                placeholderOption.textContent = 'Select your HS code';
-                hsCodeDropdown.appendChild(placeholderOption);
+                        // Add the "Select your HS code" option
+                        var placeholderOption = document.createElement('option');
+                        placeholderOption.value = '';
+                        placeholderOption.textContent = 'Select your HS code';
+                        hsCodeDropdown.appendChild(placeholderOption);
 
-                data.hs_codes.forEach(function(hsCode) {
-                    var option = document.createElement('option');
-                    option.value = hsCode.id;
-                    option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
-                    hsCodeDropdown.appendChild(option);
-                });
-                descriptionField.dataset.originalValue = descriptionField.value;
+                        data.hs_codes.forEach(function (hsCode) {
+                            var option = document.createElement('option');
+                            option.value = hsCode.id;
+                            option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+                            hsCodeDropdown.appendChild(option);
+                        });
+                        descriptionField.dataset.originalValue = descriptionField.value;
 
-                hsCodeDropdown.addEventListener('click', function() {
-                    originalDescriptions[descriptionField.name] = descriptionField.value;
-                });
+                        hsCodeDropdown.addEventListener('click', function () {
+                            originalDescriptions[descriptionField.name] = descriptionField.value;
+                        });
 
-                hsCodeDropdown.addEventListener('change', function() {
-                    originalDescriptions[descriptionField.name] = descriptionField.value;
-                });
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    });
-
-    tableBody.addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-btn')) {
-            e.preventDefault();
-            var row = e.target.closest('tr');
-            var itemId = row.dataset.itemId; 
-
-            // AJAX call to mark the item as deleted
-            fetch(`/delete-item/${itemId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ is_deleted: true })
-            })
-            .then(response => {
-                if (response.ok) {
-                  
-                    var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
-                    row.style.display = 'none';
-                } else {
-                    alert('Error: Unable to delete the item.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error: Unable to delete the item.');
-            });
-        }
-    });
-
- // Custom validation for numeric fields
- var numericFields = document.querySelectorAll('input[type="number"]');
-    numericFields.forEach(function(field) {
-        var errorSpan = document.createElement('span');
-        errorSpan.style.display = 'none';
-        errorSpan.style.color = 'red';
-        errorSpan.textContent = 'Invalid number';
-        field.parentNode.insertBefore(errorSpan, field.nextSibling);
-
-        field.addEventListener('input', function() {
-            if (!field.checkValidity()) {
-                errorSpan.style.display = 'inline';
-            } else {
-                errorSpan.style.display = 'none';
+                        hsCodeDropdown.addEventListener('change', function () {
+                            originalDescriptions[descriptionField.name] = descriptionField.value;
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
             }
         });
-    });
-            // Add event listener for hs_code change
-            tableBody.addEventListener('change', function(e) {
-        if (e.target.name.includes('hs_code')) {
-            var row = e.target.closest('tr');
-            var hsCode = e.target.value;
-            var documentField = row.querySelector('.documents');
-            var itemIndex = documentField.dataset.itemIndex;
-            var item = row.dataset.itemId;
 
-            fetch(`/get-required-docs/?hs_code=${hsCode}`)
-                .then(response => response.json())
-                .then(data => {
-                            documentField.innerHTML = '';
-    
-                            requiredDocsData[hsCode] = data.required_docs;
-                            data.required_docs.forEach(function(doc) {
-                                var fileInput = document.createElement('input');
-                                fileInput.type = 'file';
-                                fileInput.name = `new_documents_${item}_${doc.id}`;
-                                fileInput.required = true;
-                                fileInput.classList.add('required-file');
-                                var label = document.createElement('label');
-                                label.textContent = `${doc.name} (${doc.format})`;
-    
-                                documentField.appendChild(label);
-                                documentField.appendChild(fileInput);
-                            });
-                        })
-                        .catch(error => console.error('Error:', error));
+        tableBody.addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-btn')) {
+                e.preventDefault();
+                var row = e.target.closest('tr');
+                var itemId = row.dataset.itemId;
+
+                // AJAX call to mark the item as deleted
+                fetch(`/delete-item/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ is_deleted: true })
+                })
+                    .then(response => {
+                        if (response.ok) {
+
+                            var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
+                            row.style.display = 'none';
+                        } else {
+                            alert('Error: Unable to delete the item.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error: Unable to delete the item.');
+                    });
+            }
+        });
+
+        // Custom validation for numeric fields
+        var numericFields = document.querySelectorAll('input[type="number"]');
+        numericFields.forEach(function (field) {
+            var errorSpan = document.createElement('span');
+            errorSpan.style.display = 'none';
+            errorSpan.style.color = 'red';
+            errorSpan.textContent = 'Invalid number';
+            field.parentNode.insertBefore(errorSpan, field.nextSibling);
+
+            field.addEventListener('input', function () {
+                if (!field.checkValidity()) {
+                    errorSpan.style.display = 'inline';
+                } else {
+                    errorSpan.style.display = 'none';
                 }
             });
-    
-            // Form submission validation
+        });
+        // Add event listener for hs_code change
+        tableBody.addEventListener('change', function (e) {
+            if (e.target.name.includes('hs_code')) {
+                var row = e.target.closest('tr');
+                var hsCode = e.target.value;
+                var documentField = row.querySelector('.documents');
+                var itemIndex = documentField.dataset.itemIndex;
+                var item = row.dataset.itemId;
 
-            document.getElementById('update-declaration-form').addEventListener('submit', function(event) {
-                var rows = document.querySelectorAll('#item-table tbody tr');
-                var isValid = true;
+                fetch(`/get-required-docs/?hs_code=${hsCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        documentField.innerHTML = '';
 
-        rows.forEach(function(row) {
-            var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-            var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
-            var documentField = row.querySelector('.documents');
-            var requiredDocs = requiredDocsData[hsCode] || [];
+                        requiredDocsData[hsCode] = data.required_docs;
+                        data.required_docs.forEach(function (doc) {
+                            var fileInput = document.createElement('input');
+                            fileInput.type = 'file';
+                            fileInput.name = `new_documents_${item}_${doc.id}`;
+                            fileInput.required = true;
+                            fileInput.classList.add('required-file');
+                            var label = document.createElement('label');
+                            label.textContent = `${doc.name} (${doc.format})`;
 
-            requiredDocs.forEach(function(doc) {
-                var fileInput = document.querySelector(`input[name="new_documents_${row.dataset.itemId}_${doc.id}"]`);
-                if (fileInput && fileInput.files.length > 0) {
-                    var file = fileInput.files[0];
-                    var ext = file.name.split('.').pop().toLowerCase();
-                    if (!doc.format.split(',').includes(ext)) {
-                        event.preventDefault();
-                        alert(`Invalid file format for ${doc.name}: ${ext}`);
-                        fileInput.value = ''; // Clear the invalid file input
-                        isValid = false;
+                            documentField.appendChild(label);
+                            documentField.appendChild(fileInput);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
+        // Form submission validation
+
+        document.getElementById('update-declaration-form').addEventListener('submit', function (event) {
+            var rows = document.querySelectorAll('#item-table tbody tr');
+            var isValid = true;
+
+            rows.forEach(function (row) {
+                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+                var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
+                var documentField = row.querySelector('.documents');
+                var requiredDocs = requiredDocsData[hsCode] || [];
+
+                requiredDocs.forEach(function (doc) {
+                    var fileInput = document.querySelector(`input[name="new_documents_${row.dataset.itemId}_${doc.id}"]`);
+                    if (fileInput && fileInput.files.length > 0) {
+                        var file = fileInput.files[0];
+                        var ext = file.name.split('.').pop().toLowerCase();
+                        if (!doc.format.split(',').includes(ext)) {
+                            event.preventDefault();
+                            alert(`Invalid file format for ${doc.name}: ${ext}`);
+                            fileInput.value = ''; // Clear the invalid file input
+                            isValid = false;
+                        }
                     }
-                }
+                });
             });
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
         });
 
-        if (!isValid) {
-            event.preventDefault(); // Prevent form submission if validation fails
-        }
+
     });
 
+</script>
 
-        });
-    
-        </script>
-
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
-</body>
-</html>
+{% endblock content %}

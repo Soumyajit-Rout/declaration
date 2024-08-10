@@ -1,0 +1,47 @@
+// border scss for text feilds
+
+.inactive-feild{
+    border-color: rgba(25, 30, 59, 0.3);
+}
+.inactive-feild::placeholder{
+    color: rgba(25, 30, 59, 0.6);
+}
+.active-feild:focus{
+    border-color: rgba(103, 27, 199, 1);
+}
+.active-feild::placeholder{
+    color: rgba(25, 30, 59, 1);
+}
+.disabled-feild{
+    border-color: rgba(25, 30, 59, 0.3);
+    background-color: rgba(25, 30, 59, 0.1);
+}
+.disabled-feild::placeholder{
+    color: rgba(25, 30, 59, 0.6);
+}
+.success-feild{
+    border-color: rgba(82, 199, 27, 1);  
+}
+.success-feild::placeholder{
+    color: rgba(82, 199, 27, 1);
+}
+.warning-feild{
+    border-color: rgba(199, 161, 27, 1);
+}
+.warning-feild::placeholder{
+    color: rgba(199, 161, 27, 1);
+}
+.error-feild{
+    border-color: rgba(199, 27, 27, 1);
+}
+.error-feild::placeholder{
+    color: rgba(199, 27, 27, 1);
+}
+.label-field:focus {
+    box-shadow: none;
+    border-color: rgba(25, 30, 59, 0.3);
+}
+.label-field::placeholder,
+.label-field:optional{
+    color: rgba(25, 30, 59, 0.6);
+}

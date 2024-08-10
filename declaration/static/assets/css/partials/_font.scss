@@ -1,0 +1,185 @@
+// Different font size
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@font-face {
+     font-family: 'Ruberoid-Bold';
+     src: url("../../fonts/font/Ruberoid-Regular.ttf");
+}
+
+
+.font-regular {
+     font-weight: 400;
+}
+
+.font-medium {
+     font-weight: 500;
+}
+
+.font-semibold {
+     font-weight: 600;
+}
+
+.font-bold {
+     font-weight: 700;
+}
+
+.font-10 {
+     font-size: 10.23px;
+     font-weight: 600;
+     line-height: 12.48px;
+     text-align: center;
+
+}
+
+.font-11 {
+     color: rgba(25, 30, 59, 0.8);
+     font-size: 10.76px;
+     font-style: normal;
+     font-weight: 450;
+     line-height: normal;
+}
+
+.font-12 {
+     color: rgba(25, 30, 59, 0.70);
+     font-size: 12.55px;
+     font-style: normal;
+     font-weight: 450;
+     line-height: normal;
+}
+
+.font-13 {
+     color: rgba(25, 30, 59, 0.7);
+     font-size: 13.34px;
+     font-weight: 450;
+     line-height: 20.53px;
+     text-align: center;
+}
+
+.f-13 {
+     color: rgba(25, 30, 59, 0.7);
+     font-size: 13.34px;
+     font-weight: 450;
+     line-height: 20.53px;
+}
+
+.font-14 {
+     color: rgba(25, 30, 59, 0.70);
+     font-size: 14.424px;
+     font-style: normal;
+     font-weight: 500;
+     line-height: normal;
+}
+
+.font-15 {
+     font-size: 15px;
+     font-weight: 500;
+     line-height: 21.9px;
+     text-align: left;
+     color: rgba(25, 30, 59, 0.9);
+}
+
+.font-16 {
+     font-size: 16px;
+     font-weight: 600;
+     line-height: 23.36px;
+     text-align: left;
+
+}
+
+.font-17 {
+     font-size: 17px;
+     font-weight: 500;
+     line-height: 24.82px;
+     letter-spacing: 0.02em;
+     text-align: left;
+
+}
+
+.font-18 {
+     font-size: 18px;
+     line-height: 25.2px;
+     text-align: left;
+}
+
+.font-19 {
+     font-size: 19.45px;
+     font-weight: 500;
+     line-height: 28.4px;
+     text-align: left;
+}
+
+.font-20 {
+     font-size: 20px;
+     font-weight: 500;
+     line-height: 28.4px;
+     text-align: left;
+     @media (max-width: 576px) {
+          font-size: 16px;
+     }
+}
+
+.font-24 {
+     font-size: 24px;
+     font-weight: 500;
+     line-height: 35.04px;
+     letter-spacing: 0.02em;
+     text-align: left;
+}
+
+.font-28 {
+     font-size: 28px;
+     font-weight: 500;
+     line-height: 40.88px;
+     text-align: left;
+
+}
+
+.font-29 {
+     font-size: 29.59px;
+     font-weight: 700;
+     line-height: 36.07px;
+     letter-spacing: 0.01em;
+     text-align: left;
+
+}
+
+.font-32 {
+     font-size: 32.84px;
+     font-weight: 600;
+     line-height: 47.95px;
+     text-align: center;
+
+}
+
+.font-36 {
+     font-size: 36px;
+     font-weight: 600;
+     line-height: 52.56px;
+     letter-spacing: 0.02em;
+     text-align: left;
+}
+
+.font-38 {
+     font-size: 38.35px;
+     font-weight: 700;
+     line-height: 55.99px;
+     text-align: left;
+
+}
+
+.font-44 {
+     font-size: 44.21px;
+     font-weight: 500;
+     line-height: 51.8px;
+     text-align: left;
+
+}
+
+.font-49 {
+     font-size: 49.22px;
+     font-weight: 500;
+     line-height: 71.86px;
+     text-align: left;
+
+}

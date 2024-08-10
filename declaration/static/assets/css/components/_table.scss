@@ -1,0 +1,83 @@
+// scss for table
+.table-container{
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+.default-table {
+    th{
+        border-radius: 10px;
+        min-width: 185px;
+        text-align: center;
+    }
+    .table-data{
+        padding: 40px 0px 40px 0px;
+        min-width: 120px;
+        max-width: 300px;
+        p, .btn-group{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        .font-15{
+            text-align: center;
+        }
+    }
+    .tags-coin {
+        width: 89px;
+        height: 26px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+    }
+
+    .table-text-type-coin {
+        background-color: rgba(225, 207, 255, 1);
+        color: rgba(110, 65, 167, 1);
+    }
+
+    .table-text-type-sucess {
+        background-color: rgba(208, 255, 207, 1);
+        color: rgba(27, 140, 52, 1);
+    }
+    .tabel-button{
+        border: none;
+    }
+    .default-progress-bar{
+        background-color: rgba(103, 27, 199, 1);
+    }    
+}
+.pagination .page-item-number, .page-link {
+    color: rgba(255, 255, 255, 1);
+    background: linear-gradient(94.49deg, #500daf, #4355ba);
+    border: none;
+    font-size: 17px;
+    font-weight: 600;
+    width: 46px;
+    height: 43px;
+    margin-right: 10px;
+    border-radius: 10px !important;
+}
+.disabled{
+    background: rgba(240, 244, 250, 1);
+    border: none;
+    font-size: 17px;
+    font-weight: 600;
+    width: 46px;
+    height: 43px;
+    margin-right: 10px;
+    border-radius: 10px !important;
+}
+// .page-link-previous{
+//     background-color: rgba(240, 244, 250, 1);
+//     border: none;
+//     font-size: 17px;
+//     font-weight: 600;
+//     width: 46px;
+//     height: 43px;
+//     margin-right: 10px;
+//     border-radius: 10px !important;
+// }
+
+
+}
