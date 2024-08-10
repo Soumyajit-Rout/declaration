@@ -152,20 +152,14 @@
                                         </td>
                                         <td>{{ form.hs_code }} {{ form.hs_code.errors }}</td>
                                         <td class="documents" data-item-index="{{ forloop.counter0 }}"></td>
-                                        <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }} <span
-                                                class="error-message">Please enter a valid number.</span></td>
-                                        <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }} <span
-                                                class="error-message">Please enter a valid number.</span></td>
-                                        <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}<span
-                                                class="error-message">Please enter a valid number.</span></td>
-                                        <td>{{ form.goods_value }} {{ form.goods_value.errors }}<span
-                                                class="error-message">Please enter a valid number.</span></td>
-                                        <td>{{ form.cif_value }} {{ form.goods_value.errors }}<span
-                                                class="error-message">Please enter a valid number.</span></td>
-                                        <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}<span class="error-message">Please
-                                                enter a valid number.</span></td>
+                                        <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }}</td>
+                                        <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }}</td>
+                                        <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}</td>
+                                        <td>{{ form.goods_value }} {{ form.goods_value.errors }}</td>
+                                        <td>{{ form.cif_value }} {{ form.goods_value.errors }}</td>
+                                        <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}</td>
                                         <td>
-                                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">
+                                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
                                             {% if form.instance.pk %}
                                             <a href="" class="delete-btn btn btn-danger btn-sm">Delete</a>
                                             {% endif %}
