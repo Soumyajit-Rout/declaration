@@ -1,135 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Declaration</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        table#item-table th,
-        table#item-table td {
-            min-width: 220px; /* Adjust the value as needed */
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1 class="mt-5">View Declaration</h1>
-    <form method="post" enctype="multipart/form-data"  id="update-declaration-form">
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
+    <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="declaration_date">Declaration Date</label>
-            <input type="text" class="form-control" id="declaration_date" name="declaration_date" value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" readonly>
-        </div>
-        
-        <div class="form-group">
-            <label for="request_no">Request Number</label>
-            <input type="text" class="form-control" id="request_no" name="request_no" value="{{ declaration_data.request_no }}" readonly>
-        </div>
-        
-        <div class="form-group">
-            <label for="declaration_no">Declaration Number</label>
-            <input type="text" class="form-control" id="declaration_no" name="declaration_no" value="{{ declaration_data.declaration_no }}" readonly>
-        </div>
-        
-        <div class="form-group">
-            <label for="net_weight">Net Weight</label>
-            <input type="number" step="any" class="form-control" id="net_weight" name="net_weight" value="{{ declaration_data.net_weight }}" readonly>
-        </div>
-        
-        <div class="form-group">
-            <label for="gross_weight">Gross Weight</label>
-            <input type="number" step="any" class="form-control" id="gross_weight" name="gross_weight" value="{{ declaration_data.gross_weight }}" readonly>
-        </div>
-        
-        <div class="form-group">
-            <label for="measurements">Measurements</label>
-            <input type="number" class="form-control" id="measurements" name="measurements" value="{{ declaration_data.measurements }}" readonly>
-        </div>
-        
-        <div class="form-group">
-            <label for="nmbr_of_packages">Number of Packages</label>
-            <input type="number" class="form-control" id="nmbr_of_packages" name="nmbr_of_packages" value="{{ declaration_data.nmbr_of_packages }}" readonly>
-        </div>
-        <div class="form-group">
-            <label for="cargo_type">Cargo Type</label>
-            <input type="text" class="form-control" id="cargo_type" name="cargo_type" value="{{ declaration_data.cargo_types }}" readonly>
-            
-        </div>
-        
-        
-        <div class="form-group">
-            <label for="declaration_type">Declaration Type</label>
-            <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.declaration_types }}" readonly>
-          
-        </div>
-        
-    
+        <div class="default-form mb-4">
+            <div class="mb-4 form_heading">
+                <h2 class="font-20 py-2 px-3">View Declaration</h2>
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="col-12">
+                    <div class="row gx-3 pe-sm-3">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="declaration_date">Declaration Date:</label>
+                                <input type="text" class="form-control" id="declaration_date" name="declaration_date" value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="equest_noe">Request No:</label>
+                                <input type="text" class="form-control" id="request_no" name="request_no" value="{{ declaration_data.request_no }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="declaration_no">Declaration No:</label>
+                                <input type="text" class="form-control" id="declaration_no" name="declaration_no" value="{{ declaration_data.declaration_no }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="net_weight">Net Weight:</label>
+                                <input type="number" step="any" class="form-control" id="net_weight" name="net_weight" value="{{ declaration_data.net_weight }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="gross_weight">Gross Weight:</label>
+                                <input type="number" step="any" class="form-control" id="gross_weight" name="gross_weight" value="{{ declaration_data.gross_weight }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="measurements">Measurements:</label>
+                                <input type="number" class="form-control" id="measurements" name="measurements" value="{{ declaration_data.measurements }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="nmbr_of_packages">Number of Packages:</label>
+                                <input type="number" class="form-control" id="nmbr_of_packages" name="nmbr_of_packages" value="{{ declaration_data.nmbr_of_packages }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="cargo_type">Cargo Type:</label>
+                                <input type="text" class="form-control" id="cargo_type" name="cargo_type" value="{{ declaration_data.cargo_types }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="declaration_type">Declaration Type:</label>
+                                <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.declaration_types }}" readonly>
+                            </div>
+                        </div>
 
-        <h2 class="mt-5">Items</h2>
-        <div class="table-responsive">
-            <table id="item-table" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>HS Code</th>
-                        <th>Documents</th>
-                        <th>Static Quantity Unit</th>
-                        <th>Supplementary Quantity Unit</th>
-                        <th>Unit Weight</th>
-                        <th>Goods Value</th>
-                        <th>CIF Value</th>
-                        <th>Duty Fee</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items_data %}
-                        <tr data-item-id="{{ item.id }}">
-                            <input type="hidden" name="items_set-id" value="{{ item.id }}">
-                            <td>
-                               
-                                <textarea class="form-control" readonly name="items_set-{{ forloop.counter0 }}-description">{{ item.description }} </textarea>
-                            </td>
-                            <td>
-                                <!-- <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
-                                    {% for hs_code in hs_codes %}
-                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
+                        <div class="mb-4 form_heading my-4">
+                            <h2 class="font-20 py-2 px-3">Items</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="item-table" class="table table-bordered">
+                                <thead class="default-table-head border">
+                                    <tr>
+                                        <th scope="col" class="font-15 ps-4">Description</th>
+                                        <th scope="col" class="font-15 ps-4">HsCode</th>
+                                        <th scope="col" class="font-15 ps-4">Documents</th>
+                                        <th scope="col" class="font-15 ps-4">Static Quantity Unit</th>
+                                        <th scope="col" class="font-15 ps-4">Supplementary Quantity Unit</th>
+                                        <th scope="col" class="font-15 ps-4">Unit Weight</th>
+                                        <th scope="col" class="font-15 ps-4">Goods Value</th>
+                                        <th scope="col" class="font-15 ps-4">CIF Value</th>
+                                        <th scope="col" class="font-15 ps-4">Duty Fee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items_data %}
+                                        <tr data-item-id="{{ item.id }}">
+                                            <input type="hidden" name="items_set-id" value="{{ item.id }}">
+                                            <td>
+                                               
+                                                <textarea class="form-control" readonly name="items_set-{{ forloop.counter0 }}-description">{{ item.description }} </textarea>
+                                            </td>
+                                            <td>
+                                                <!-- <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
+                                                    {% for hs_code in hs_codes %}
+                                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
+                                                    {% endfor %}
+                                                </select> -->
+                                                <input type="text" class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code" value="{{ item.hs_code.hs_code }}" readonly>
+                
+                                            </td>
+                                            <td class="documents">
+                                                {% for document_formset in document_formsets %}
+                                                    {% if document_formset.item.id == item.id %}
+                                                        {% for doc in document_formset.documents %}
+                                                           
+                                                            {% if doc.file %}
+                                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" readonly></td>
+                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" readonly></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" readonly></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" readonly></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" readonly></td>
+                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}"readonly></td>
+                
+                                        </tr>
                                     {% endfor %}
-                                </select> -->
-                                <input type="text" class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code" value="{{ item.hs_code.hs_code }}" readonly>
-
-                            </td>
-                            <td class="documents">
-                                {% for document_formset in document_formsets %}
-                                    {% if document_formset.item.id == item.id %}
-                                        {% for doc in document_formset.documents %}
-                                           
-                                            {% if doc.file %}
-                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" readonly></td>
-                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" readonly></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" readonly></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" readonly></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" readonly></td>
-                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}"readonly></td>
-
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
-</div>
+</section>
 
-
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
-</body>
-</html>
+{% endblock content %}
