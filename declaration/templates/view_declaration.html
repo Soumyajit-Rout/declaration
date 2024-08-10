@@ -1,86 +1,151 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Declaration List</title>
-    {% load static %}
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    
-    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-<style>
-    .header-container{
-        display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0; /* Adjust padding as needed */
-    }
-</style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="header-container">
-        <h1 class="my-4">Declarations</h1>
-        <a href="{% url 'create_declaration' %}" class="btn btn-primary" role="button">Create Declaration</a>
-       </div>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>S no</th>
-                    <th>Declaration Date</th>
-                    <th>Request No</th>
-                    <th>Declaration No</th>
-                    <th>Net Weight</th>
-                    <th>Gross Weight</th>
-                    <th>Measurements</th>
-                    <th>Number of Packages</th>
-                    <th>Cargo Type</th>
-                    <th>Declaration Type</th>
-                    <th>Cargo Channel</th>
-                    <th>Transaction Type</th>
-                    <th>Trade Type</th>
-                    <th>Regime Type</th>
-                    <th>View Log</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for declaration in declarations %}
-                {% if declaration.is_deleted == False %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ declaration.declaration_date }}</td>
-                    <td>{{ declaration.request_no }}</td>
-                    <td>{{ declaration.declaration_no }}</td>
-                    <td>{{ declaration.net_weight }}</td>
-                    <td>{{ declaration.gross_weight }}</td>
-                    <td>{{ declaration.measurements }}</td>
-                    <td>{{ declaration.nmbr_of_packages }}</td>
-                    <td>{{ declaration.cargo_type.name }}</td>
-                    <td>{{ declaration.declaration_type.name }}</td>
-                    <td>{{ declaration.cargo_channel.name }}</td>
-                    <td>{{ declaration.transaction_type.name }}</td>
-                    <td>{{ declaration.trade_type.name }}</td>
-                    <td>{{ declaration.regime_type.name }}</td>
-                    <td> <a href="{% url 'view-logs' declaration.pk %}" class="">View Logs</a></td>
-
-                    <td>
-                        <a href="{% url 'update_declaration' declaration.pk %}" class="btn btn-warning btn-sm">Update</a>
-                        <a href="{% url 'list_declaration' declaration.pk %}" class="btn">View</a>
-
-                        <form action="{% url 'delete_declaration' declaration.pk %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="section">
+    <div class="section-header bg-white">
+        <h1>Dashboard</h1>
     </div>
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script> -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-</body>
-</html>
+    <div class="section-body">
+
+        <!-- all table component -->
+
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center bg-white mb-3">
+                <div class="font-20">Declarations</div>
+                <div>
+                    <a href="{% url 'create_declaration' %}" class="btn navbar-card-button text-white">Create
+                        Declaration</a>
+                </div>
+            </div>
+            <!-- default table -->
+            <div class="default-table table-responsive py-2">
+                <table class="table table-hover">
+                    <thead class="default-table-head border">
+                        <tr>
+                            <th scope="col" class="font-15 ps-4">S no</th>
+                            <th scope="col" class="font-15 ps-4">Declaration Date</th>
+                            <th scope="col" class="font-15 ps-4">Request No</th>
+                            <th scope="col" class="font-15 ps-4">Declaration No</th>
+                            <th scope="col" class="font-15 ps-4">Net Weight</th>
+                            <th scope="col" class="font-15 ps-4">Gross Weight</th>
+                            <th scope="col" class="font-15 ps-4">Measurements</th>
+                            <th scope="col" class="font-15 ps-4">Number of Packages</th>
+                            <th scope="col" class="font-15 ps-4">Cargo Type</th>
+                            <th scope="col" class="font-15 ps-4">Declaration Type</th>
+                            <th scope="col" class="font-15 ps-4">Cargo Channel</th>
+                            <th scope="col" class="font-15 ps-4">Transaction Type</th>
+                            <th scope="col" class="font-15 ps-4">Trade Type</th>
+                            <th scope="col" class="font-15 ps-4">Regime Type</th>
+                            <th scope="col" class="font-15 ps-4">View Log</th>
+                            <th scope="col" class="font-15 ps-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for declaration in declarations %}
+                        {% if declaration.is_deleted == False %}
+                        <tr>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ forloop.counter }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.declaration_date }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.request_no }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.declaration_no }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.net_weight }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.gross_weight }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.measurements }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.nmbr_of_packages }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-4">{{ declaration.cargo_type.name }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15">{{ declaration.declaration_type.name }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15">{{ declaration.cargo_channel.name }}</p>
+                            </td>
+
+                            <td class="table-data">
+                                <p class="font-15">{{ declaration.transaction_type.name }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15">{{ declaration.trade_type.name }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15">{{ declaration.regime_type.name }} </p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15 ps-3"><a href="{% url 'view-logs' declaration.pk %}">view Log</a></p>
+                            </td>
+                            <td class="table-data">
+                                <div class="btn-group px-3">
+                                    <a href="{% url 'update_declaration' declaration.pk %}"
+                                        class="btn btn-sm btn-primary border-0 update_button me-1">Update</a>
+                                    <a href="{% url 'list_declaration' declaration.pk %}"
+                                        class="btn btn-sm btn-primary border-0 update_button me-1">View</a>
+                                    <a href="{% url 'delete_declaration' declaration.pk %}"
+                                        class="btn btn-sm btn-danger border-0 delete_button">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginations -->
+            <div class="row text-center mt-3 d-flex justify-content-end">
+                <!-- Page selector -->
+                <div class="col-12 col-lg-3">
+                    <div class="d-flex justify-content-end">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination mb-0">
+                                <!-- Previous Page Button -->
+                                <li class="page-item">
+                                    <a
+                                        class="page-link page-link-previous d-flex justify-content-center align-items-center font-24">
+                                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+
+                                <!-- Page Number Buttons -->
+                                <li class="page-item active">
+                                    <span class="page-link d-flex justify-content-center align-items-center">1</span>
+                                </li>
+
+                                <!-- Next Page Button -->
+                                <li class="page-item">
+                                    <a
+                                        class="page-link page-link-next d-flex justify-content-center align-items-center font-24 me-0">
+                                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+    </div>
+</section>
+
+
+{% endblock content %}

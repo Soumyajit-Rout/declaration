@@ -1,234 +1,196 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Declaration</title>
-    {% load static %}
-    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 800px;
-            margin-top: 50px;
-        }
-        .form-control {
-            margin-bottom: 15px;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .card-header h4 {
-            margin: 0;
-        }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            display: none;
-        }
-        .errorlist{
-            color:red
-        }
-        .delete-row {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="my-4">Create Declaration</h1>
-        <div class="card">
-            <div class="card-header">
-                <h4>Declaration Details</h4>
-            </div>
+{% extends "base.html" %}
+{% load static %}
 
-            {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                <ul>
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+{% block content %}
 
-            {% if item_formset.non_field_errors %}
-            <div class="alert alert-danger">
-                <ul>
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+    <ul>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if item_formset.non_field_errors %}
+<div class="alert alert-danger">
+    <ul>
+        {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
+    <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="default-form mb-4">
+            <div class="mb-4 form_heading">
+                <h2 class="font-20 py-2 px-3">Declaration Information</h2>
             </div>
-            {% endif %}
-            <div class="card-body">
-                <form method="post" novalidate enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_declaration_date">Declaration Date:</label>
+            <div class="d-flex flex-wrap">
+                <div class="col-12">
+                    <div class="row gx-3 pe-sm-3">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_declaration_date">Declaration Date:</label>
                                 {{ form.declaration_date }}
                                 {{ form.declaration_date.errors }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_request_no">Request No:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Request No:</label>
                                 {{ form.request_no }}
                                 {{ form.request_no.errors }}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_declaration_no">Declaration No:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_declaration_no">Declaration No:</label>
                                 {{ form.declaration_no }}
                                 {{ form.declaration_no.errors }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_net_weight">Net Weight:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_net_weight">Net Weight:</label>
                                 {{ form.net_weight }}
                                 {{ form.net_weight.errors }}
-                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_gross_weight">Gross Weight:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_gross_weight">Gross Weight:</label>
                                 {{ form.gross_weight }}
                                 {{ form.gross_weight.errors }}
-                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_measurements">Measurements:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_measurements">Measurements:</label>
                                 {{ form.measurements }}
                                 {{ form.measurements.errors }}
-                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_nmbr_of_packages">Number of Packages:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_nmbr_of_packages">Number of Packages:</label>
                                 {{ form.nmbr_of_packages }}
                                 {{ form.nmbr_of_packages.errors }}
-                                <span class="error-message">Please enter a valid number.</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_cargo_type">Cargo Type:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_cargo_type">Cargo Type:</label>
                                 {{ form.cargo_type }}
                                 {{ form.cargo_type.errors }}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_declaration_type">Declaration Type:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_declaration_type">Declaration Type:</label>
                                 {{ form.declaration_type }}
                                 {{ form.declaration_type.errors }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_cargo_channel">Cargo Channel:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_cargo_channel">Cargo Channel:</label>
                                 {{ form.cargo_channel }}
                                 {{ form.cargo_channel.errors }}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_transaction_type">Transaction Type:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_transaction_type">Transaction Type:</label>
                                 {{ form.transaction_type }}
                                 {{ form.transaction_type.errors }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_trade_type">Trade Type:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_trade_type">Trade Type:</label>
                                 {{ form.trade_type }}
                                 {{ form.trade_type.errors }}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="id_regime_type">Regime Type:</label>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_regime_type">Regime Type:</label>
                                 {{ form.regime_type }}
                                 {{ form.regime_type.errors }}
                             </div>
                         </div>
+
+                        <div class="mb-4 form_heading my-4">
+                            <h2 class="font-20 py-2 px-3">Items</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="item-table" class="table table-bordered">
+                                <thead class="default-table-head border">
+                                    <tr>
+                                        <th scope="col" class="font-15 ps-4">Description</th>
+                                        <th scope="col" class="font-15 ps-4">HsCode</th>
+                                        <th scope="col" class="font-15 ps-4">Documents</th>
+                                        <th scope="col" class="font-15 ps-4">Static Quantity Unit</th>
+                                        <th scope="col" class="font-15 ps-4">Supplementary Quantity Unit</th>
+                                        <th scope="col" class="font-15 ps-4">Unit Weight</th>
+                                        <th scope="col" class="font-15 ps-4">Goods Value</th>
+                                        <th scope="col" class="font-15 ps-4">CIF Value</th>
+                                        <th scope="col" class="font-15 ps-4">Duty Fee</th>
+                                        <th scope="col" class="font-15 ps-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{ item_formset.management_form }}
+                                    {% for form in item_formset %}
+                                    <tr>
+                                        <td>{{ form.goods_description }} {{ form.goods_description.errors }} <button
+                                                type="button" class="submit-button mt-2" id="search-hscode">Search</button>
+                                        </td>
+                                        <td>{{ form.hs_code }} {{ form.hs_code.errors }}</td>
+                                        <td class="documents" data-item-index="{{ forloop.counter0 }}"></td>
+                                        <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }} <span
+                                                class="error-message">Please enter a valid number.</span></td>
+                                        <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }} <span
+                                                class="error-message">Please enter a valid number.</span></td>
+                                        <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}<span
+                                                class="error-message">Please enter a valid number.</span></td>
+                                        <td>{{ form.goods_value }} {{ form.goods_value.errors }}<span
+                                                class="error-message">Please enter a valid number.</span></td>
+                                        <td>{{ form.cif_value }} {{ form.goods_value.errors }}<span
+                                                class="error-message">Please enter a valid number.</span></td>
+                                        <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}<span class="error-message">Please
+                                                enter a valid number.</span></td>
+                                        <td>
+                                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">
+                                            {% if form.instance.pk %}
+                                            <a href="" class="delete-btn btn btn-danger btn-sm">Delete</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group mb-0">
+                            <button type="submit" class="submit-button" style="float: right;">Save</button>
+                            <button type="button" id="add-row" class="submit-button w-20 me-3" style="float: right;">Add Item</button>
+                        </div>
+                        <div class="form-group mt-5 text-left">
+                            <a href="{% url 'view_declaration' %}" role="button"> <- Back</a>
+                        </div>
                     </div>
-
-                    <h2>Items</h2>
-                <div class="table-responsive">
-                    <table  id="item-table" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Description</th>
-                                <th>HsCode</th>
-                                <th>Documents</th>
-                                <th>Static Quantity Unit</th>
-                                <th>Supplementary Quantity Unit</th>
-                                <th>Unit Weight</th>
-                                <th>Goods Value</th>
-                                <th>CIF Value</th>
-                                <th>Duty Fee</th>
-        
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody> 
-                            {{ item_formset.management_form }}
-                            {% for form in item_formset %}
-                            
-                                <tr>
-                                    <td>{{ form.goods_description }} {{ form.goods_description.errors }} <button type="button" class="btn btn-primary" id="search-hscode">Search</button></td>
-                                    <td>{{ form.hs_code }}  {{ form.hs_code.errors }}</td>
-                                    <td class="documents" data-item-index="{{ forloop.counter0 }}"></td>
-                                    <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
-                                    <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }} <span class="error-message">Please enter a valid number.</span></td>
-                                    <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}<span class="error-message">Please enter a valid number.</span></td>
-                                    <td>{{ form.goods_value }}  {{ form.goods_value.errors }}<span class="error-message">Please enter a valid number.</span></td>
-                                    <td>{{ form.cif_value }} {{ form.goods_value.errors }}<span class="error-message">Please enter a valid number.</span></td>
-                                    <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}<span class="error-message">Please enter a valid number.</span></td>
-                                    <td>
-                                        <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row">  
-                                        {% if form.instance.pk %}
-                                        <a href="" class="delete-btn btn btn-danger btn-sm">Delete</a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-
-                            {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
-                    <button type="button" id="add-row" class="btn btn-primary">Add Item</button>
-                    <div class="form-group mb-0 ml-100">
-                        <button type="submit" class="btn btn-primary mr-1" style="float: right;">Save</button>
-                    </div>
-                    <div class="form-group mt-5 text-left">
-                        <a href="{% url 'view_declaration' %}"  role="button"> <- Back</a>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
+    </form>
+</section>
+
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var addButton = document.getElementById('add-row');
         var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
         var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
@@ -237,42 +199,42 @@ document.addEventListener('DOMContentLoaded', function() {
         let requiredDocsData = {};
 
         function attachValidationListeners(row) {
-        var numericFields = row.querySelectorAll('input[type="number"]');
-        numericFields.forEach(function(field) {
-            var errorSpan = document.createElement('span');
-        errorSpan.style.display = 'none';
-        errorSpan.style.color = 'red';
-        errorSpan.textContent = 'Invalid number';
-        field.parentNode.insertBefore(errorSpan, field.nextSibling);
-            field.addEventListener('input', function() {
-                if (!field.checkValidity()) {
-                    field.nextElementSibling.style.display = 'inline';
-                } else {
-                    field.nextElementSibling.style.display = 'none';
-                }
+            var numericFields = row.querySelectorAll('input[type="number"]');
+            numericFields.forEach(function (field) {
+                var errorSpan = document.createElement('span');
+                errorSpan.style.display = 'none';
+                errorSpan.style.color = 'red';
+                errorSpan.textContent = 'Invalid number';
+                field.parentNode.insertBefore(errorSpan, field.nextSibling);
+                field.addEventListener('input', function () {
+                    if (!field.checkValidity()) {
+                        field.nextElementSibling.style.display = 'inline';
+                    } else {
+                        field.nextElementSibling.style.display = 'none';
+                    }
+                });
             });
-        });
-    }
+        }
 
-        tableBody.addEventListener('click', function(e) {
+        tableBody.addEventListener('click', function (e) {
             if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
                 var row = e.target.closest('tr');
                 var descriptionField = row.querySelector('textarea');
                 var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
                 descriptionField.dataset.originalValue = descriptionField.value;
 
-                hsCodeDropdown.addEventListener('click', function() {
+                hsCodeDropdown.addEventListener('click', function () {
                     originalDescriptions[descriptionField.name] = descriptionField.value;
                 });
 
-                hsCodeDropdown.addEventListener('change', function() {
+                hsCodeDropdown.addEventListener('change', function () {
                     originalDescriptions[descriptionField.name] = descriptionField.value;
                 });
             }
         });
 
         // Search functionality
-        tableBody.addEventListener('click', function(e) {
+        tableBody.addEventListener('click', function (e) {
             if (e.target.id === 'search-hscode') {
                 var row = e.target.closest('tr');
                 var descriptionField = row.querySelector('textarea');
@@ -287,65 +249,65 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify({ description: descriptionData })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    hsCodeDropdown.innerHTML = '';
+                    .then(response => response.json())
+                    .then(data => {
+                        hsCodeDropdown.innerHTML = '';
 
-                    // Add the "Select your HS code" option
-                    var placeholderOption = document.createElement('option');
-                    placeholderOption.value = '';
-                    placeholderOption.textContent = 'Select your HS code';
-                    hsCodeDropdown.appendChild(placeholderOption);
+                        // Add the "Select your HS code" option
+                        var placeholderOption = document.createElement('option');
+                        placeholderOption.value = '';
+                        placeholderOption.textContent = 'Select your HS code';
+                        hsCodeDropdown.appendChild(placeholderOption);
 
-                    data.hs_codes.forEach(function(hsCode) {
-                        var option = document.createElement('option');
-                        option.value = hsCode.id;
-                        option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
-                        hsCodeDropdown.appendChild(option);
-                    });
-                    descriptionField.dataset.originalValue = descriptionField.value;
+                        data.hs_codes.forEach(function (hsCode) {
+                            var option = document.createElement('option');
+                            option.value = hsCode.id;
+                            option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+                            hsCodeDropdown.appendChild(option);
+                        });
+                        descriptionField.dataset.originalValue = descriptionField.value;
 
-                    hsCodeDropdown.addEventListener('click', function() {
-                        originalDescriptions[descriptionField.name] = descriptionField.value;
-                    });
+                        hsCodeDropdown.addEventListener('click', function () {
+                            originalDescriptions[descriptionField.name] = descriptionField.value;
+                        });
 
-                    hsCodeDropdown.addEventListener('change', function() {
-                        originalDescriptions[descriptionField.name] = descriptionField.value;
-                    });
-                })
-                .catch(error => console.error('Error:', error));
+                        hsCodeDropdown.addEventListener('change', function () {
+                            originalDescriptions[descriptionField.name] = descriptionField.value;
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
             }
         });
 
-        addButton.addEventListener('click', function() {
-    var newForm = tableBody.rows[0].cloneNode(true);
-    var regex = new RegExp(`items_set-\\d+-`, 'g');
+        addButton.addEventListener('click', function () {
+            var newForm = tableBody.rows[0].cloneNode(true);
+            var regex = new RegExp(`items_set-\\d+-`, 'g');
 
-    newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
-    newForm.dataset.itemIndex = currentFormCount; // Set the item index for the new row
+            newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
+            newForm.dataset.itemIndex = currentFormCount; // Set the item index for the new row
 
-    tableBody.appendChild(newForm);
-    currentFormCount++;
-    formCountInput.value = currentFormCount;
+            tableBody.appendChild(newForm);
+            currentFormCount++;
+            formCountInput.value = currentFormCount;
 
-    var inputs = newForm.querySelectorAll('input, textarea');
-    inputs.forEach(function(input) {
-        if (input.type === 'hidden') {
-            input.value = '';
-        } else {
-            input.value = '';
-        }
-        input.dataset.itemIndex = currentFormCount - 1; // Set the item index for each input
-    });
-    var documentsCell = newForm.querySelector('.documents');
-    if (documentsCell) {
-        documentsCell.dataset.itemIndex = currentFormCount - 1; // Set the item index for the documents cell
-    }
-    attachValidationListeners(newForm);
-});
+            var inputs = newForm.querySelectorAll('input, textarea');
+            inputs.forEach(function (input) {
+                if (input.type === 'hidden') {
+                    input.value = '';
+                } else {
+                    input.value = '';
+                }
+                input.dataset.itemIndex = currentFormCount - 1; // Set the item index for each input
+            });
+            var documentsCell = newForm.querySelector('.documents');
+            if (documentsCell) {
+                documentsCell.dataset.itemIndex = currentFormCount - 1; // Set the item index for the documents cell
+            }
+            attachValidationListeners(newForm);
+        });
 
 
-        tableBody.addEventListener('click', function(e) {
+        tableBody.addEventListener('click', function (e) {
             if (e.target.classList.contains('delete-btn')) {
                 e.preventDefault();
                 var row = e.target.closest('tr');
@@ -363,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
         attachValidationListeners(document);
 
         // Add event listener for hs_code change
-        tableBody.addEventListener('change', function(e) {
+        tableBody.addEventListener('change', function (e) {
             if (e.target.name.includes('hs_code')) {
                 var row = e.target.closest('tr');
                 var hsCode = e.target.value;
@@ -376,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         documentField.innerHTML = '';
 
                         requiredDocsData[hsCode] = data.required_docs;
-                        data.required_docs.forEach(function(doc) {
+                        data.required_docs.forEach(function (doc) {
                             var fileInput = document.createElement('input');
                             fileInput.type = 'file';
                             fileInput.name = `documents_${itemIndex}_${doc.id}`;
@@ -394,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Form submission validation
-        document.querySelector('form').addEventListener('submit', function(e) {
+        document.querySelector('form').addEventListener('submit', function (e) {
             var isValid = true;
             var rows = document.querySelectorAll('#item-table tbody tr');
             // Check for originalDescriptions change
@@ -408,36 +370,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Check for required file inputs
             var requiredFiles = document.querySelectorAll('.required-file');
-            requiredFiles.forEach(function(input) {
+            requiredFiles.forEach(function (input) {
                 if (!input.files.length) {
                     e.preventDefault();
-                alert(' you must upload all required files.');
+                    alert(' you must upload all required files.');
                 }
             });
 
 
-        rows.forEach(function(row) {
-            var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-            var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
-            var documentField = row.querySelector('.documents');
-            var requiredDocs = requiredDocsData[hsCode] || [];
-            var documentField = row.querySelector('.documents');
-            var itemIndex = documentField.getAttribute('data-item-index');
+            rows.forEach(function (row) {
+                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
+                var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
+                var documentField = row.querySelector('.documents');
+                var requiredDocs = requiredDocsData[hsCode] || [];
+                var documentField = row.querySelector('.documents');
+                var itemIndex = documentField.getAttribute('data-item-index');
 
 
-            requiredDocs.forEach(function(doc) {
-                var fileInput = document.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
-                if (fileInput && fileInput.files.length > 0) {
-                    var file = fileInput.files[0];
-                    var ext = file.name.split('.').pop().toLowerCase();
-                    if (!doc.format.split(',').includes(ext)) {
-                        event.preventDefault();
-                        alert(`Invalid file format for ${doc.name}: ${ext}`);
-                        fileInput.value = ''; // Clear the invalid file input
+                requiredDocs.forEach(function (doc) {
+                    var fileInput = document.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
+                    if (fileInput && fileInput.files.length > 0) {
+                        var file = fileInput.files[0];
+                        var ext = file.name.split('.').pop().toLowerCase();
+                        if (!doc.format.split(',').includes(ext)) {
+                            event.preventDefault();
+                            alert(`Invalid file format for ${doc.name}: ${ext}`);
+                            fileInput.value = ''; // Clear the invalid file input
+                        }
                     }
-                }
+                });
             });
-        });
 
             if (!isValid) {
                 e.preventDefault();
@@ -446,14 +408,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    </script>
-    
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script> -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
-    <!-- <script src="static/js/jquery-3.6.0.min.js"></script> -->
-    <!-- <script src="static/js/bootstrap.min.js"></script> -->
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-</body>
-</html>
+</script>
+
+{% endblock content %}

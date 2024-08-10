@@ -1,0 +1,102 @@
+// Button for cards
+.card-button{
+    background: none;
+    border: none;
+    .gradient-text {
+       font-size: 14px;
+       font-weight: 700;
+       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       -webkit-background-clip: text;
+       background-clip: text;
+       color: transparent;
+   }
+   }
+   
+   // Button for navbar
+   .navbar-card-button {
+       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       color: #fff;
+       font-size: 14px;
+       font-weight: 500;
+       line-height: 21.9px;
+       text-align: center;
+       border-radius: 10px;
+       border: 1px solid #6818C7;
+       padding: 8px 16px;
+       &:hover{
+        background: #fff;
+        border: 1px solid #6818C7;
+        color: #6818c7 !important;
+       }
+       @media (max-width: 576px) {
+           font-size: 12px;
+      }
+   }
+   
+   .submit-button {
+       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       color: #fff;
+       font-size: 18px;
+       font-weight: 500;
+       line-height: 21.9px;
+       text-align: center;
+       border-radius: 10px;
+       border: none;
+       padding: 10px 16px;
+   }
+   
+   // Different style buttons
+   .extra-small{
+       color: #fff;
+       border-radius: 10px;
+       padding: 15px 27px 15px 27px;
+       border: none;
+       background: linear-gradient(94.49deg, #500daf, #4355ba);
+   }
+   .default-primary-button{
+       color: #fff;
+       border-radius: 10px;
+       padding: 16px 0px 15px 0px;
+       border: none;
+       background: linear-gradient(94.49deg, #500daf, #4355ba);
+   }
+   .default-primary-button:active{
+       border-color: rgba(103, 27, 199, 1);
+   }
+   .extra-Secondary-small{
+       padding: 15px 27px 16px 27px;
+       color: black;
+       background-color: #fff;
+       border-radius: 10px;
+   }
+   .default-Secondary-button{
+       color: black;
+       background-color: #fff;
+       border-radius: 10px;
+       padding: 16px 0px 15px 0px;
+   }
+   .disabled-button{
+       color: rgba(25, 30, 59, 0.6);
+       border-color: rgba(25, 30, 59, 0.2);
+       background-color: rgba(231, 231, 231, 1);
+       border-radius: 10px;
+       padding: 16px 0px 15px 0px;
+   }
+   .back-button{
+       border: none;
+       color: black;
+       background-color: #fff;
+       border-radius: 10px;
+       padding: 16px 0px 15px 0px;
+   }
+   .default-dropdown{
+       border-radius: 7px;
+       padding: 12px 10px 11px 10px;
+   }
+   .update_button{
+       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+   }
+   .delete_button{
+       background: linear-gradient(91.37deg, #ff0808 1.57%, #c1355a 98.04%);
+   }
+   
