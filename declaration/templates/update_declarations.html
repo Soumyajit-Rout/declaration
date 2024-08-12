@@ -7,6 +7,7 @@
     <form class="needs-validation" id="update-declaration-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="default-form mb-4">
+            <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
             <div class="mb-4 form_heading">
                 <h2 class="font-20 py-2 px-3">Update Declaration</h2>
             </div>
@@ -168,7 +169,7 @@
                                             <td>
                                                
                                                 <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description">{{ item.description }}</textarea>
-                                                <button type="button" class="search-btn submit-button mt-2">Search</button>
+                                                <button type="button" class="search-btn navbar-card-button mt-2">Search</button>
                                             </td>
                                             <td>
                                                 <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
@@ -197,7 +198,7 @@
                                             <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required></td>
                                             <td>
                                                 {% if item.id %}
-                                                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                                                    <button type="button" class="btn btn-danger delete_button">Delete</button>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -205,8 +206,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="form-group mb-0">
-                            <button type="submit" class="submit-button" style="float: right;">Update
+                        <div class="form-group mb-0 mt-4">
+                            <button type="submit" class="navbar-card-button" style="float: right;">Update
                                 Declaration</button>
                         </div>
                     </div>
