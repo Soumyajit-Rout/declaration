@@ -12,6 +12,7 @@
 
   <!-- Template CSS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/theme.css' %}">
   
@@ -24,6 +25,36 @@
     .fade-out.hidden {
       opacity: 0;
     }
+    .confirmbtn {
+     margin: .3125em;
+     padding: .625em 1.1em;
+     transition: box-shadow .1s;
+     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+     font-weight: 500;
+     display: inline-block;
+     border: 0;
+     border-radius: 10px;
+     color: #fff;
+     font-size: 14px;
+     text-decoration: none;
+     padding: 8px 24px;
+ }
+ .sweetsuccess{
+   background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+   border: 1px solid #6818C7;
+ }
+ .sweetsuccess:hover{
+     color: #6818C7;
+     background: #fff !important;
+}
+ .sweetdanger{
+   background: #d33;
+   border: 1px solid #d33;
+ }
+.sweetdanger:hover{
+     color: #6818C7;
+     background: #fff !important;
+}
   </style>
 </head>
 

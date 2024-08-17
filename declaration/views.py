@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import FileResponse, Http404
+from django.contrib import messages
 
 """
 This function is to create a declaration form along with the items,here with each
@@ -52,7 +53,7 @@ def create_declaration(request):
                                         file=request.FILES[file_field_name],
                                         required_doc = req_doc
                                     )
-
+                messages.success(request, 'Declaration added successfully.')
                 return redirect('view_declaration')
             except Exception as e:
                 print(e)
@@ -71,7 +72,7 @@ This function is to display the declaration objects it is a normal list function
 renders the view_declaration.html page
 """
 def declaration_list(request):
-    declarations = Declaration.objects.all().order_by('declaration_date')
+    declarations = Declaration.objects.filter(is_deleted = False).order_by('declaration_date')
     return render(request, 'view_declaration.html', {'declarations': declarations})
 
 """
@@ -193,9 +194,9 @@ def update_declaration(request, pk):
                                             file=request.FILES[key],
                                             required_doc=required_doc
                                             )
-
+        messages.success(request, 'Declaration updated successfully.')            
         # Redirect to prevent resubmission
-        return redirect('update_declaration',pk=pk)
+        return redirect('view_declaration')
 
     else:
         # Populate initial data for the form

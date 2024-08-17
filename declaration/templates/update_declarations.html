@@ -7,7 +7,9 @@
     <form class="needs-validation" id="update-declaration-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="default-form mb-4">
-            <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
+            <div class="d-flex justify-content-end">
+                <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
+            </div>
             <div class="mb-4 form_heading">
                 <h2 class="font-20 py-2 px-3">Update Declaration</h2>
             </div>
@@ -387,5 +389,6 @@
     });
 
 </script>
+
 
 {% endblock content %}
