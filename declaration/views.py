@@ -16,6 +16,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import FileResponse, Http404
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 """
 This function is to create a declaration form along with the items,here with each
@@ -72,7 +74,17 @@ This function is to display the declaration objects it is a normal list function
 renders the view_declaration.html page
 """
 def declaration_list(request):
-    declarations = Declaration.objects.filter(is_deleted = False).order_by('declaration_date')
+    declarations = Declaration.objects.filter(is_deleted=False).order_by('declaration_date')
+    
+    page = request.GET.get('page', 1)
+    paginator = Paginator(declarations, 3) 
+    try:
+        declarations = paginator.page(page)
+    except PageNotAnInteger:
+        declarations = paginator.page(1)
+    except EmptyPage:
+        declarations = paginator.page(paginator.num_pages)
+    
     return render(request, 'view_declaration.html', {'declarations': declarations})
 
 """

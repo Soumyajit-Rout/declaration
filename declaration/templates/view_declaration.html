@@ -44,7 +44,7 @@
                         {% if not declaration.is_deleted %}
                         <tr>
                             <td class="table-data">
-                                <p class="font-15 ps-4">{{ forloop.counter }}</p>
+                                <p class="font-15 ps-4">{{ forloop.counter0|add:declarations.start_index }}</p>
                             </td>
                             <td class="table-data">
                                 <p class="font-15 ps-4">{{ declaration.declaration_date }}</p>
@@ -116,25 +116,33 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination mb-0">
                                 <!-- Previous Page Button -->
+                                {% if declarations.has_previous %}
                                 <li class="page-item">
-                                    <a
-                                        class="page-link page-link-previous d-flex justify-content-center align-items-center font-24">
+                                    <a href="?page={{ declarations.previous_page_number }}" class="page-link d-flex justify-content-center align-items-center font-24">
                                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                                     </a>
                                 </li>
-
-                                <!-- Page Number Buttons -->
+                                {% endif %}
+                               <!-- Page Number Buttons -->
+                                {% for num in declarations.paginator.page_range %}
+                                {% if declarations.number == num %}
                                 <li class="page-item active">
-                                    <span class="page-link d-flex justify-content-center align-items-center">1</span>
+                                    <span class="page-link d-flex justify-content-center align-items-center">{{ num }}</span>
                                 </li>
-
-                                <!-- Next Page Button -->
+                                {% else %}
                                 <li class="page-item">
-                                    <a
-                                        class="page-link page-link-next d-flex justify-content-center align-items-center font-24 me-0">
+                                    <a href="?page={{ num }}" class="page-link d-flex justify-content-center align-items-center">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                <!-- Next Page Button -->
+                                {% if declarations.has_next %}
+                                <li class="page-item">
+                                    <a href="?page={{ declarations.next_page_number }}" class="page-link d-flex justify-content-center align-items-center font-24 me-0">
                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                                     </a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </nav>
                     </div>
