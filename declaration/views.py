@@ -145,7 +145,7 @@ def update_declaration(request, pk):
             hs_code_id = request.POST.get(f'items_set-{idx}-hs_code')
             hs_code = HsCode.objects.get(id=hs_code_id) if hs_code_id else None
             item_data = {
-                'description': request.POST.get(f'items_set-{idx}-description'),
+                'goods_description': request.POST.get(f'items_set-{idx}-description'),
                 'hs_code': hs_code,
                 'static_quantity_unit': request.POST.get(f'items_set-{idx}-static_quantity_unit'),
                 'supp_quantity_unit': request.POST.get(f'items_set-{idx}-supp_quantity_unit'),
