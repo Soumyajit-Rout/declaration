@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        SONARQUBE_TOKEN = credentials('sonarqube')
+    }
     stages {
         stage('Setup Python Virtual ENV') {
             steps {
@@ -40,6 +42,16 @@ pipeline {
                 script {
                     sh 'ls -l build-output.log'
                     sh 'cat build-output.log'
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQube Scanner' // Adjust to the name of your SonarQube Scanner installation
+                    withSonarQubeEnv('SonarQube Server') { // Adjust to the name of your SonarQube server configuration
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=declaration-Staging-server -Dsonar.sources=. -Dsonar.host.url=http://54.147.128.77:9000 -Dsonar.login=${SONARQUBE_TOKEN}"
+                    }
                 }
             }
         }
