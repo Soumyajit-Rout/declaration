@@ -155,3 +155,50 @@ h1, h2, h3, h4, h5, h6, p{
      right: 2px;
      top: 8px;
 }
+.btn-back {
+     color: rgba(25, 30, 59, 0.9);
+     text-decoration: none;
+   }
+   
+   .btn-back:hover {
+     color: rgba(25, 30, 59, 0.9);
+     text-decoration: none;
+   }
+   
+   .shadow-right {
+     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+   }
+   
+   .h-100vh {
+     height: 100vh;
+   }
+   
+   .px-100 {
+     padding-left: 100px;
+     padding-right: 100px;
+   }
+   
+   .py-46 {
+     padding-top: 46px;
+     padding-bottom: 46px;
+   }
+   
+   .sign-up-btn {
+     color: #005AAD;
+     position: absolute;
+     bottom: 46px;
+     right: 56px;
+     text-decoration: underline;
+   }
+   
+   .pt-40 {
+     padding-top: 40px;
+   }
+   
+   .pt-100 {
+     padding-top: 100px;
+   }
+   
+   .tab {
+     display: none;
+   }

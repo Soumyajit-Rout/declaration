@@ -87,6 +87,7 @@ DATABASES = {
         'PORT': os.getenv('DATABASE_PORT'),
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -136,3 +137,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+USER_API_KEY = os.getenv('USER_API_KEY')
+IAM_URL = os.getenv('IAM_URL')

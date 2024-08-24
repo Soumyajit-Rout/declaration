@@ -21,6 +21,7 @@ class DeclarationForm(forms.ModelForm):
             'trade_type',
             'regime_type',
             'comments',
+            'iam_user_id',
         ]
         widgets = {
             'declaration_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),

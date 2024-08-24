@@ -1,3 +1,10 @@
+{% if not request.session.name %}
+    {% url 'onboard' as dashboard_url %}
+    <script type="text/javascript">
+        alert('Please configure your wallet')
+        window.location.href = "{{ dashboard_url }}";
+    </script>
+{% endif %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +81,7 @@
   <!-- General JS Scripts -->
   <script src="{% static 'assets/js/jquery.js' %}"></script>
   <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-  
+  <script type="module" src="{% static 'assets/js/talisman.js' %}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.alert').forEach(function (element) {
