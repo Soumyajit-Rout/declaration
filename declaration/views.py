@@ -457,7 +457,7 @@ Basic api to list the declarations
 """
 class ListDeclarations(generics.ListAPIView):
     permission_classes = [StaticTokenPermission]
-    serializer_class = DeclarationSerializer
+    serializer_class = DelcarationListSerilaizer
 
     def get_queryset(self):
         return Declaration.objects.filter(is_verified=0)
