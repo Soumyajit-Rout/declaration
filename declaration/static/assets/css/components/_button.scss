@@ -100,3 +100,185 @@
        background: linear-gradient(91.37deg, #ff0808 1.57%, #c1355a 98.04%);
    }
    
+   .delete_button_dashbord {
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+   }
+
+//      .update_button{
+//        background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+//        color: #fff;
+//        font-size: 14px;
+//        font-weight: 500;
+//        line-height: 21.9px;
+//        text-align: center;
+//        border-radius: 10px;
+//        border: 1px solid #6818C7;
+//        padding: 6px 22px;
+//        @media (max-width: 576px) {
+//         font-size: 12px;
+//         padding: 4px 15px;
+//        }
+//        &:hover{
+//         background: #fff;
+//         border: 1px solid #6818C7;
+//         color: #6818c7;
+//        }
+//    }
+//    .delete_button{
+//        background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+//        color: #fff;
+//        font-size: 14px;
+//        font-weight: 500;
+//        line-height: 21.9px;
+//        text-align: center;
+//        border-radius: 10px;
+//        border: 1px solid #bd0303;
+//        padding: 8px 22px;
+//        @media (max-width: 576px) {
+//         font-size: 12px;
+//         padding: 4px 15px;
+//        }
+//        &:hover{
+//         background: #fff;
+//         border: 1px solid #bd0303;
+//         color: #bd0303;
+//        }
+//    }
+   .warning_button{
+    background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21.9px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #bd0303;
+    padding: 8px 22px;
+    @media (max-width: 576px) {
+        font-size: 12px;
+        padding: 4px 15px;
+    }
+    &:hover{
+        background: #fff;
+        border: 1px solid #bd0303;
+        color: #bd0303;
+       }
+   }
+
+   .header_success_button{
+    background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21.9px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #6818C7;
+    padding: 8px 22px;
+    @media (max-width: 576px) {
+        font-size: 12px;
+        padding: 4px 15px;
+    }
+    &:hover{
+     background: #fff;
+     border: 1px solid #6818C7;
+     color: #6818c7;
+    }
+    // &:focus:not(:focus-visible){
+    //     color: #fff;
+    // }
+   }
+
+   .header_danger_button{
+    background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21.9px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #bd0303;
+    padding: 8px 22px;
+    @media (max-width: 576px) {
+        font-size: 12px;
+        padding: 4px 15px;
+    }
+    &:hover{
+     background: #fff;
+     border: 1px solid #bd0303;
+     color: #bd0303;
+    }
+    
+   }
+
+
+.confirmbtn {
+    margin: .3125em;
+    padding: .625em 1.1em;
+    transition: box-shadow .1s;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+    font-weight: 500;
+    display: inline-block;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 8px 24px;
+}
+.sweetsuccess{
+  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  border: 1px solid #6818C7;
+  &:hover{
+  color: #6818C7;
+  background: #fff !important;
+  }
+}
+
+.sweetdanger{
+  background: #d33 !important;
+  border: 1px solid #d33 !important;
+  &:hover{
+     color: #d33 !important;
+     background: #fff !important;
+  }
+}
+
+.swal2-confirm{
+    margin: .3125em;
+    padding: .625em 1.1em;
+    transition: box-shadow .1s;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+    font-weight: 500;
+    display: inline-block;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 8px 24px;
+    background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+    border: 1px solid #6818C7;
+    &:hover{
+    color: #6818C7;
+    background: #fff !important;
+    }
+}
+
+.alert-success{
+    .close{
+        padding: 0px 10px;
+        background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+        border: none;
+        color: #fff;
+        border-radius: 6px;
+    }
+}
+
+.swal2-actions{
+    margin-bottom: 1.45em;
+}
+div:where(.swal2-container) div:where(.swal2-popup){
+    border-radius: 8px;
+}

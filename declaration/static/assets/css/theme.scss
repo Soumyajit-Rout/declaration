@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6, p{
 .main-content{
      width: calc(100% - 250px);
      margin-left: 250px;
-     margin-top: 90px;
+     margin-top: 68px;
      @media (max-width: 991px) {
           width: 100%;
           margin-left: 0;
@@ -46,10 +46,9 @@ h1, h2, h3, h4, h5, h6, p{
      .section-header{
           h1{
                font-size: 1.5rem;
-               padding: 20px 40px;
+               padding: 0.4rem 0;
                @media (max-width: 576px) {
                     font-size: 1.2rem;
-                    padding: 20px 15px;
                }
           }
      }
@@ -155,6 +154,8 @@ h1, h2, h3, h4, h5, h6, p{
      right: 2px;
      top: 8px;
 }
+
+
 .btn-back {
      color: rgba(25, 30, 59, 0.9);
      text-decoration: none;

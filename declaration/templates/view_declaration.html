@@ -2,15 +2,22 @@
 {% load static %}
 {% block content %}
 <section class="section">
-    <div class="section-header bg-white">
+    <!-- <div class="section-header bg-white">
         <h1>Dashboard</h1>
+    </div> -->
+    <div class="section-header bg-white">
+        <div class="d-flex justify-content-between align-items-center py-3 px-3 px-md-5">
+            <div>
+                <h1>Dashboard</h1>
+            </div>         
+        </div>
     </div>
     <div class="section-body">
 
         <!-- all table component -->
 
         <div class="table-container">
-            <div class="d-flex justify-content-between align-items-center bg-white mb-3">
+            <div class="d-flex justify-content-between align-items-center bg-white mt-1">
                 <div class="font-20">Declarations</div>
                 <div>
                     <a href="{% url 'create_declaration' %}" class="btn navbar-card-button text-white">Create
@@ -18,8 +25,10 @@
                 </div>
             </div>
             <!-- default table -->
+             
             <div class="default-table table-responsive py-2">
-                <table class="table table-hover">
+                
+                <table id="datafilertable" class="table table-hover table-striped">
                     <thead class="default-table-head border">
                         <tr>
                             <th scope="col" class="font-15 ps-4">S no</th>
@@ -44,16 +53,16 @@
                         {% if not declaration.is_deleted %}
                         <tr>
                             <td class="table-data">
-                                <p class="font-15 ps-4">{{ forloop.counter0|add:declarations.start_index }}</p>
+                                <p class="font-15">{{ forloop.counter0|add:declarations.start_index }}</p>
                             </td>
                             <td class="table-data">
-                                <p class="font-15 ps-4">{{ declaration.declaration_date }}</p>
+                                <p class="font-15">{{ declaration.declaration_date }}</p>
                             </td>
                             <td class="table-data">
-                                <p class="font-15 ps-4">{{ declaration.request_no }}</p>
+                                <p class="font-15">{{ declaration.request_no }}</p>
                             </td>
                             <td class="table-data">
-                                <p class="font-15 ps-4">{{ declaration.declaration_no }}</p>
+                                <p class="font-15">{{ declaration.declaration_no }}</p>
                             </td>
                             <!-- <td class="table-data">
                                 <p class="font-15 ps-4">{{ declaration.net_weight }}</p>
@@ -89,7 +98,7 @@
                             <td class="table-data">
                                 <div class="btn-group px-3">
                                     <a href="{% url 'view-logs' declaration.pk %}"
-                                    class="btn btn-sm btn-primary border-0 update_button me-1">view Log</a>
+                                    class="btn btn-sm btn-primary border-0 update_button me-1">Logs</a>
                                     <a href="{% url 'update_declaration' declaration.pk %}"
                                         class="btn btn-sm btn-primary border-0 update_button me-1">Update</a>
                                     <a href="{% url 'list_declaration' declaration.pk %}"

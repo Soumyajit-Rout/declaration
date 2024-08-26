@@ -6,8 +6,8 @@
 .default-table {
     th{
         border-radius: 10px;
-        min-width: 185px;
-        text-align: center;
+        min-width: 195px;
+        text-align: center !important;
     }
     .table-data{
         padding: 40px 0px 40px 0px;
@@ -47,9 +47,8 @@
         background-color: rgba(103, 27, 199, 1);
     }    
 }
-.pagination .page-item-number, .page-link {
+.pagination .page-item-number, .page-link-next {
     color: rgba(255, 255, 255, 1);
-    background: linear-gradient(94.49deg, #500daf, #4355ba);
     border: none;
     font-size: 17px;
     font-weight: 600;
@@ -58,8 +57,8 @@
     margin-right: 10px;
     border-radius: 10px !important;
 }
-.disabled{
-    background: rgba(240, 244, 250, 1);
+.page-link-previous{
+    background-color: rgba(240, 244, 250, 1);
     border: none;
     font-size: 17px;
     font-weight: 600;
@@ -68,16 +67,55 @@
     margin-right: 10px;
     border-radius: 10px !important;
 }
-// .page-link-previous{
-//     background-color: rgba(240, 244, 250, 1);
-//     border: none;
-//     font-size: 17px;
-//     font-weight: 600;
-//     width: 46px;
-//     height: 43px;
-//     margin-right: 10px;
-//     border-radius: 10px !important;
-// }
+.pagination {
+    .page-item{
+        .page-link{
+            background: linear-gradient(94.49deg, #500daf, #4355ba);
+        } 
+    }
+    .page-item.disabled {
+        .page-link{
+            background: rgb(193 193 193);
+        } 
+    }  
+}
+
+}
 
 
+.dt-length, .dt-search, .dt-info, .dt-paging{
+    display: none;
+}
+.table-container .default-table .table-data{
+padding: 25px 0px;
+}
+table.dataTable thead > tr > th.dt-orderable-asc:hover, table.dataTable thead > tr > th.dt-orderable-desc:hover{
+outline: none;
+}
+.dt-layout-full{
+    padding: 0;
+}
+.table-for-items{
+    th{
+        min-width: 250px;
+        // text-align: center;
+    }
+    .table-action{
+        min-width: 90px;
+    }
+    td{
+        // text-align: center;
+        textarea{
+            padding: 8px 10px;
+        }
+        button{
+            padding: 5px 12px;
+        }
+    }
+    .form-control-file{
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: 6px 10px !important;
+    margin-bottom: 2px;
+    }
 }
