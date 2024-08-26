@@ -87,7 +87,7 @@ class DelcarationListSerilaizer(serializers.ModelSerializer):
 
     class Meta:
         model = Declaration
-        fields = ["id","created_at","name","detail","detail1","detail2","detail3"]
+        fields = ["id","name","detail","detail1","detail2","detail3"]
 
 
     def get_name(self, obj):
@@ -104,7 +104,7 @@ class DelcarationListSerilaizer(serializers.ModelSerializer):
         return obj.measurements
     
     def get_detail3 (self, obj):
-        return obj.gross_weight    
+        return obj.created_at    
     
 
 
