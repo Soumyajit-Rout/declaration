@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
      path('create-declaration/',create_declaration, name='create_declaration'),
-     path('', declaration_list, name='view_declaration'),
+     path('view-declaration/', declaration_list, name='view_declaration'),
      path('update/<uuid:pk>/', update_declaration, name='update_declaration'),
      path('retrieve/<uuid:pk>/', list_declaration, name='list_declaration'),
      path('delete/<uuid:pk>/', delete_declaration, name='delete_declaration'),
@@ -20,6 +20,9 @@ urlpatterns = [
      path('get-document-data/', get_document_data, name='get-document-data'),
      path('delete-item/<uuid:item_id>/',delete_item,name='delete_item'),
      path('view-logs/<uuid:pk>/',Declaration_Logs_List,name='view-logs'),
+     path('fetch/user/',fetch_user_info,name='fetch_user_info'),
+     path('delete_session/',delete_session,name='delete_session'),
+     path('',connect_wallet,name='onboard'),
 
 
 ]

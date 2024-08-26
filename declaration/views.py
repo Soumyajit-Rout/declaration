@@ -17,6 +17,8 @@ from rest_framework import status
 from django.http import FileResponse, Http404
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
+import requests
 
 
 """
@@ -34,7 +36,12 @@ def create_declaration(request):
         if declaration_form.is_valid() and item_formset.is_valid():
             try:
                 with transaction.atomic():
-                    declaration = declaration_form.save()
+                    user_id = request.session.get('id', None)
+                    print("user_id",user_id)
+                    declaration = declaration_form.save(commit=False)
+                    if user_id:
+                        declaration.iam_user_id = user_id
+                    declaration.save()
                     item_formset.instance = declaration
                     items = item_formset.save()
 
@@ -74,7 +81,9 @@ This function is to display the declaration objects it is a normal list function
 renders the view_declaration.html page
 """
 def declaration_list(request):
-    declarations = Declaration.objects.filter(is_deleted=False).order_by('declaration_date')
+                    
+    user_id = request.session.get('id')
+    declarations = Declaration.objects.filter(is_deleted=False,iam_user_id=user_id).order_by('declaration_date')
     
     page = request.GET.get('page', 1)
     paginator = Paginator(declarations, 3) 
@@ -481,19 +490,21 @@ class RetrieveDeclaration(APIView):
 Basic api to update the declarations based on id 
 """
 class UpdateDeclaration(APIView):
-    permission_classes = [StaticTokenPermission]
+    # permission_classes = [StaticTokenPermission]
 
     def put(self, request):
         id = request.query_params.get("id")
         req_data = request.query_params.get("is_verified")
         comment = request.query_params.get("comment")
+        user_id = request.query_params.get("user_id")
+        print("user_id",user_id)
         if not id and not req_data:
             return Response({"detail": "ID and Request Data is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             declaration = Declaration.objects.get(id=id)
         except Declaration.DoesNotExist:
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-        data = {"is_verified":req_data}
+        data = {"is_verified":req_data,"updated_by_id":user_id}
         serializer = UpdateDeclarationSerializer(declaration, data=data, partial=True)
         if serializer.is_valid():
             data = serializer.save()
@@ -550,3 +561,63 @@ def Declaration_Logs_List(request,pk):
     declarations = Declaration.objects.get(id = pk)
     declaration_logs = Declaration_log.objects.filter(declaration = declarations).order_by('created_at')
     return render(request, 'view_declaration_logs.html', {'logs': declaration_logs})
+
+@csrf_exempt
+def fetch_user_info(request):
+    if request.method == 'POST':
+        try:
+            accounts = json.loads(request.body).get('accounts')
+            if not accounts:
+                return JsonResponse({'message': 'No accounts provided'}, status=400)
+
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': settings.USER_API_KEY
+            }
+            EXTERNAL_API_URL = settings.IAM_URL + '/user/info/'
+
+            data = {
+                'accounts': accounts
+            }
+
+            response = requests.post(EXTERNAL_API_URL, headers=headers, data=json.dumps(data))
+
+            if response.status_code == 200:
+                result = response.json()
+                if result['status'] == 'success':
+                    user_data = result['data']['user']
+                    request.session['wallet_address'] = user_data['wallet_address']
+                    request.session['name'] = user_data['first_name']
+                    request.session['id'] = user_data['id']
+                    return JsonResponse({'status': 'success', 'user': user_data})
+                else:
+                    return JsonResponse({'status': 'error', 'message': result['message']}, status=200)
+            else:
+                return JsonResponse({'status': 'error', 'message': 'External API call failed'}, status=response.status_code)
+
+        except ValueError:
+            return JsonResponse({'status': 'error', 'message': 'Failed to decode JSON from response'}, status=500)
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+def delete_session(request):
+    """
+    This view deletes the user session from the website.
+    Inputs: None (uses session data)
+    Returns: JSON response with success or error message.
+    """
+    try:
+        if 'wallet_address' in request.session:
+            request.session.flush()
+            return JsonResponse({"message": "Wallet address removed from session"}, status=200)
+        else:
+            return JsonResponse({"message": "No wallet address found in cookies"}, status=400)
+    except Exception as e:
+        return JsonResponse({"message": f"Failed to delete cookie: {str(e)}"}, status=500)
+    
+
+def connect_wallet(request):
+    return render(request, 'home.html')

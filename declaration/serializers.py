@@ -81,7 +81,7 @@ class DeclarationSerializer(serializers.ModelSerializer):
 class UpdateDeclarationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Declaration
-        fields = ["is_verified"]
+        fields = ["is_verified","updated_by_id"]
 
 class ListDeclarationLogSerializer(serializers.ModelSerializer):
     declaration = DeclarationSerializer()
