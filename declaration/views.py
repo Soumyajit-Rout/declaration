@@ -19,6 +19,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 import requests
+from .tasks import get_id
 
 
 """
@@ -62,6 +63,8 @@ def create_declaration(request):
                                         file=request.FILES[file_field_name],
                                         required_doc = req_doc
                                     )
+
+                                    get_id.delay((declaration.id,))
                 messages.success(request, 'Declaration added successfully.')
                 return redirect('view_declaration')
             except Exception as e:
@@ -620,4 +623,8 @@ def delete_session(request):
     
 
 def connect_wallet(request):
-    return render(request, 'home.html')
+    iam_base_url = settings.IAM_URL
+    context = {
+        "iam_base_url": iam_base_url  # Pass the URL to the template context
+    }
+    return render(request, 'home.html',context)
