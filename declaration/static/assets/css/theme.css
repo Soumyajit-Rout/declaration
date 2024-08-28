@@ -398,6 +398,150 @@
   background: linear-gradient(91.37deg, #ff0808 1.57%, #c1355a 98.04%);
 }
 
+.delete_button_dashbord {
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+
+.warning_button {
+  background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21.9px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid #bd0303;
+  padding: 8px 22px;
+}
+@media (max-width: 576px) {
+  .warning_button {
+    font-size: 12px;
+    padding: 4px 15px;
+  }
+}
+.warning_button:hover {
+  background: #fff;
+  border: 1px solid #bd0303;
+  color: #bd0303;
+}
+
+.header_success_button {
+  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21.9px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid #6818C7;
+  padding: 8px 22px;
+}
+@media (max-width: 576px) {
+  .header_success_button {
+    font-size: 12px;
+    padding: 4px 15px;
+  }
+}
+.header_success_button:hover {
+  background: #fff;
+  border: 1px solid #6818C7;
+  color: #6818c7;
+}
+
+.header_danger_button {
+  background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21.9px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid #bd0303;
+  padding: 8px 22px;
+}
+@media (max-width: 576px) {
+  .header_danger_button {
+    font-size: 12px;
+    padding: 4px 15px;
+  }
+}
+.header_danger_button:hover {
+  background: #fff;
+  border: 1px solid #bd0303;
+  color: #bd0303;
+}
+
+.confirmbtn {
+  margin: 0.3125em;
+  padding: 0.625em 1.1em;
+  transition: box-shadow 0.1s;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+  font-weight: 500;
+  display: inline-block;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 8px 24px;
+}
+
+.sweetsuccess {
+  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  border: 1px solid #6818C7;
+}
+.sweetsuccess:hover {
+  color: #6818C7;
+  background: #fff !important;
+}
+
+.sweetdanger {
+  background: #d33 !important;
+  border: 1px solid #d33 !important;
+}
+.sweetdanger:hover {
+  color: #d33 !important;
+  background: #fff !important;
+}
+
+.swal2-confirm {
+  margin: 0.3125em;
+  padding: 0.625em 1.1em;
+  transition: box-shadow 0.1s;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+  font-weight: 500;
+  display: inline-block;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 8px 24px;
+  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  border: 1px solid #6818C7;
+}
+.swal2-confirm:hover {
+  color: #6818C7;
+  background: #fff !important;
+}
+
+.alert-success .close {
+  padding: 0px 10px;
+  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+}
+
+.swal2-actions {
+  margin-bottom: 1.45em;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+  border-radius: 8px;
+}
+
 .shadow-sm {
   border: none;
   box-shadow: rgba(0, 0, 0, 0.08);
@@ -542,7 +686,7 @@
 }
 
 .custom-navbar {
-  padding: 22px 48px;
+  padding: 22px 54px 22px 58px;
   width: calc(100% - 250px);
   margin-left: 250px;
   background-color: rgb(255, 255, 255);
@@ -614,7 +758,7 @@
   color: rgb(33, 37, 41);
   margin-bottom: 10px;
 }
-.form-container .default-form input, .form-container .default-form select {
+.form-container .default-form input, .form-container .default-form select, .form-container .default-form textarea {
   color: rgba(25, 30, 59, 0.7);
   padding: 8px 10px;
 }
@@ -672,8 +816,8 @@
 }
 .table-container .default-table th {
   border-radius: 10px;
-  min-width: 185px;
-  text-align: center;
+  min-width: 195px;
+  text-align: center !important;
 }
 .table-container .default-table .table-data {
   padding: 40px 0px 40px 0px;
@@ -710,9 +854,8 @@
 .table-container .default-table .default-progress-bar {
   background-color: rgb(103, 27, 199);
 }
-.table-container .pagination .page-item-number, .table-container .page-link {
+.table-container .pagination .page-item-number, .table-container .page-link-next {
   color: rgb(255, 255, 255);
-  background: linear-gradient(94.49deg, #500daf, #4355ba);
   border: none;
   font-size: 17px;
   font-weight: 600;
@@ -721,8 +864,8 @@
   margin-right: 10px;
   border-radius: 10px !important;
 }
-.table-container .disabled {
-  background: rgb(240, 244, 250);
+.table-container .page-link-previous {
+  background-color: rgb(240, 244, 250);
   border: none;
   font-size: 17px;
   font-weight: 600;
@@ -730,6 +873,47 @@
   height: 43px;
   margin-right: 10px;
   border-radius: 10px !important;
+}
+.table-container .pagination .page-item .page-link {
+  background: linear-gradient(94.49deg, #500daf, #4355ba);
+}
+.table-container .pagination .page-item.disabled .page-link {
+  background: rgb(193, 193, 193);
+}
+
+.dt-length, .dt-search, .dt-info, .dt-paging {
+  display: none;
+}
+
+.table-container .default-table .table-data {
+  padding: 25px 0px;
+}
+
+table.dataTable thead > tr > th.dt-orderable-asc:hover, table.dataTable thead > tr > th.dt-orderable-desc:hover {
+  outline: none;
+}
+
+.dt-layout-full {
+  padding: 0;
+}
+
+.table-for-items th {
+  min-width: 250px;
+}
+.table-for-items .table-action {
+  min-width: 90px;
+}
+.table-for-items td textarea {
+  padding: 8px 10px;
+}
+.table-for-items td button {
+  padding: 5px 12px;
+}
+.table-for-items .form-control-file {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  padding: 6px 10px !important;
+  margin-bottom: 2px;
 }
 
 .sidebar_wrapper {
@@ -970,7 +1154,7 @@ h1, h2, h3, h4, h5, h6, p {
 .main-content {
   width: calc(100% - 250px);
   margin-left: 250px;
-  margin-top: 90px;
+  margin-top: 68px;
 }
 @media (max-width: 991px) {
   .main-content {
@@ -980,12 +1164,11 @@ h1, h2, h3, h4, h5, h6, p {
 }
 .main-content .section-header h1 {
   font-size: 1.5rem;
-  padding: 20px 40px;
+  padding: 0.4rem 0;
 }
 @media (max-width: 576px) {
   .main-content .section-header h1 {
     font-size: 1.2rem;
-    padding: 20px 15px;
   }
 }
 .main-content .section-body {

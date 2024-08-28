@@ -2,6 +2,24 @@
 {% load static %}
 
 {% block content %}
+<section class="section">
+    <div class="section-header bg-white">
+        <div class="d-flex justify-content-between align-items-center py-3 px-3 px-md-5">
+            <div>
+                <h1>View Declaration</h1>
+            </div>
+            
+            <div class="d-flex align-items-center">
+                <div class="">
+                    <a href="{% url 'view_declaration' %}" class="nav-link text-center header_success_button" >
+                        <span class=" d-xl-inline">Back</span>
+                    </a>
+                </div>
+            </div>
+                
+        </div>
+    </div>
+</section>
 
 <section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
     <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
@@ -96,18 +114,18 @@
                             <h2 class="font-20 py-2 px-3">Items</h2>
                         </div>
                         <div class="table-responsive">
-                            <table id="item-table" class="table table-bordered">
+                            <table id="item-table" class="table table-bordered table-for-items">
                                 <thead class="default-table-head border">
                                     <tr>
-                                        <th scope="col" class="font-15 ps-4">Description</th>
-                                        <th scope="col" class="font-15 ps-4">HsCode</th>
-                                        <th scope="col" class="font-15 ps-4">Documents</th>
-                                        <th scope="col" class="font-15 ps-4">Static Quantity Unit</th>
-                                        <th scope="col" class="font-15 ps-4">Supplementary Quantity Unit</th>
-                                        <th scope="col" class="font-15 ps-4">Unit Weight</th>
-                                        <th scope="col" class="font-15 ps-4">Goods Value</th>
-                                        <th scope="col" class="font-15 ps-4">CIF Value</th>
-                                        <th scope="col" class="font-15 ps-4">Duty Fee</th>
+                                        <th scope="col" class="font-15">Description</th>
+                                        <th scope="col" class="font-15">HsCode</th>
+                                        <th scope="col" class="font-15">Documents</th>
+                                        <th scope="col" class="font-15">Static Quantity Unit</th>
+                                        <th scope="col" class="font-15">Supplementary Quantity Unit</th>
+                                        <th scope="col" class="font-15">Unit Weight</th>
+                                        <th scope="col" class="font-15">Goods Value</th>
+                                        <th scope="col" class="font-15">CIF Value</th>
+                                        <th scope="col" class="font-15">Duty Fee</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -116,7 +134,7 @@
                                             <input type="hidden" name="items_set-id" value="{{ item.id }}">
                                             <td>
                                                
-                                                <textarea class="form-control" readonly name="items_set-{{ forloop.counter0 }}-description">{{ item.description }} </textarea>
+                                                <textarea class="form-control" readonly name="items_set-{{ forloop.counter0 }}-description" rows="1">{{ item.description }} </textarea>
                                             </td>
                                             <td>
                                                 <!-- <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
