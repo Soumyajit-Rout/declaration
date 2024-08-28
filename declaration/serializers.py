@@ -118,3 +118,62 @@ class ListDeclarationLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Declaration_log
         fields = ["status","comment","declaration","id","created_at","updated_at","is_deleted"]
+
+
+class DeclarationDataContractSerializer:
+
+
+   def __init__(self, data):
+       self.registration_data = data
+   def parse_data(self):
+
+    declaration_data = {
+           "id": str(self.registration_data.id),
+           "declarationDate": str(self.registration_data.declaration_date),
+           "requestNo": self.registration_data.request_no,
+           "declarationNo": self.registration_data.declaration_no,
+           "netWeight": int(self.registration_data.net_weight),
+           "grossWeight":int(self.registration_data.gross_weight),
+           "measurements": str(self.registration_data.measurements),
+           "nmbrOfPackages": self.registration_data.nmbr_of_packages,
+           "cargoType": self.registration_data.cargo_type.name,
+           "declarationType": self.registration_data.declaration_type.name,
+           "cargoChannel": self.registration_data.cargo_channel.name,
+           "transactionType": self.registration_data.transaction_type.name,
+           "tradeType": self.registration_data.trade_type.name,
+           "regimeType": self.registration_data.regime_type.name,
+           "iamUserId": self.registration_data.iam_user_id,
+
+       }
+
+
+    return declaration_data
+   
+
+class ItemDataContractSerializer:
+
+    def __init__(self, item, declaration_id):
+        self.registration_data = item
+        self.declaration_id = declaration_id
+
+    def parse_data(self):
+        documents = Document.objects.filter(item=self.registration_data)
+        
+        # Convert document URLs into a single string, separated by commas
+        doc_urls = ",".join([doc.file.url for doc in documents])
+        
+        item_data = {
+            "id": str(self.registration_data.id),
+            "goodsDescription": self.registration_data.goods_description,
+            "staticQuantityUnit": str(self.registration_data.static_quantity_unit),
+            "suppQuantityUnit": str(self.registration_data.supp_quantity_unit),
+            "unitWeight": int(self.registration_data.unit_weight),
+            "goodsValue": int(self.registration_data.goods_value),
+            "cifValue": int(self.registration_data.cif_value),
+            "dutyFee": int(self.registration_data.duty_fee),
+            "hsCode": self.registration_data.hs_code.hs_code,
+            "declarationId": str(self.declaration_id),
+            "documents": doc_urls,  # Store URLs as a comma-separated string
+        }
+        
+        return item_data

@@ -140,3 +140,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 USER_API_KEY = os.getenv('USER_API_KEY')
 IAM_URL = os.getenv('IAM_URL')
+
+# Celery settings
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL = os.getenv(
+    "CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL", "http://127.0.0.1:8001/api/smart-contracts")
+
+STATIC_API_TOKEN = os.getenv('STATIC_API_TOKEN')
