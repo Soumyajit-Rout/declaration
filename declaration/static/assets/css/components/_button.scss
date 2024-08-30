@@ -95,9 +95,13 @@
    }
    .update_button{
        background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       cursor: pointer;
+       border: 1px solid #6818C7;
    }
    .delete_button{
        background: linear-gradient(91.37deg, #ff0808 1.57%, #c1355a 98.04%);
+       cursor: pointer;
+       border: 1px solid #ff0808;
    }
    
    .delete_button_dashbord {
