@@ -126,7 +126,13 @@ class DeclarationDataContractSerializer:
    def __init__(self, data):
        self.registration_data = data
    def parse_data(self):
-
+    status_map = {
+           -1: "rejected",
+            0: "underprocess",
+            1: "approved",
+            2: "on-hold",
+            }
+    print("is_verified",self.registration_data.is_verified)
     declaration_data = {
            "id": str(self.registration_data.id),
            "declarationDate": str(self.registration_data.declaration_date),
@@ -143,6 +149,7 @@ class DeclarationDataContractSerializer:
            "tradeType": self.registration_data.trade_type.name,
            "regimeType": self.registration_data.regime_type.name,
            "iamUserId": self.registration_data.iam_user_id,
+           "is_verified":str(status_map.get(self.registration_data.is_verified)),
 
        }
 
