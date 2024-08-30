@@ -22,13 +22,32 @@
     </ul>
 </div>
 {% endif %}
+
+<section class="section">
+    <div class="section-header bg-white">
+        <div class="d-flex justify-content-between align-items-center py-3 px-3 px-md-5">
+            <div>
+                <h1>Create Declaration</h1>
+            </div>
+            
+            <div class="d-flex align-items-center">
+                <div class="">
+                    <a href="{% url 'view_declaration' %}" class="nav-link text-center header_success_button" >
+                        <span class=" d-xl-inline">Back</span>
+                    </a>
+                </div>
+            </div>
+                
+        </div>
+    </div>
+</section>
 <section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
     <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="default-form mb-4">
-            <div class="d-flex justify-content-end">
+            <!-- <div class="d-flex justify-content-end">
                 <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
-            </div>
+            </div> -->
             <div class="mb-4 form_heading">
                 <h2 class="font-20 py-2 px-3">Declaration Information</h2>
             </div>
@@ -180,6 +199,83 @@
                 </div>
             </div>
         </div>
+
+        <!-- <div class="default-form mb-4">
+            <div class="mb-4 form_heading">
+                <h2 class="font-20 py-2 px-3">Items</h2>
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="col-12">
+                    <div class="row gx-3 pe-sm-3">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_declaration_date">Description</label>
+                                <div class="input-group">
+                                    <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea>
+                                    <span class="input-group-text update_button text-white">Search</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">HsCode</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Documents</label>
+                                <input class="form-control" type="file" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Static Quantity Unit</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Supplementary Quantity Unit</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Unit Weight</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Goods Value</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">CIF Value</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Duty Fee</label>
+                                <input class="form-control" type="text" name="" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-0 mt-4 d-flex justify-content-end">
+                            <button type="button" id="add-row" class="navbar-card-button w-20 me-2">Add Item</button>
+                            <button type="button" id="add-row" class="warning_button w-20 me-2">Delete Item</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+       <button type="submit"  class="submit-button w-100">Submit</button> -->
+
     </form>
 </section>
 
