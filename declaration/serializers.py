@@ -80,31 +80,14 @@ class DeclarationSerializer(serializers.ModelSerializer):
     
 class DelcarationListSerilaizer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
-    detail = serializers.SerializerMethodField()
-    detail1 = serializers.SerializerMethodField()
-    detail2 = serializers.SerializerMethodField()
-    detail3 = serializers.SerializerMethodField()
-
     class Meta:
         model = Declaration
-        fields = ["id","name","detail","detail1","detail2","detail3"]
+        fields = ["id","name","declaration_no","net_weight","measurements","created_at"]
 
 
     def get_name(self, obj):
         return obj.request_no
     
-    def get_detail (self, obj):
-        return obj.declaration_no
-    
-
-    def get_detail1 (self, obj):
-        return obj.net_weight
-    
-    def get_detail2 (self, obj):
-        return obj.measurements
-    
-    def get_detail3 (self, obj):
-        return obj.created_at    
     
 
 
