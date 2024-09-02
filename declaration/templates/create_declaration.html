@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load form_filters %}
 
 {% block content %}
 
@@ -214,7 +215,7 @@
                                 <label class="font-14" for="id_declaration_date">Description</label>
                                 <div class="input-group">
                                     <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
-                                    {{ form.goods_description }}
+                                    {{ form.goods_description |add_class:"form-control"}}
                                     <span class="input-group-text update_button text-white search-bttn">Search</span>
                                     {{ form.goods_description.errors }}
                                 </div>
@@ -224,13 +225,14 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">HsCode</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.hs_code }}
+                                {{ form.hs_code |add_class:"form-control"}}
                                 {{ form.hs_code.errors }}
+                                <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3 document-form" data-item-index="{{ forloop.counter0 }}" >
-                                <label class="font-14" for="id_request_noe">Documents</label>
+                                <label class="font-14 label" for="id_request_noe">Documents</label>
                                 <input class="form-control" type="file" name="documents" placeholder="">
                             </div>
                         </div>
@@ -238,7 +240,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Static Quantity Unit</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.static_quantity_unit }}
+                                {{ form.static_quantity_unit |add_class:"form-control" }}
                                 {{ form.static_quantity_unit.errors }}
                             </div>
                         </div>
@@ -246,7 +248,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Supplementary Quantity Unit</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.supp_quantity_unit }}
+                                {{ form.supp_quantity_unit |add_class:"form-control"}}
                                 {{ form.supp_quantity_unit.errors }}
                             </div>
                         </div>
@@ -254,7 +256,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Unit Weight</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.unit_weight }}
+                                {{ form.unit_weight |add_class:"form-control"}}
                                 {{ form.unit_weight.errors }}
                             </div>
                         </div>
@@ -262,7 +264,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Goods Value</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.goods_value }}
+                                {{ form.goods_value|add_class:"form-control" }}
                                 {{ form.goods_value.errors }}
                             </div>
                         </div>
@@ -270,7 +272,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">CIF Value</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.cif_value }}
+                                {{ form.cif_value|add_class:"form-control" }}
                                 {{ form.cif_value.errors }}
                             </div>
                         </div>
@@ -278,7 +280,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Duty Fee</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.duty_fee }}
+                                {{ form.duty_fee|add_class:"form-control" }}
                                 {{ form.duty_fee.errors }}
                             </div>
                         </div>
@@ -354,6 +356,7 @@
                     input.value = '';
                 } else {
                     input.value = '';
+                    input.removeAttribute('readonly');
                 } 
     });
 
@@ -433,6 +436,50 @@ console.log("originalDescriptions",originalDescriptions)
             }
         });
 
+        document.querySelector('.item').addEventListener('click', function (e) {
+        if (e.target.classList.contains('reset-btn')) {
+            var formGroup = e.target.closest('.item-form');
+            
+            // Find the description field and clear it
+            var descriptionField = formGroup.querySelector('textarea[name*="goods_description"]');
+            console.log("descriptionField*********",descriptionField)
+
+            if (descriptionField) {
+                console.log("descriptionField*********",descriptionField)
+                descriptionField.value = '';  // Clear the description field
+                descriptionField.readOnly = false;  // Re-enable the description field
+            }
+
+            // Clear the HS code dropdown
+            var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
+            if (hsCodeDropdown) {
+                hsCodeDropdown.value = '';  // Reset the HS code dropdown
+            }
+
+            // Clear the document fields
+            var documentForm = formGroup.querySelector('.document-form');
+            var documentsField = formGroup.querySelector('input[type="file"]');  
+            var label = document.createElement('label');
+            label.classList.add('font-14'); 
+             label.textContent = "Document";
+            console.log("documentsField############",documentForm)
+            if (documentForm) {
+                documentForm.innerHTML = '';
+                documentForm.appendChild(label);
+                documentForm.appendChild(documentsField);
+
+                
+                
+            }
+
+            // Optionally, remove from originalDescriptions if needed
+            if (descriptionField && originalDescriptions[descriptionField.name]) {
+                delete originalDescriptions[descriptionField.name];
+            }
+
+            console.log("Form reset");
+        }
+    });
 
 
 document.querySelector('.item').addEventListener('click', function (e) {
@@ -473,6 +520,7 @@ document.querySelector('.item').addEventListener('click', function (e) {
 
             hsCodeDropdown.addEventListener('change', function () {
                 originalDescriptions[descriptionField.name] = descriptionField.value;
+                descriptionField.readOnly = true; 
             });
             console.log("originalDescriptions",originalDescriptions)
         })
@@ -528,20 +576,8 @@ document.querySelector('.item').addEventListener('change', function (e) {
   // Form submission validation
 document.querySelector('form').addEventListener('submit', function (e) {
     var isValid = true;
-    console.log("i am in ")
-    // Check for originalDescriptions change
-    for (var key in originalDescriptions) {
-        var descriptionField = document.querySelector(`[name="${key}"]`);
-        console.log("descriptionField",descriptionField)
-
-        if (descriptionField.value !== originalDescriptions[key]) {
-            console.log("innnn2")
-            e.preventDefault();
-            alert('You cannot change the description after selecting an HS code');
-        }
-    }
+    console.log("i am in ",originalDescriptions)
     
-
     // Check for required file inputs
     var requiredFiles = document.querySelectorAll('.required-file');
     requiredFiles.forEach(function (input) {
