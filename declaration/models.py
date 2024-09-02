@@ -55,6 +55,7 @@ class Declaration(TimestampedUUIDModel):
      comments = models.TextField(max_length=200,null=True,blank=True)
      iam_user_id = models.CharField(max_length=100,null=True,blank=True)
      updated_by_id = models.CharField(max_length=100,null=True,blank=True)
+     contract_address = models.CharField(max_length=200,null=True,blank=True)
 
 class HsCode(TimestampedUUIDModel):
     keywords = models.TextField(max_length=200,null=True,blank=False)  

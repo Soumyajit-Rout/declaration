@@ -19,7 +19,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 import requests
-from .tasks import get_id
+from .tasks import get_id,update_declaration_info_to_contract,get_updated_id
 
 
 """
@@ -178,6 +178,8 @@ def update_declaration(request, pk):
         pattern = re.compile(r'documents_item_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
         new_pattern = re.compile(r'new_documents_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
         doc = []
+        get_updated_id.delay((declaration.id))
+
         for key, file in request.FILES.items():
             if key.startswith('documents_item'):
                 match = pattern.match(key)
@@ -511,6 +513,7 @@ class UpdateDeclaration(APIView):
         serializer = UpdateDeclarationSerializer(declaration, data=data, partial=True)
         if serializer.is_valid():
             data = serializer.save()
+            update_declaration_info_to_contract.delay((data.id))
             Declaration_log.objects.create(
                 status = data.is_verified,
                 declaration = data,
