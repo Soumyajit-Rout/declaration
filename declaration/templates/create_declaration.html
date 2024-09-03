@@ -302,8 +302,7 @@
 </section>
 
 <script type="text/javascript">
-        console.log("hai")
-
+      
     document.addEventListener('DOMContentLoaded', function () {
         var originalDescriptions = {};
         let requiredDocsData = {};
@@ -327,17 +326,16 @@
         }
 
     document.getElementById('add-row').addEventListener('click', function () {
-        console.log("i am in")
+        
     var mainForm = document.querySelector('.item')
     var formContainer = document.querySelector('.item-form'); 
     var newForm = formContainer.cloneNode(true);
 
-    console.log("newForm",newForm) 
+   
 
     var totalForms = document.getElementById('id_items_set-TOTAL_FORMS'); 
     var currentFormCount = parseInt(totalForms.value); 
-    console.log("currentFormCount",currentFormCount)
-
+   
     
     var regex = new RegExp(`items_set-\\d+-`, 'g');
     newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
@@ -410,9 +408,9 @@ function updateFormIndices() {
 
 
 document.querySelector('.item').addEventListener('click', function (e) {
-    console.log("hlo")
+  
             if (e.target.classList.contains('delete-button')) {
-            console.log("hai")
+          
 
 
                 e.preventDefault();
@@ -425,7 +423,7 @@ if (descriptionField && originalDescriptions.hasOwnProperty(descriptionField.nam
     delete originalDescriptions[descriptionField.name];
 }
 console.log("originalDescriptions",originalDescriptions)
-                console.log("row",row)
+              
                 var deleteCheckbox = row.querySelector('input[type="checkbox"]');
                 console.log("deleteCheckbox",deleteCheckbox)
                 deleteCheckbox.checked = true;
@@ -442,10 +440,10 @@ console.log("originalDescriptions",originalDescriptions)
             
             // Find the description field and clear it
             var descriptionField = formGroup.querySelector('textarea[name*="goods_description"]');
-            console.log("descriptionField*********",descriptionField)
+            
 
             if (descriptionField) {
-                console.log("descriptionField*********",descriptionField)
+                
                 descriptionField.value = '';  // Clear the description field
                 descriptionField.readOnly = false;  // Re-enable the description field
             }
@@ -462,7 +460,7 @@ console.log("originalDescriptions",originalDescriptions)
             var label = document.createElement('label');
             label.classList.add('font-14'); 
              label.textContent = "Document";
-            console.log("documentsField############",documentForm)
+            
             if (documentForm) {
                 documentForm.innerHTML = '';
                 documentForm.appendChild(label);
@@ -484,7 +482,7 @@ console.log("originalDescriptions",originalDescriptions)
 
 document.querySelector('.item').addEventListener('click', function (e) {
     if (e.target.classList.contains('search-bttn')) {
-        console.log("hw r u")
+       
        
         var formGroup = e.target.closest('.form-group');
 
@@ -522,7 +520,7 @@ document.querySelector('.item').addEventListener('click', function (e) {
                 originalDescriptions[descriptionField.name] = descriptionField.value;
                 descriptionField.readOnly = true; 
             });
-            console.log("originalDescriptions",originalDescriptions)
+           
         })
         .catch(error => console.error('Error:', error));
     }
@@ -532,15 +530,15 @@ document.querySelector('.item').addEventListener('click', function (e) {
 // Add event listener for hs_code change
 document.querySelector('.item').addEventListener('change', function (e) {
     if (e.target.name.includes('hs_code')) {
-        console.log("in_hscode")
+     
       
         var formGroup = e.target.closest('.form-group');
        
         var hsCode = e.target.value;
-        console.log("formGroup.parentElement.nextElementSibling",formGroup.parentElement.nextElementSibling)
+       
         var documentsField = formGroup.parentElement.nextElementSibling.querySelector('input[type="file"]');
         var documentform = formGroup.parentElement.nextElementSibling.querySelector('.document-form')
-        console.log("documentsField",documentsField)
+       
         var itemIndex = documentform.dataset.itemIndex;
 
         fetch(`/get-required-docs/?hs_code=${hsCode}`)

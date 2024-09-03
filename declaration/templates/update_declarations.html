@@ -39,7 +39,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="declaration_date">Declaration Date:</label>
                                 <input type="date" class="form-control" id="declaration_date" name="declaration_date"
-                                    value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required>
+                                    value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required >
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -252,7 +252,7 @@
                                 <label class="font-14" for="id_declaration_date">Description</label>
                                 <div class="input-group">
                                     <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
-                                    <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1" aria-label="With textarea">{{ item.description }}</textarea>
+                                    <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1" aria-label="With textarea" readOnly>{{ item.description }}</textarea>
                                     <span class="input-group-text update_button text-white search-bttn">Search</span>
                                 </div>
                             </div>
@@ -266,6 +266,7 @@
                                         <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
                                     {% endfor %}
                                 </select>
+                                <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -351,7 +352,6 @@
                 var itemId = row.dataset.itemId;
                 var descriptionField = row.querySelector('textarea');
                 var descriptionData = descriptionField.value;
-                console.log("descriptionData",descriptionData)
                 var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
 
                 fetch(`/update-search-hscode/${itemId}/`, {
@@ -380,17 +380,63 @@
                         });
                         descriptionField.dataset.originalValue = descriptionField.value;
 
-                        hsCodeDropdown.addEventListener('click', function () {
-                            originalDescriptions[descriptionField.name] = descriptionField.value;
-                        });
+                        // hsCodeDropdown.addEventListener('click', function () {
+                        //     originalDescriptions[descriptionField.name] = descriptionField.value;
+                        // });
 
                         hsCodeDropdown.addEventListener('change', function () {
                             originalDescriptions[descriptionField.name] = descriptionField.value;
+                            descriptionField.readOnly = true; 
                         });
                     })
                     .catch(error => console.error('Error:', error));
             }
         });
+
+
+        document.querySelector('.item').addEventListener('click', function (e) {
+        if (e.target.classList.contains('reset-btn')) {
+            var formGroup = e.target.closest('.item-form');
+            
+            
+            var descriptionField = formGroup.querySelector('textarea[name*="description"]');
+            
+            if (descriptionField) {
+               
+                descriptionField.value = '';  
+                descriptionField.readOnly = false;  
+            }
+
+            
+            var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
+            if (hsCodeDropdown) {
+                hsCodeDropdown.value = ''; 
+            }
+
+            var documentForm = formGroup.querySelector('.document-form');
+            var documentsField = formGroup.querySelector('input[type="file"]');  
+            var label = document.createElement('label');
+            label.classList.add('font-14'); 
+             label.textContent = "Document";
+          
+            if (documentForm) {
+                documentForm.innerHTML = '';
+                documentForm.appendChild(label);
+                documentForm.appendChild(documentsField);
+
+                
+                
+            }
+
+          
+            if (descriptionField && originalDescriptions[descriptionField.name]) {
+                delete originalDescriptions[descriptionField.name];
+            }
+
+            console.log("Form reset");
+        }
+    });
+
 
         document.querySelector('.item').addEventListener('click', function (e) {
             if (e.target.classList.contains('delete-button')) {
@@ -477,20 +523,7 @@
   // Form submission validation
   document.querySelector('form').addEventListener('submit', function (e) {
     var isValid = true;
-    console.log("i am in ")
-    // Check for originalDescriptions change
-    for (var key in originalDescriptions) {
-        var descriptionField = document.querySelector(`[name="${key}"]`);
-        console.log("descriptionField",descriptionField)
-
-        if (descriptionField.value !== originalDescriptions[key]) {
-            console.log("innnn2")
-            e.preventDefault();
-            alert('You cannot change the description after selecting an HS code');
-        }
-    }
     
-
     // Check for required file inputs
     var requiredFiles = document.querySelectorAll('.required-file');
     requiredFiles.forEach(function (input) {
