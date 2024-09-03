@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load form_filters %}
+{% load widget_tweaks %}
 
 {% block content %}
 
@@ -208,14 +208,14 @@
             <div class="d-flex flex-wrap">
                 <div class="col-12 item">
                     {{ item_formset.management_form }}
-                    <div class="row gx-3 pe-sm-3 item-form">
+                    <div class="row gx-3 pe-sm-3 item-form mb-5">
                         {% for form in item_formset %}
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_declaration_date">Description</label>
                                 <div class="input-group">
                                     <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
-                                    {{ form.goods_description |add_class:"form-control"}}
+                                    {{ form.goods_description |add_class:"form-control"|attr:"rows:1 "}}
                                     <span class="input-group-text update_button text-white search-bttn">Search</span>
                                     {{ form.goods_description.errors }}
                                 </div>
@@ -225,9 +225,11 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">HsCode</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                <div class="input-group">
                                 {{ form.hs_code |add_class:"form-control"}}
                                 {{ form.hs_code.errors }}
                                 <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
