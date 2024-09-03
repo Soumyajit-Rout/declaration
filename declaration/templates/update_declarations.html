@@ -244,7 +244,7 @@
                 <div class="col-12 item">
                     {{ item_formset.management_form }}
                     {% for item in items_data %}
-                    <div class="row gx-3 pe-sm-3 item-form mb-5"data-item-id="{{ item.id }}">
+                    <div class="row gx-3 pe-sm-3 item-form"data-item-id="{{ item.id }}">
                         <input type="hidden" name="items_set-id" value="{{ item.id }}">
                         
                         <div class="col-12 col-sm-6">
@@ -261,14 +261,12 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">HsCode</label>
                                 <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                <div class="input-group">
                                 <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
                                     {% for hs_code in hs_codes %}
                                         <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
                                     {% endfor %}
                                 </select>
                                 <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
-                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -337,7 +335,7 @@
                 </div>
             </div>
         </div>
-       <button type="submit"  class="submit-button w-100 mt-5">Submit</button>
+       <button type="submit"  class="submit-button w-100">Submit</button>
 
     </form>
 </section>
@@ -526,7 +524,6 @@
   document.querySelector('form').addEventListener('submit', function (e) {
     var isValid = true;
     
-
     // Check for required file inputs
     var requiredFiles = document.querySelectorAll('.required-file');
     requiredFiles.forEach(function (input) {
