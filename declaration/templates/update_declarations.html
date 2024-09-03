@@ -39,7 +39,7 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="declaration_date">Declaration Date:</label>
                                 <input type="date" class="form-control" id="declaration_date" name="declaration_date"
-                                    value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required>
+                                    value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required >
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -164,7 +164,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-4 form_heading my-4">
+                        <!-- <div class="mb-4 form_heading my-4">
                             <h2 class="font-20 py-2 px-3">Items</h2>
                         </div>
                         <div class="table-responsive">
@@ -230,25 +230,125 @@
                         <div class="form-group mb-0 mt-4">
                             <button type="submit" class="navbar-card-button" style="float: right;">Update
                                 Declaration</button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="default-form mb-4">
+            <div class="mb-4 form_heading">
+                <h2 class="font-20 py-2 px-3">Items</h2>
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="col-12 item">
+                    {{ item_formset.management_form }}
+                    {% for item in items_data %}
+                    <div class="row gx-3 pe-sm-3 item-form"data-item-id="{{ item.id }}">
+                        <input type="hidden" name="items_set-id" value="{{ item.id }}">
+                        
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_declaration_date">Description</label>
+                                <div class="input-group">
+                                    <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
+                                    <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1" aria-label="With textarea" readOnly>{{ item.description }}</textarea>
+                                    <span class="input-group-text update_button text-white search-bttn">Search</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">HsCode</label>
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
+                                    {% for hs_code in hs_codes %}
+                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3 document-form" data-item-index="{{ forloop.counter0 }}" >
+                                <label class="font-14" for="id_request_noe">Documents</label>
+                                {% for document_formset in document_formsets %}
+                                                    {% if document_formset.item.id == item.id %}
+                                                        {% for doc in document_formset.documents %}
+                                                            <input type="file" class="form-control" name="documents_item_{{ document_formset.item.id }}_{{ doc.required_doc.id }}"value="{{ doc.file }}">
+                                                            {% if doc.file %}
+                                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Static Quantity Unit</label>
+                                <input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" required>
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Supplementary Quantity Unit</label>
+                                <input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required>
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Unit Weight</label>
+                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Goods Value</label>
+                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">CIF Value</label>
+                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" required>
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-3">
+                                <label class="font-14" for="id_request_noe">Duty Fee</label>
+                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-0 mt-4 d-flex justify-content-end">
+                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
+                            <button type="button" id="delete-btn" class="delete-button warning_button w-20 me-2">Delete Item</button>
+                        </div>
+                        
+                        {% endfor %}
+                    </div> 
+                </div>
+            </div>
+        </div>
+       <button type="submit"  class="submit-button w-100">Submit</button>
+
     </form>
 </section>
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-        var addButton = document.getElementById('add-row');
-        var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
         var originalDescriptions = {};
         let requiredDocsData = {};
 
-        tableBody.addEventListener('click', function (e) {
+        document.querySelector('.item').addEventListener('click', function (e) {
 
-            if (e.target.classList.contains('search-btn')) {
-                var row = e.target.closest('tr');
+            if (e.target.classList.contains('search-bttn')) {
+                var row = e.target.closest('.item-form');
                 var itemId = row.dataset.itemId;
                 var descriptionField = row.querySelector('textarea');
                 var descriptionData = descriptionField.value;
@@ -280,22 +380,68 @@
                         });
                         descriptionField.dataset.originalValue = descriptionField.value;
 
-                        hsCodeDropdown.addEventListener('click', function () {
-                            originalDescriptions[descriptionField.name] = descriptionField.value;
-                        });
+                        // hsCodeDropdown.addEventListener('click', function () {
+                        //     originalDescriptions[descriptionField.name] = descriptionField.value;
+                        // });
 
                         hsCodeDropdown.addEventListener('change', function () {
                             originalDescriptions[descriptionField.name] = descriptionField.value;
+                            descriptionField.readOnly = true; 
                         });
                     })
                     .catch(error => console.error('Error:', error));
             }
         });
 
-        tableBody.addEventListener('click', function (e) {
-            if (e.target.classList.contains('delete_button')) {
+
+        document.querySelector('.item').addEventListener('click', function (e) {
+        if (e.target.classList.contains('reset-btn')) {
+            var formGroup = e.target.closest('.item-form');
+            
+            
+            var descriptionField = formGroup.querySelector('textarea[name*="description"]');
+            
+            if (descriptionField) {
+               
+                descriptionField.value = '';  
+                descriptionField.readOnly = false;  
+            }
+
+            
+            var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
+            if (hsCodeDropdown) {
+                hsCodeDropdown.value = ''; 
+            }
+
+            var documentForm = formGroup.querySelector('.document-form');
+            var documentsField = formGroup.querySelector('input[type="file"]');  
+            var label = document.createElement('label');
+            label.classList.add('font-14'); 
+             label.textContent = "Document";
+          
+            if (documentForm) {
+                documentForm.innerHTML = '';
+                documentForm.appendChild(label);
+                documentForm.appendChild(documentsField);
+
+                
+                
+            }
+
+          
+            if (descriptionField && originalDescriptions[descriptionField.name]) {
+                delete originalDescriptions[descriptionField.name];
+            }
+
+            console.log("Form reset");
+        }
+    });
+
+
+        document.querySelector('.item').addEventListener('click', function (e) {
+            if (e.target.classList.contains('delete-button')) {
                 e.preventDefault();
-                var row = e.target.closest('tr');
+                var row = e.target.closest('.item-form');
                 var itemId = row.dataset.itemId;
 
                 // AJAX call to mark the item as deleted
@@ -341,12 +487,11 @@
             });
         });
         // Add event listener for hs_code change
-        tableBody.addEventListener('change', function (e) {
+        document.querySelector('.item').addEventListener('change', function (e) {
             if (e.target.name.includes('hs_code')) {
-                var row = e.target.closest('tr');
+                var row = e.target.closest('.item-form');
                 var hsCode = e.target.value;
-                var documentField = row.querySelector('.documents');
-                var itemIndex = documentField.dataset.itemIndex;
+                var documentField =  row.querySelector('.document-form');
                 var item = row.dataset.itemId;
 
                 fetch(`/get-required-docs/?hs_code=${hsCode}`)
@@ -360,8 +505,9 @@
                             fileInput.type = 'file';
                             fileInput.name = `new_documents_${item}_${doc.id}`;
                             fileInput.required = true;
-                            fileInput.classList.add('required-file');
+                            fileInput.classList.add('form-control','required-file');
                             var label = document.createElement('label');
+                            label.classList.add('font-14'); 
                             label.textContent = `${doc.name} (${doc.format})`;
 
                             documentField.appendChild(label);
@@ -374,36 +520,51 @@
 
         // Form submission validation
 
-        document.getElementById('update-declaration-form').addEventListener('submit', function (event) {
-            var rows = document.querySelectorAll('#item-table tbody tr');
-            var isValid = true;
+  // Form submission validation
+  document.querySelector('form').addEventListener('submit', function (e) {
+    var isValid = true;
+    
+    // Check for required file inputs
+    var requiredFiles = document.querySelectorAll('.required-file');
+    requiredFiles.forEach(function (input) {
+        if (!input.files.length) {
+            e.preventDefault();
+            alert('You must upload all required files.');
+        }
+    });
 
-            rows.forEach(function (row) {
-                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-                var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
-                var documentField = row.querySelector('.documents');
-                var requiredDocs = requiredDocsData[hsCode] || [];
+    // Select all item forms in the grid
+    var items = document.querySelectorAll('.item-form');
 
-                requiredDocs.forEach(function (doc) {
-                    var fileInput = document.querySelector(`input[name="new_documents_${row.dataset.itemId}_${doc.id}"]`);
-                    if (fileInput && fileInput.files.length > 0) {
-                        var file = fileInput.files[0];
-                        var ext = file.name.split('.').pop().toLowerCase();
-                        if (!doc.format.split(',').includes(ext)) {
-                            event.preventDefault();
-                            alert(`Invalid file format for ${doc.name}: ${ext}`);
-                            fileInput.value = ''; // Clear the invalid file input
-                            isValid = false;
-                        }
-                    }
-                });
-            });
+    items.forEach(function (item) {
+        console.log("inside items")
+        var hsCodeDropdown = item.querySelector('select[name*="hs_code"]');
+        var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
 
-            if (!isValid) {
-                event.preventDefault(); // Prevent form submission if validation fails
+        var documentField = item.querySelector('.document-form');
+        var itemIndex = documentField.getAttribute('data-item-index');
+        
+        var requiredDocs = requiredDocsData[hsCode] || [];
+        
+        // Validate file uploads for each required document
+        requiredDocs.forEach(function (doc) {
+            var fileInput = item.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
+            if (fileInput && fileInput.files.length > 0) {
+                var file = fileInput.files[0];
+                var ext = file.name.split('.').pop().toLowerCase();
+                if (!doc.format.split(',').includes(ext)) {
+                    e.preventDefault();
+                    alert(`Invalid file format for ${doc.name}: ${ext}`);
+                    fileInput.value = ''; // Clear the invalid file input
+                }
             }
         });
+    });
 
+
+        
+    
+});
 
     });
 

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load form_filters %}
 
 {% block content %}
 
@@ -146,7 +147,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-4 form_heading my-4">
+                        <!-- <div class="mb-4 form_heading my-4">
                             <h2 class="font-20 py-2 px-3">Items</h2>
                         </div>
                         <div class="table-responsive">
@@ -194,97 +195,115 @@
                         <div class="form-group mb-0 mt-4">
                             <button type="submit" class="navbar-card-button" style="float: right;">Save</button>
                             <button type="button" id="add-row" class="navbar-card-button w-20 me-3" style="float: right;">Add Item</button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- <div class="default-form mb-4">
+        <div class="default-form mb-4">
             <div class="mb-4 form_heading">
                 <h2 class="font-20 py-2 px-3">Items</h2>
             </div>
             <div class="d-flex flex-wrap">
-                <div class="col-12">
-                    <div class="row gx-3 pe-sm-3">
+                <div class="col-12 item">
+                    {{ item_formset.management_form }}
+                    <div class="row gx-3 pe-sm-3 item-form">
+                        {% for form in item_formset %}
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_declaration_date">Description</label>
                                 <div class="input-group">
-                                    <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea>
-                                    <span class="input-group-text update_button text-white">Search</span>
+                                    <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
+                                    {{ form.goods_description |add_class:"form-control"}}
+                                    <span class="input-group-text update_button text-white search-bttn">Search</span>
+                                    {{ form.goods_description.errors }}
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">HsCode</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.hs_code |add_class:"form-control"}}
+                                {{ form.hs_code.errors }}
+                                <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Documents</label>
-                                <input class="form-control" type="file" name="" placeholder="">
+                            <div class="form-group mb-3 document-form" data-item-index="{{ forloop.counter0 }}" >
+                                <label class="font-14 label" for="id_request_noe">Documents</label>
+                                <input class="form-control" type="file" name="documents" placeholder="">
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Static Quantity Unit</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.static_quantity_unit |add_class:"form-control" }}
+                                {{ form.static_quantity_unit.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Supplementary Quantity Unit</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.supp_quantity_unit |add_class:"form-control"}}
+                                {{ form.supp_quantity_unit.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Unit Weight</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.unit_weight |add_class:"form-control"}}
+                                {{ form.unit_weight.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Goods Value</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.goods_value|add_class:"form-control" }}
+                                {{ form.goods_value.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">CIF Value</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.cif_value|add_class:"form-control" }}
+                                {{ form.cif_value.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Duty Fee</label>
-                                <input class="form-control" type="text" name="" placeholder="">
+                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
+                                {{ form.duty_fee|add_class:"form-control" }}
+                                {{ form.duty_fee.errors }}
                             </div>
                         </div>
 
                         <div class="form-group mb-0 mt-4 d-flex justify-content-end">
-                            <button type="button" id="add-row" class="navbar-card-button w-20 me-2">Add Item</button>
-                            <button type="button" id="add-row" class="warning_button w-20 me-2">Delete Item</button>
+                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
+                            <button type="button" id="delete-btn" class="delete-button warning_button w-20 me-2">Delete Item</button>
                         </div>
                         
-                    </div>
+                        {% endfor %}
+                    </div> 
                 </div>
+                <button type="button" id="add-row" class="navbar-card-button w-20 me-2">Add Item</button>
             </div>
         </div>
-       <button type="submit"  class="submit-button w-100">Submit</button> -->
+       <button type="submit"  class="submit-button w-100">Submit</button>
 
     </form>
 </section>
 
 <script type="text/javascript">
+      
     document.addEventListener('DOMContentLoaded', function () {
-        var addButton = document.getElementById('add-row');
-        var tableBody = document.getElementById('item-table').getElementsByTagName('tbody')[0];
-        var formCountInput = document.getElementsByName('items_set-TOTAL_FORMS')[0];
-        var currentFormCount = parseInt(formCountInput.value);
         var originalDescriptions = {};
         let requiredDocsData = {};
 
@@ -306,202 +325,298 @@
             });
         }
 
-        tableBody.addEventListener('click', function (e) {
-            if (e.target.id === `id_items_set-${currentFormCount - 1}-hs_code`) {
-                var row = e.target.closest('tr');
-                var descriptionField = row.querySelector('textarea');
-                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-                descriptionField.dataset.originalValue = descriptionField.value;
+    document.getElementById('add-row').addEventListener('click', function () {
+        
+    var mainForm = document.querySelector('.item')
+    var formContainer = document.querySelector('.item-form'); 
+    var newForm = formContainer.cloneNode(true);
 
-                hsCodeDropdown.addEventListener('click', function () {
-                    originalDescriptions[descriptionField.name] = descriptionField.value;
-                });
+   
 
-                hsCodeDropdown.addEventListener('change', function () {
-                    originalDescriptions[descriptionField.name] = descriptionField.value;
-                });
-            }
-        });
+    var totalForms = document.getElementById('id_items_set-TOTAL_FORMS'); 
+    var currentFormCount = parseInt(totalForms.value); 
+   
+    
+    var regex = new RegExp(`items_set-\\d+-`, 'g');
+    newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
 
-        // Search functionality
-        tableBody.addEventListener('click', function (e) {
-            if (e.target.id === 'search-hscode') {
-                var row = e.target.closest('tr');
-                var descriptionField = row.querySelector('textarea');
-                var descriptionData = descriptionField.value;
-                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
 
-                fetch('/search-hscode/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({ description: descriptionData })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        hsCodeDropdown.innerHTML = '';
-
-                        // Add the "Select your HS code" option
-                        var placeholderOption = document.createElement('option');
-                        placeholderOption.value = '';
-                        placeholderOption.textContent = 'Select your HS code';
-                        hsCodeDropdown.appendChild(placeholderOption);
-
-                        data.hs_codes.forEach(function (hsCode) {
-                            var option = document.createElement('option');
-                            option.value = hsCode.id;
-                            option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
-                            hsCodeDropdown.appendChild(option);
-                        });
-                        descriptionField.dataset.originalValue = descriptionField.value;
-
-                        hsCodeDropdown.addEventListener('click', function () {
-                            originalDescriptions[descriptionField.name] = descriptionField.value;
-                        });
-
-                        hsCodeDropdown.addEventListener('change', function () {
-                            originalDescriptions[descriptionField.name] = descriptionField.value;
-                        });
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
-        });
-
-        addButton.addEventListener('click', function () {
-            var newForm = tableBody.rows[0].cloneNode(true);
-            var regex = new RegExp(`items_set-\\d+-`, 'g');
-
-            newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
-            newForm.dataset.itemIndex = currentFormCount; // Set the item index for the new row
-              
-            // Remove document input fields from the new form
-            var documentsCell = newForm.querySelector('.documents');
+    var documentsCell = newForm.querySelector('.document-form');
             if (documentsCell) {
-                documentsCell.innerHTML = ''; // Clear any existing document input fields
+                documentsCell.dataset.itemIndex = currentFormCount;
+                console.log("documentsCell",documentsCell) 
             }
-
-            tableBody.appendChild(newForm);
-            currentFormCount++;
-            formCountInput.value = currentFormCount;
-
-            var inputs = newForm.querySelectorAll('input, textarea');
-            inputs.forEach(function (input) {
+   
+   
+    var inputs = newForm.querySelectorAll('input, textarea');
+    inputs.forEach(function (input) {
                 if (input.type === 'hidden') {
                     input.value = '';
                 } else {
                     input.value = '';
-                }
-                input.dataset.itemIndex = currentFormCount - 1; // Set the item index for each input
-            });
-            var documentsCell = newForm.querySelector('.documents');
-            if (documentsCell) {
-                documentsCell.dataset.itemIndex = currentFormCount - 1; // Set the item index for the documents cell
+                    input.removeAttribute('readonly');
+                } 
+    });
+
+   
+    mainForm.appendChild(newForm);
+
+    totalForms.value = currentFormCount + 1;
+    attachValidationListeners(newForm);
+});
+
+
+function updateFormIndices() {
+    var forms = document.querySelectorAll('.item-form');
+    forms.forEach(function (form, index) {
+        form.setAttribute('data-item-index', index);
+        
+     
+        var inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(function (input) {
+            if (input.name) {
+                input.name = input.name.replace(/items_set-\d+-/, `items_set-${index}-`);
             }
-            attachValidationListeners(newForm);
+            if (input.id) {
+                input.id = input.id.replace(/items_set-\d+-/, `items_set-${index}-`);
+            }
         });
 
+   
+        var documentForm = form.querySelector('.document-form');
+        if (documentForm) {
+            
+            documentForm.setAttribute('data-item-index', index);
 
-        tableBody.addEventListener('click', function (e) {
-            if (e.target.classList.contains('delete-btn')) {
+        
+            var fileInputs = documentForm.querySelectorAll('input[type="file"]');
+            fileInputs.forEach(function (fileInput) {
+                var docIdMatch = fileInput.name.match(/documents_\d+_([a-f0-9\-]{36})/); // Capture the full UUID
+                if (docIdMatch) {
+                    var docId = docIdMatch[1];
+                    fileInput.name = `documents_${index}_${docId}`; 
+                }
+            });
+        }
+    
+    });
+
+    
+    var totalForms = document.getElementById('id_items_set-TOTAL_FORMS');
+    totalForms.value = forms.length;
+}
+
+
+document.querySelector('.item').addEventListener('click', function (e) {
+  
+            if (e.target.classList.contains('delete-button')) {
+          
+
+
                 e.preventDefault();
-                var row = e.target.closest('tr');
-                var deleteCheckbox = row.querySelector('input[type="checkbox"].delete-row');
+                var row = e.target.closest('.item-form');
+
+                var descriptionField = row.querySelector('textarea[name*="description"]');
+
+
+if (descriptionField && originalDescriptions.hasOwnProperty(descriptionField.name)) {
+    delete originalDescriptions[descriptionField.name];
+}
+console.log("originalDescriptions",originalDescriptions)
+              
+                var deleteCheckbox = row.querySelector('input[type="checkbox"]');
+                console.log("deleteCheckbox",deleteCheckbox)
                 deleteCheckbox.checked = true;
                 deleteCheckbox.value = 'true';
-
-                row.style.display = 'none';
+               row.remove();
+                updateFormIndices();
 
             }
         });
 
-        // Custom validation for numeric fields
+        document.querySelector('.item').addEventListener('click', function (e) {
+        if (e.target.classList.contains('reset-btn')) {
+            var formGroup = e.target.closest('.item-form');
+            
+            // Find the description field and clear it
+            var descriptionField = formGroup.querySelector('textarea[name*="goods_description"]');
+            
 
-        attachValidationListeners(document);
-
-        // Add event listener for hs_code change
-        tableBody.addEventListener('change', function (e) {
-            if (e.target.name.includes('hs_code')) {
-                var row = e.target.closest('tr');
-                var hsCode = e.target.value;
-                var documentField = row.querySelector('.documents');
-                var itemIndex = documentField.dataset.itemIndex;
-
-                fetch(`/get-required-docs/?hs_code=${hsCode}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        documentField.innerHTML = '';
-
-                        requiredDocsData[hsCode] = data.required_docs;
-                        data.required_docs.forEach(function (doc) {
-                            var fileInput = document.createElement('input');
-                            fileInput.type = 'file';
-                            fileInput.name = `documents_${itemIndex}_${doc.id}`;
-                            fileInput.required = true;
-                            fileInput.classList.add('required-file');
-                            var label = document.createElement('label');
-                            label.textContent = `${doc.name} (${doc.format})`;
-
-                            documentField.appendChild(label);
-                            documentField.appendChild(fileInput);
-                        });
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
-        });
-
-        // Form submission validation
-        document.querySelector('form').addEventListener('submit', function (e) {
-            var isValid = true;
-            var rows = document.querySelectorAll('#item-table tbody tr');
-            // Check for originalDescriptions change
-            for (var key in originalDescriptions) {
-                var descriptionField = document.querySelector(`[name="${key}"]`);
-                if (descriptionField.value !== originalDescriptions[key]) {
-                    isValid = false;
-                    break;
-                }
+            if (descriptionField) {
+                
+                descriptionField.value = '';  // Clear the description field
+                descriptionField.readOnly = false;  // Re-enable the description field
             }
 
-            // Check for required file inputs
-            var requiredFiles = document.querySelectorAll('.required-file');
-            requiredFiles.forEach(function (input) {
-                if (!input.files.length) {
+            // Clear the HS code dropdown
+            var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
+            if (hsCodeDropdown) {
+                hsCodeDropdown.value = '';  // Reset the HS code dropdown
+            }
+
+            // Clear the document fields
+            var documentForm = formGroup.querySelector('.document-form');
+            var documentsField = formGroup.querySelector('input[type="file"]');  
+            var label = document.createElement('label');
+            label.classList.add('font-14'); 
+             label.textContent = "Document";
+            
+            if (documentForm) {
+                documentForm.innerHTML = '';
+                documentForm.appendChild(label);
+                documentForm.appendChild(documentsField);
+
+                
+                
+            }
+
+            // Optionally, remove from originalDescriptions if needed
+            if (descriptionField && originalDescriptions[descriptionField.name]) {
+                delete originalDescriptions[descriptionField.name];
+            }
+
+            console.log("Form reset");
+        }
+    });
+
+
+document.querySelector('.item').addEventListener('click', function (e) {
+    if (e.target.classList.contains('search-bttn')) {
+       
+       
+        var formGroup = e.target.closest('.form-group');
+
+        var descriptionField = formGroup.querySelector('textarea');
+        var descriptionData = descriptionField.value;
+        var hsCodeDropdown = formGroup.parentElement.nextElementSibling.querySelector('select[name*="hs_code"]');
+
+        fetch('/search-hscode/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ description: descriptionData })
+        })
+        .then(response => response.json())
+        .then(data => {
+            hsCodeDropdown.innerHTML = '';
+
+            var placeholderOption = document.createElement('option');
+            placeholderOption.value = '';
+            placeholderOption.textContent = 'Select your HS code';
+            hsCodeDropdown.appendChild(placeholderOption);
+
+            data.hs_codes.forEach(function (hsCode) {
+                var option = document.createElement('option');
+                option.value = hsCode.id;
+                option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+                hsCodeDropdown.appendChild(option);
+            });
+
+            descriptionField.dataset.originalValue = descriptionField.value;
+
+            hsCodeDropdown.addEventListener('change', function () {
+                originalDescriptions[descriptionField.name] = descriptionField.value;
+                descriptionField.readOnly = true; 
+            });
+           
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+    attachValidationListeners(document);
+        
+// Add event listener for hs_code change
+document.querySelector('.item').addEventListener('change', function (e) {
+    if (e.target.name.includes('hs_code')) {
+     
+      
+        var formGroup = e.target.closest('.form-group');
+       
+        var hsCode = e.target.value;
+       
+        var documentsField = formGroup.parentElement.nextElementSibling.querySelector('input[type="file"]');
+        var documentform = formGroup.parentElement.nextElementSibling.querySelector('.document-form')
+       
+        var itemIndex = documentform.dataset.itemIndex;
+
+        fetch(`/get-required-docs/?hs_code=${hsCode}`)
+            .then(response => response.json())
+            .then(data => {
+            
+                documentform.innerHTML = '';
+                requiredDocsData[hsCode] = data.required_docs;
+
+    data.required_docs.forEach(function (doc) {
+    var label = document.createElement('label');
+    label.classList.add('font-14'); 
+    label.textContent = `${doc.name} (${doc.format})`;
+
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = `documents_${itemIndex}_${doc.id}`;
+    fileInput.required = true;
+    fileInput.classList.add('form-control','required-file'); 
+    fileInput.placeholder = ''; 
+
+    documentform.appendChild(label);
+    documentform.appendChild(fileInput);
+});
+
+})
+.catch(error => console.error('Error:', error));
+    }
+});
+
+
+
+  // Form submission validation
+document.querySelector('form').addEventListener('submit', function (e) {
+    var isValid = true;
+    console.log("i am in ",originalDescriptions)
+    
+    // Check for required file inputs
+    var requiredFiles = document.querySelectorAll('.required-file');
+    requiredFiles.forEach(function (input) {
+        if (!input.files.length) {
+            e.preventDefault();
+            alert('You must upload all required files.');
+        }
+    });
+
+    // Select all item forms in the grid
+    var items = document.querySelectorAll('.item-form');
+
+    items.forEach(function (item) {
+        console.log("inside items")
+        var hsCodeDropdown = item.querySelector('select[name*="hs_code"]');
+        var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
+
+        var documentField = item.querySelector('.document-form');
+        var itemIndex = documentField.getAttribute('data-item-index');
+        
+        var requiredDocs = requiredDocsData[hsCode] || [];
+        
+        // Validate file uploads for each required document
+        requiredDocs.forEach(function (doc) {
+            var fileInput = item.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
+            if (fileInput && fileInput.files.length > 0) {
+                var file = fileInput.files[0];
+                var ext = file.name.split('.').pop().toLowerCase();
+                if (!doc.format.split(',').includes(ext)) {
                     e.preventDefault();
-                    alert(' you must upload all required files.');
+                    alert(`Invalid file format for ${doc.name}: ${ext}`);
+                    fileInput.value = ''; // Clear the invalid file input
                 }
-            });
-
-
-            rows.forEach(function (row) {
-                var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
-                var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
-                var documentField = row.querySelector('.documents');
-                var requiredDocs = requiredDocsData[hsCode] || [];
-                var documentField = row.querySelector('.documents');
-                var itemIndex = documentField.getAttribute('data-item-index');
-
-
-                requiredDocs.forEach(function (doc) {
-                    var fileInput = document.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
-                    if (fileInput && fileInput.files.length > 0) {
-                        var file = fileInput.files[0];
-                        var ext = file.name.split('.').pop().toLowerCase();
-                        if (!doc.format.split(',').includes(ext)) {
-                            event.preventDefault();
-                            alert(`Invalid file format for ${doc.name}: ${ext}`);
-                            fileInput.value = ''; // Clear the invalid file input
-                        }
-                    }
-                });
-            });
-
-            if (!isValid) {
-                e.preventDefault();
-                alert('You cannot change the description after selecting an HS code');
             }
         });
+    });
+
+
+        
+    
+});
     });
 
 </script>
