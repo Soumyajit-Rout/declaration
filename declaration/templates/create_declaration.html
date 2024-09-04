@@ -233,6 +233,13 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
+                            <template id="document-template">
+                                <div class="document-form">
+                                    <!-- Default document input fields go here -->
+                                    <label class="font-14 label" for="id_request_noe">Documents</label>
+                                    <input class="form-control" type="file" name="documents" placeholder="">
+                                </div>
+                            </template>
                             <div class="form-group mb-3 document-form" data-item-index="{{ forloop.counter0 }}" >
                                 <label class="font-14 label" for="id_request_noe">Documents</label>
                                 <input class="form-control" type="file" name="documents" placeholder="">
@@ -332,23 +339,19 @@
     var mainForm = document.querySelector('.item')
     var formContainer = document.querySelector('.item-form'); 
     var newForm = formContainer.cloneNode(true);
-
-   
-
     var totalForms = document.getElementById('id_items_set-TOTAL_FORMS'); 
     var currentFormCount = parseInt(totalForms.value); 
    
-    
     var regex = new RegExp(`items_set-\\d+-`, 'g');
     newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
 
-
+    var documentTemplate = document.getElementById('document-template').innerHTML;
     var documentsCell = newForm.querySelector('.document-form');
             if (documentsCell) {
+                documentsCell.innerHTML = documentTemplate;
                 documentsCell.dataset.itemIndex = currentFormCount;
-                console.log("documentsCell",documentsCell) 
+               
             }
-   
    
     var inputs = newForm.querySelectorAll('input, textarea');
     inputs.forEach(function (input) {
@@ -360,9 +363,7 @@
                 } 
     });
 
-   
     mainForm.appendChild(newForm);
-
     totalForms.value = currentFormCount + 1;
     attachValidationListeners(newForm);
 });
@@ -436,7 +437,7 @@ console.log("originalDescriptions",originalDescriptions)
             }
         });
 
-        document.querySelector('.item').addEventListener('click', function (e) {
+    document.querySelector('.item').addEventListener('click', function (e) {
         if (e.target.classList.contains('reset-btn')) {
             var formGroup = e.target.closest('.item-form');
             
@@ -458,7 +459,13 @@ console.log("originalDescriptions",originalDescriptions)
 
             // Clear the document fields
             var documentForm = formGroup.querySelector('.document-form');
-            var documentsField = formGroup.querySelector('input[type="file"]');  
+            var documentsField = formGroup.querySelector('input[type="file"]');
+            var fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.name = 'documents';
+            fileInput.required = true;
+            fileInput.classList.add('form-control'); 
+            fileInput.placeholder = '';   
             var label = document.createElement('label');
             label.classList.add('font-14'); 
              label.textContent = "Document";
@@ -466,7 +473,7 @@ console.log("originalDescriptions",originalDescriptions)
             if (documentForm) {
                 documentForm.innerHTML = '';
                 documentForm.appendChild(label);
-                documentForm.appendChild(documentsField);
+                documentForm.appendChild(fileInput  );
 
                 
                 
