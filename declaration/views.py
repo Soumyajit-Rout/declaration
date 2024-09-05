@@ -43,6 +43,7 @@ def create_declaration(request):
                     if user_id:
                         declaration.iam_user_id = user_id
                     declaration.save()
+
                     item_formset.instance = declaration
                     items = item_formset.save()
 
@@ -63,8 +64,8 @@ def create_declaration(request):
                                         file=request.FILES[file_field_name],
                                         required_doc = req_doc
                                     )
-
                                     get_id.delay((declaration.id,))
+                Declaration_log.objects.create(declaration=declaration,status=0)
                 messages.success(request, 'Declaration added successfully.')
                 return redirect('view_declaration')
             except Exception as e:
@@ -73,7 +74,6 @@ def create_declaration(request):
     else:
         declaration_form = DeclarationForm()
         item_formset = ItemFormSet()
-        # document_formset = DocumentFormSet()
 
     return render(request, 'create_declaration.html', {
         'form': declaration_form,
@@ -220,6 +220,9 @@ def update_declaration(request, pk):
                                             file=request.FILES[key],
                                             required_doc=required_doc
                                             )
+        declaration.is_verified = 0
+        declaration.save()
+        Declaration_log.objects.create(declaration=declaration,status=0,comment=declaration.comments)
         messages.success(request, 'Declaration updated successfully.')            
         # Redirect to prevent resubmission
         return redirect('view_declaration')
@@ -283,7 +286,7 @@ def update_declaration(request, pk):
                 'item': item,
                 'documents': document_formset,
             })
-
+    declaration_log = Declaration_log.objects.filter(declaration=declaration,created_by = True).order_by('-created_at').first()
     context = {
         'declaration_data': declaration_data,
         'items_data': items_data,
@@ -295,6 +298,7 @@ def update_declaration(request, pk):
         'declaration_types': declaration_types,
         'cargo_types': cargo_types,
         'hs_codes': hs_codes,
+        'declaration_log':declaration_log,
     }
 
     return render(request, 'update_declarations.html', context)
@@ -465,7 +469,7 @@ class ListDeclarations(generics.ListAPIView):
     serializer_class = DelcarationListSerilaizer
 
     def get_queryset(self):
-        return Declaration.objects.filter(is_verified=0)
+            return Declaration.objects.filter(is_verified=0).order_by('-updated_at')
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -495,7 +499,7 @@ class RetrieveDeclaration(APIView):
 Basic api to update the declarations based on id 
 """
 class UpdateDeclaration(APIView):
-    # permission_classes = [StaticTokenPermission]
+    permission_classes = [StaticTokenPermission]
 
     def put(self, request):
         id = request.query_params.get("id")
@@ -518,8 +522,8 @@ class UpdateDeclaration(APIView):
                 status = data.is_verified,
                 declaration = data,
                 comment = comment,
+                created_by = True,
             )
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -529,7 +533,7 @@ class ListDeclarationLog(generics.ListAPIView):
     serializer_class = ListDeclarationLogSerializer
     def get_queryset(self):
         id = self.request.query_params.get("id")
-        return Declaration_log.objects.filter(declaration = id)
+        return Declaration_log.objects.filter(declaration = id).order_by("-created_at")
 
 
 def get_required_docs(request):
@@ -565,7 +569,7 @@ def delete_item(request, item_id):
     
 def Declaration_Logs_List(request,pk):
     declarations = Declaration.objects.get(id = pk)
-    declaration_logs = Declaration_log.objects.filter(declaration = declarations).order_by('created_at')
+    declaration_logs = Declaration_log.objects.filter(declaration = declarations).order_by('-created_at')
     return render(request, 'view_declaration_logs.html', {'logs': declaration_logs})
 
 @csrf_exempt
@@ -628,6 +632,6 @@ def delete_session(request):
 def connect_wallet(request):
     iam_base_url = settings.IAM_URL
     context = {
-        "iam_base_url": iam_base_url  # Pass the URL to the template context
+        "iam_base_url": iam_base_url 
     }
     return render(request, 'home.html',context)
