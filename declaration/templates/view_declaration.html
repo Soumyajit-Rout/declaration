@@ -45,6 +45,7 @@
                             <th scope="col" class="font-15 ps-4">Transaction Type</th>
                             <th scope="col" class="font-15 ps-4">Trade Type</th>
                             <th scope="col" class="font-15 ps-4">Regime Type</th> -->
+                            <th scope="col" class="font-15 ps-4">Status</th>
                             <th scope="col" class="font-15 ps-4">Actions</th>
                         </tr>
                     </thead>
@@ -63,6 +64,19 @@
                             </td>
                             <td class="table-data">
                                 <p class="font-15">{{ declaration.declaration_no }}</p>
+                            </td>
+                            <td class="table-data">
+                                <p class="font-15">
+                                    {% if declaration.is_verified == 0 %}
+                                        Under Process
+                                    {% elif declaration.is_verified == 1 %}
+                                        Approved
+                                    {% elif declaration.is_verified == -1 %}
+                                        Rejected
+                                    {% elif declaration.is_verified == 2 %}
+                                        Re-Submit
+                                    {% endif %}
+                                </p>
                             </td>
                             <!-- <td class="table-data">
                                 <p class="font-15 ps-4">{{ declaration.net_weight }}</p>

@@ -98,3 +98,4 @@ class Declaration_log(TimestampedUUIDModel):
      declaration = models.ForeignKey(Declaration,on_delete=models.CASCADE)
      status = models.IntegerField(choices=status_choices,default=0)
      comment = models.CharField(max_length=250,null=True,blank=True)
+     created_by = models.BooleanField(default=False,blank=True)

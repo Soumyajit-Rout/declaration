@@ -27,7 +27,11 @@
             <div class="col-12 col-lg-6 card-container">
                 <div class="card mb-3 status-card">
                     <div class="card-header bg-white py-3">
-                        <strong>Status : </strong>
+                        <p class="card-text mb-1"><strong>Date : </strong>{{ log.created_at|date:"F j, Y, g:i a" }}</p>
+                       
+                    </div>
+                    <div class="card-body">
+                        <strong>Current Status : </strong>
                         {% if log.status == 0 %}
                         Under process
                         {% endif %}
@@ -43,10 +47,17 @@
                         {% if log.status == 2 %}
                         Resubmit for modification
                         {% endif %}
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text mb-1"><strong>Date : </strong>{{ log.created_at|date:"F j, Y, g:i a" }}</p>
+     
                         <p class="card-text mb-1"><strong>Comment : </strong>{{ log.comment }}</p>
+                        {% if log.created_by == True %}
+                        <p class="card-text mb-1"><strong>Update Done By: </strong>Verification Team</p>
+                        {% endif %}
+
+                        {% if log.created_by == False %}
+                        <p class="card-text mb-1"><strong>Update Done By: </strong>{{ request.session.name }}</p>
+                        {% endif %}
+
+
                     </div>
                 </div>
             </div>
