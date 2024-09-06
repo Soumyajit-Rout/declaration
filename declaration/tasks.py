@@ -87,7 +87,7 @@ def send_company_registration_info_to_contract(declaration_data,items_data):
            "_is_verified":" ",
            "_updated_by_user":" ",
        }
-       substrate = SubstrateInterface(url="wss://testnet.dubaicustoms.network")
+       substrate = SubstrateInterface(url="wss://contract-node.finloge.com/")
        keypair = Keypair.create_from_uri("//Alice")
     
 
@@ -227,7 +227,7 @@ def update_declaration_info_to_contract(id):
            "_newStatus": declaration_data.get("is_verified"),
            "_declarationId": declaration_data.get("id"),
        }
-       substrate = SubstrateInterface(url="wss://testnet.dubaicustoms.network")
+       substrate = SubstrateInterface(url="wss://contract-node.finloge.com/")
        keypair = Keypair.create_from_uri("//Alice")
 
        try:
@@ -384,7 +384,7 @@ def update_declaration_to_contract(declaration_data,items_data):
            "_is_verified":" ",
            "_updated_by_user":" ",
        }
-       substrate = SubstrateInterface(url="wss://testnet.dubaicustoms.network")
+       substrate = SubstrateInterface(url="wss://contract-node.finloge.com/")
        keypair = Keypair.create_from_uri("//Alice")
 
 
