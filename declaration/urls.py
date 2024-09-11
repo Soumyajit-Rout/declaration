@@ -27,6 +27,7 @@ urlpatterns = [
      path('api/DeclarationRegistration/verification/updateDeclarationRegistrationData',UpdateDeclaration.as_view(),name='retrieve_declaration'),
      path('api/DeclarationRegistration/verification/listDeclarationLogData',ListDeclarationLog.as_view(),name='retrieve_declaration'),
      path('api/DeclarationOpinion/createDeclarationOpinion', views.CreateDeclarationOpinion.as_view(),name='create_declaration_opinion'),
+     path('api/DeclarationOpinion/getDeclarationOpinionDataByDepartmentId', views.GetDeclarationOpinionDataByDepartmentId.as_view(),name='get_declaration_opinion'),
 
 ]
 

@@ -126,6 +126,7 @@ class Opinion(models.Model):
     status = models.IntegerField(choices=status_choices, default=0)
     comment = models.CharField(max_length=250, null=True, blank=True)
     employee_id = models.CharField(max_length=250, null=True, blank=True)
+    employee_name = models.CharField(max_length=250, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
