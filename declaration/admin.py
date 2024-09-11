@@ -107,6 +107,18 @@ class Declaration_logAdmin(admin.ModelAdmin):
           'status',
      )
 
+class Declaration_opinionAdmin(admin.ModelAdmin):
+     list_display = (
+          'declaration_id',
+          'department_ids',
+          'id',
+          'status',
+          'comment',
+          'employee_id',
+          'created_at'
+     )
+
+
 admin.site.register(Declaration, DeclarationAdmin)
 admin.site.register(CargoType, CargoTypeAdmin)
 admin.site.register(DeclarationType, DeclarationTypeAdmin)
@@ -119,7 +131,7 @@ admin.site.register(HsCode, HsCodeAdmin)
 admin.site.register(RequiredDoc, RequiredDocAdmin)
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(Declaration_log, Declaration_logAdmin)
-
+admin.site.register(Opinion, Declaration_opinionAdmin)
 
 
 
