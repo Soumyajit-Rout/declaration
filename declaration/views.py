@@ -20,6 +20,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 import requests
 from .tasks import get_id,update_declaration_info_to_contract,get_updated_id
+from rest_framework.views import APIView
+from rest_framework import renderers, status
+from rest_framework.response import Response
+from urllib.request import Request
+from DeclarationManagement.utils import Authentication
+from django.forms.models import model_to_dict
+
+# pylint: disable=E1101,W0702,E1133
 
 
 """
@@ -489,11 +497,19 @@ class RetrieveDeclaration(APIView):
             return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             declaration = Declaration.objects.get(is_verified=0, id=id)
+            opinion_data = Opinion.objects.filter(
+                declaration_id=id
+            ).order_by("-created_at")
+            opinions = []
+            if opinion_data:
+                for obj in opinion_data:
+                    entry = model_to_dict(obj)
+                    opinions.append(entry)
         except Declaration.DoesNotExist:
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = DeclarationSerializer(declaration)
-        return Response({"status":status.HTTP_200_OK,"registration_data":serializer.data})
+        return Response({"status":status.HTTP_200_OK,"registration_data":serializer.data, "opinions": opinions})
     
 """
 Basic api to update the declarations based on id 
@@ -635,3 +651,35 @@ def connect_wallet(request):
         "iam_base_url": iam_base_url 
     }
     return render(request, 'home.html',context)
+
+class CreateDeclarationOpinion(APIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+    def post(self, request: Request):
+
+        # To use authentcation
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        declaration_id = request.data.get("declarationId")
+        department_ids = request.data.get("departmentIds")
+        if not (declaration_id and department_ids):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            opinion_object = Opinion(
+                declaration_id = declaration_id,
+                department_ids = department_ids,
+            )
+            opinion_object.save()
+            return Response(
+                {"result": "Opinion Data Successfully Saved"},
+                status=status.HTTP_200_OK,
+            )
+        except ValidationError as e:
+            return Response(data={"Result": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+
+            return Response(
+                data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
