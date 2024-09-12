@@ -152,3 +152,4 @@ CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL = os.getenv(
     "CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL", "http://127.0.0.1:8001/api/smart-contracts")
 
 STATIC_API_TOKEN = os.getenv('STATIC_API_TOKEN')
+AI_URL = os.getenv('AI_URL')

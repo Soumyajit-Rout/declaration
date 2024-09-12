@@ -55,11 +55,12 @@ class Declaration(TimestampedUUIDModel):
      transaction_type = models.ForeignKey(TransactionType,on_delete=models.SET_NULL, null=True)
      trade_type = models.ForeignKey(TradeType,on_delete=models.SET_NULL, null=True)
      regime_type = models.ForeignKey(RegimeType,on_delete=models.SET_NULL, null=True)
-     is_verified = models.IntegerField(default=0,null=True,blank=True)
+     is_verified = models.IntegerField(null=True,blank=True)
      comments = models.TextField(max_length=200,null=True,blank=True)
      iam_user_id = models.CharField(max_length=100,null=True,blank=True)
      updated_by_id = models.CharField(max_length=100,null=True,blank=True)
      contract_address = models.CharField(max_length=200,null=True,blank=True)
+     save_as_draft = models.BooleanField(default=False,blank=True)
 
 class HsCode(TimestampedUUIDModel):
     keywords = models.TextField(max_length=200,null=True,blank=False)  

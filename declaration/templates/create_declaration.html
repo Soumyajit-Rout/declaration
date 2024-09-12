@@ -146,56 +146,6 @@
                                 {{ form.regime_type.errors }}
                             </div>
                         </div>
-
-                        <!-- <div class="mb-4 form_heading my-4">
-                            <h2 class="font-20 py-2 px-3">Items</h2>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="item-table" class="table table-bordered">
-                                <thead class="default-table-head border">
-                                    <tr>
-                                        <th scope="col" class="font-15 ps-4">Description</th>
-                                        <th scope="col" class="font-15 ps-4">HsCode</th>
-                                        <th scope="col" class="font-15 ps-4">Documents</th>
-                                        <th scope="col" class="font-15 ps-4">Static Quantity Unit</th>
-                                        <th scope="col" class="font-15 ps-4">Supplementary Quantity Unit</th>
-                                        <th scope="col" class="font-15 ps-4">Unit Weight</th>
-                                        <th scope="col" class="font-15 ps-4">Goods Value</th>
-                                        <th scope="col" class="font-15 ps-4">CIF Value</th>
-                                        <th scope="col" class="font-15 ps-4">Duty Fee</th>
-                                        <th scope="col" class="font-15 ps-4">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{ item_formset.management_form }}
-                                    {% for form in item_formset %}
-                                    <tr>
-                                        <td>{{ form.goods_description }} {{ form.goods_description.errors }} <button
-                                                type="button" class="navbar-card-button mt-2" id="search-hscode">Search</button>
-                                        </td>
-                                        <td>{{ form.hs_code }} {{ form.hs_code.errors }}</td>
-                                        <td class="documents" data-item-index="{{ forloop.counter0 }}"></td>
-                                        <td>{{ form.static_quantity_unit }} {{ form.static_quantity_unit.errors }}</td>
-                                        <td>{{ form.supp_quantity_unit }} {{ form.supp_quantity_unit.errors }}</td>
-                                        <td>{{ form.unit_weight }} {{ form.unit_weight.errors }}</td>
-                                        <td>{{ form.goods_value }} {{ form.goods_value.errors }}</td>
-                                        <td>{{ form.cif_value }} {{ form.goods_value.errors }}</td>
-                                        <td>{{ form.duty_fee }} {{ form.duty_fee.errors }}</td>
-                                        <td>
-                                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
-                                            {% if form.instance.pk %}
-                                            <a href="" class="delete-btn btn btn-danger btn-sm">Delete</a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group mb-0 mt-4">
-                            <button type="submit" class="navbar-card-button" style="float: right;">Save</button>
-                            <button type="button" id="add-row" class="navbar-card-button w-20 me-3" style="float: right;">Add Item</button>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -306,6 +256,7 @@
             </div>
         </div>
        <button type="submit"  class="submit-button w-100">Submit</button>
+       <button type="submit" name="save_draft" value="True" class="submit-button w-100 mt-2">Save as Draft</button>
 
     </form>
 </section>
