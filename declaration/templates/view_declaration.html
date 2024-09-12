@@ -67,14 +67,16 @@
                             </td>
                             <td class="table-data">
                                 <p class="font-15">
-                                    {% if declaration.is_verified == 0 %}
-                                        Under Process
-                                    {% elif declaration.is_verified == 1 %}
+                                    {% if declaration.is_verified == 1 %}
                                         Approved
+                                    {% elif declaration.is_verified == 0 %}
+                                        On-Hold
                                     {% elif declaration.is_verified == -1 %}
                                         Rejected
                                     {% elif declaration.is_verified == 2 %}
                                         Re-Submit
+                                    {% elif declaration.is_verified == 3 %}
+                                        Saved as Draft
                                     {% endif %}
                                 </p>
                             </td>
@@ -113,8 +115,10 @@
                                 <div class="btn-group px-3">
                                     <a href="{% url 'view-logs' declaration.pk %}"
                                     class="btn btn-sm btn-primary border-0 update_button me-1">Logs</a>
+                                    {% if declaration.is_verified != 0 and declaration.is_verified != 1 %}
                                     <a href="{% url 'update_declaration' declaration.pk %}"
                                         class="btn btn-sm btn-primary border-0 update_button me-1">Update</a>
+                                        {% endif %}
                                     <a href="{% url 'list_declaration' declaration.pk %}"
                                         class="btn btn-sm btn-primary border-0 update_button me-1">View</a>
                                     <!-- <a href="{% url 'delete_declaration' declaration.pk %}"
@@ -185,44 +189,43 @@
             messages.push({ tags: "{{ message.tags }}", message: "{{ message }}" });
         {% endfor %}
         messages.forEach(function(message) {
-            if (message.message === 'Declaration updated successfully.') {
-                Swal.fire({
-            title: "Declaration Form Updated",
-            text: "Your declaration form has been successfully updated",
-            // showCancelButton: true,
-            // showDenyButton: true,
-            icon: "success",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ok",
-            customClass: {
-                confirmButton: 'confirmbtn sweetsuccess',  // Add custom class for confirm button
-      }
-
-        });
-            }else if (message.message === 'Declaration added successfully.') {
+        if (message.message === 'Declaration updated successfully.') {
             Swal.fire({
-            title: "Declaration Form Created",
-            text: "Your declaration form has been successfully created",
-            icon: "success",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ok",
-            customClass: {
-                confirmButton: 'confirmbtn sweetsuccess',  // Add custom class for confirm button
-      }
-
-        });
-    }
-        });
-        
+                title: "Declaration Form Updated",
+                text: "Your declaration form has been successfully updated",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ok",
+                customClass: {
+                    confirmButton: 'confirmbtn sweetsuccess',  
+                }
+            }).then(function() {
+                window.location.reload(true);  
+            });
+        } else if (message.message === 'Declaration added successfully.') {
+            Swal.fire({
+                title: "Declaration Form Created",
+                text: "Your declaration form has been successfully created",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ok",
+                customClass: {
+                    confirmButton: 'confirmbtn sweetsuccess',  
+                }
+            }).then(function() {
+                console.log("haiinnnnnn")
+                window.location.reload(true);  
+            });
+        }
+    });
    </script>
 <script>
     $(document).ready(function() {
         
         $('.delete_button').on('click', function(){
        
-
             var declarationId = $(this).data('declaration-id');
            
             var deleteUrl = '/delete/' + declarationId + '/';

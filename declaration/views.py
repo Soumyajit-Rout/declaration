@@ -19,7 +19,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 import requests
-from .tasks import get_id,update_declaration_info_to_contract,get_updated_id
+from .tasks import get_id,update_declaration_info_to_contract,get_updated_id,sent_items_to_ai
 from rest_framework.views import APIView
 from rest_framework import renderers, status
 from rest_framework.response import Response
@@ -28,6 +28,7 @@ from DeclarationManagement.utils import Authentication
 from django.forms.models import model_to_dict
 
 # pylint: disable=E1101,W0702,E1133
+
 
 
 """
@@ -46,18 +47,20 @@ def create_declaration(request):
             try:
                 with transaction.atomic():
                     user_id = request.session.get('id', None)
-                    print("user_id",user_id)
                     declaration = declaration_form.save(commit=False)
+                              
                     if user_id:
                         declaration.iam_user_id = user_id
+                    if 'save_draft' in request.POST:
+                        declaration.save_as_draft = True
+                        declaration.is_verified = 3
+                    else:
+                        declaration.save_as_draft = False
+
                     declaration.save()
 
                     item_formset.instance = declaration
-                    items = item_formset.save()
-
-                    for deleted_item in item_formset.deleted_objects:
-                        deleted_item.delete()
-                    
+                    items = item_formset.save()         
                     for item_index, item in enumerate(items):
                         hs_code = item.hs_code
                         if hs_code:
@@ -73,6 +76,9 @@ def create_declaration(request):
                                         required_doc = req_doc
                                     )
                                     get_id.delay((declaration.id,))
+                    
+                    if not declaration.save_as_draft:
+                        sent_items_to_ai.delay(declaration.id)
                 Declaration_log.objects.create(declaration=declaration,status=0)
                 messages.success(request, 'Declaration added successfully.')
                 return redirect('view_declaration')
@@ -230,6 +236,7 @@ def update_declaration(request, pk):
                                             )
         declaration.is_verified = 0
         declaration.save()
+        sent_items_to_ai.delay(declaration.id)
         Declaration_log.objects.create(declaration=declaration,status=0,comment=declaration.comments)
         messages.success(request, 'Declaration updated successfully.')            
         # Redirect to prevent resubmission
