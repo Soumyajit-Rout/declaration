@@ -683,3 +683,48 @@ class CreateDeclarationOpinion(APIView):
                 data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+    serializer_class = DelcarationListSerilaizer
+
+    def get_queryset(self, declaration_ids):
+            return Declaration.objects.filter(is_verified=0).order_by('-updated_at')
+    
+    def get(self, request: Request):
+
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        department_id = request.GET.get("departmentId")
+
+        if not department_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        opinion_data = Opinion.objects.filter(
+            department_ids__contains=[int(department_id)]
+        ).order_by("-created_at")
+
+        try:
+            if opinion_data:
+                declaration_ids = []
+
+                opinion_data_entries = []
+                if opinion_data:
+                    for opinion_obj in opinion_data:
+                        entry = model_to_dict(opinion_obj)
+                        entry['id'] = opinion_obj.id
+                        opinion_data_entries.append(entry)
+                        declaration_ids.append(opinion_obj.declaration_id)
+
+                queryset = self.get_queryset(declaration_ids)
+                serializer = self.get_serializer(queryset, many=True)
+
+                return Response({"status": status.HTTP_200_OK,"declaration_data": serializer.data, "opinion_data":opinion_data_entries})
+        except ValidationError as e:
+            return Response(data={"Result": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+
+            return Response(
+                data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
