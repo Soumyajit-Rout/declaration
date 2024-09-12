@@ -728,3 +728,37 @@ class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
                 data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+class UpdateDeclarationOpinionData(APIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+
+    def put(self, request: Request):
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        opinion_id = request.data.get("opinionId")
+        comment = request.data.get("comment","")
+        opinion_status = request.data.get("status")
+        employee_id = request.data.get("employeeId")
+        employee_name = request.data.get("employeeName")
+
+        if not (opinion_id and opinion_status and employee_id and employee_name):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        opinion_object = Opinion.objects.get(id=opinion_id)
+        if not opinion_object:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            opinion_object.comment = comment
+            opinion_object.status = int(opinion_status)
+            opinion_object.employee_id = employee_id
+            opinion_object.employee_name = employee_name
+
+            with transaction.atomic():
+                opinion_object.save()
+
+            return Response(
+                {"result": "Opinion Status Successfully Updated"},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
