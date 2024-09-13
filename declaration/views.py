@@ -192,7 +192,6 @@ def update_declaration(request, pk):
         pattern = re.compile(r'documents_item_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
         new_pattern = re.compile(r'new_documents_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
         doc = []
-        get_updated_id.delay((declaration.id))
 
         for key, file in request.FILES.items():
             if key.startswith('documents_item'):
@@ -234,9 +233,9 @@ def update_declaration(request, pk):
                                             file=request.FILES[key],
                                             required_doc=required_doc
                                             )
-        declaration.is_verified = 0
         declaration.save()
         sent_items_to_ai.delay(declaration.id)
+        get_updated_id.delay((declaration.id))
         Declaration_log.objects.create(declaration=declaration,status=0,comment=declaration.comments)
         messages.success(request, 'Declaration updated successfully.')            
         # Redirect to prevent resubmission
