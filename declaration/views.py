@@ -768,3 +768,33 @@ class UpdateDeclarationOpinionData(APIView):
             )
         except Exception as e:
             return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class DeclarationAssignUserIdView(APIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+
+    def put(self, request: Request):
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        declaration_id = request.data.get("warehouse_id")
+        assign_user_id = request.data.get("assign_user_id")
+        assign_user_name = request.data.get("assign_user_name")
+
+        if not declaration_id or not assign_user_id or not assign_user_name:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        declaration_object = Declaration.objects.get(id=declaration_id)
+        if not declaration_object:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            declaration_object.assign_user_id = assign_user_id
+            declaration_object.assign_user_name = assign_user_name
+            with transaction.atomic():
+                declaration_object.save()
+
+            return Response(
+                {"result": "User Successfully Assigned"},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

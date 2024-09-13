@@ -61,6 +61,8 @@ class Declaration(TimestampedUUIDModel):
      updated_by_id = models.CharField(max_length=100,null=True,blank=True)
      contract_address = models.CharField(max_length=200,null=True,blank=True)
      save_as_draft = models.BooleanField(default=False,blank=True)
+     assign_user_id = models.CharField(null=True, default="", blank=True)
+     assign_user_name = models.CharField(null=True, default="", blank=True)
 
 class HsCode(TimestampedUUIDModel):
     keywords = models.TextField(max_length=200,null=True,blank=False)  
