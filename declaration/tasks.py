@@ -520,7 +520,7 @@ def sent_items_to_ai(id):
             "Declared Value (USD)": item.duty_fee,  
             "Quantity": item.static_quantity_unit,
             "Weight (kg)": item.supp_quantity_unit,
-            "Previous Risk Flag": "No" 
+            "Previous Risk Flag": "Yes" 
         }
         items_data.append(item_data)
         print("items_data",items_data)
