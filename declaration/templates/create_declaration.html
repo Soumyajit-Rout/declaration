@@ -162,7 +162,7 @@
                         {% for form in item_formset %}
                         <div class="col-12">
                             <label class="font-14" for="id_declaration_date">Description</label>
-                                <div class="row mb-3">
+                                <div class="row mb-3 form-group">
                                     <div class="col-11">
                                         {{ form.goods_description |add_class:"form-control"|attr:"rows:1" }}
                                         {{ form.goods_description.errors }}
