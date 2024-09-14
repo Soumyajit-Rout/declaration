@@ -33,7 +33,7 @@
 
     .table-text-type-coin {
         background-color: rgba(225, 207, 255, 1);
-        color: rgba(110, 65, 167, 1);
+        color: black;
     }
 
     .table-text-type-sucess {
@@ -44,7 +44,7 @@
         border: none;
     }
     .default-progress-bar{
-        background-color: rgba(103, 27, 199, 1);
+        background-color: black;
     }    
 }
 .pagination .page-item-number, .page-link-next {
@@ -70,10 +70,11 @@
 .pagination {
     .page-item{
         .page-link{
-            background: linear-gradient(94.49deg, #500daf, #4355ba);
+            background: black;
+            border: 2px solid black;
         } 
     }
-    .page-item.disabled {
+    .page-item.disabled {   
         .page-link{
             background: rgb(193 193 193);
         } 

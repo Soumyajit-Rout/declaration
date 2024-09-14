@@ -158,27 +158,31 @@
             <div class="d-flex flex-wrap">
                 <div class="col-12 item">
                     {{ item_formset.management_form }}
-                    <div class="row gx-3 pe-sm-3 item-form mb-5">
+                    <div class="row gx-3 pe-sm-3 item-form">
                         {% for form in item_formset %}
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_declaration_date">Description</label>
-                                <div class="input-group">
-                                    <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
-                                    {{ form.goods_description |add_class:"form-control"|attr:"rows:1"}}
-                                    <span class="input-group-text update_button text-white search-bttn">Search</span>
-                                    {{ form.goods_description.errors }}
+                        <div class="col-12">
+                            <label class="font-14" for="id_declaration_date">Description</label>
+                                <div class="row mb-3">
+                                    <div class="col-11">
+                                        {{ form.goods_description |add_class:"form-control"|attr:"rows:1" }}
+                                        {{ form.goods_description.errors }}
+                                    </div>
+                                    <div class="col-1">
+                                        <button type="button" class="input-group-text update_button text-white justify-content-center w-100">Search</button>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
-                        <div class="col-12 col-sm-6">
+                        <div class="col-12">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">HsCode</label>
-                                <div class="input-group">
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.hs_code |add_class:"form-control"}}
-                                {{ form.hs_code.errors }}
-                                <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
+                            <div class="row">
+                                <div class="col-11">
+                                    {{ form.hs_code |add_class:"form-control"}}
+                                    {{ form.hs_code.errors }}
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" class="input-group-text update_button text-white justify-content-center w-100">Reset</button>
+                                </div>
                             </div>
                             </div>
                         </div>
@@ -243,21 +247,23 @@
                                 {{ form.duty_fee.errors }}
                             </div>
                         </div>
-
-                        <div class="form-group mb-0 mt-4 d-flex justify-content-end">
+                        <div class="form-group mb-0 mt-4 d-flex justify-content-between">
+                            <button type="button" id="add-row" class="add-card-button w-20 me-2">Add Item</button>
                             <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
-                            <button type="button" id="delete-btn" class="delete-button warning_button w-20 me-2">Delete Item</button>
+                            <button type="button" id="delete-btn" class="btn delete-button btn-danger warning_button w-20 me-2">Delete Item</button>
                         </div>
                         
                         {% endfor %}
                     </div> 
                 </div>
-                <button type="button" id="add-row" class="navbar-card-button w-20 me-2">Add Item</button>
             </div>
         </div>
-       <button type="submit"  class="submit-button w-100">Submit</button>
-       <button type="submit" name="save_draft" value="True" class="submit-button w-100 mt-2">Save as Draft</button>
-
+        <div class="row p-2">
+        <div class="form-group d-flex justify-content-between">
+            <button type="submit"  class="submit-button">Submit</button>
+            <button type="submit" name="save_draft" value="True" class="submit-button">Save as Draft</button>
+        </div>
+    </div>
     </form>
 </section>
 
