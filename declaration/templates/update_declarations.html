@@ -249,27 +249,31 @@
                     <div class="row gx-3 pe-sm-3 item-form mb-5" data-item-id="{{ item.id }}">
                         <input type="hidden" name="items_set-id" value="{{ item.id }}">
                         
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_declaration_date">Description</label>
-                                <div class="input-group">
-                                    <!-- <textarea class="form-control" name="" rows="1" aria-label="With textarea"></textarea> -->
-                                    <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1" aria-label="With textarea" readOnly>{{ item.description }}</textarea>
-                                    <span class="input-group-text update_button text-white search-bttn">Search</span>
+                        <div class="col-12">
+                            <label class="font-14" for="id_declaration_date">Description</label>
+                                <div class="row mb-3 form-group">
+                                    <div class="col-11">
+                                        <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1" aria-label="With textarea" readOnly>{{ item.description }}</textarea>
+                                    </div>
+                                    <div class="col-1">
+                                        <button type="button" class="input-group-text update_button text-white justify-content-center search-bttn">Search</button>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
-                        <div class="col-12 col-sm-6">
+                        <div class="col-12">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">HsCode</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                 <div class="input-group">
+                            <div class="row">
+                                <div class="col-11">
                                     <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
                                         {% for hs_code in hs_codes %}
                                             <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
                                         {% endfor %}
                                     </select>
-                                <button type="button" class="reset-btn navbar-card-button w-20 me-2">Reset</button>
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" class="input-group-text update_button text-white justify-content-center reset-btn">Reset</button>
+                                </div>
                             </div>
                             </div>
                         </div>
