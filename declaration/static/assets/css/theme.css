@@ -295,27 +295,27 @@
 .card-button .gradient-text {
   font-size: 14px;
   font-weight: 700;
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .navbar-card-button {
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 21.9px;
   text-align: center;
   border-radius: 10px;
-  border: 1px solid #6818C7;
+  border: 1px solid black;
   padding: 8px 16px;
 }
 .navbar-card-button:hover {
   background: #fff;
-  border: 1px solid #6818C7;
-  color: #6818c7 !important;
+  border: 1px solid black;
+  color: black !important;
 }
 @media (max-width: 576px) {
   .navbar-card-button {
@@ -323,8 +323,25 @@
   }
 }
 
+.add-card-button {
+  background: black;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21.9px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 8px 16px;
+}
+@media (max-width: 576px) {
+  .add-card-button {
+    font-size: 12px;
+  }
+}
+
 .submit-button {
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   color: #fff;
   font-size: 18px;
   font-weight: 500;
@@ -340,7 +357,7 @@
   border-radius: 10px;
   padding: 15px 27px 15px 27px;
   border: none;
-  background: linear-gradient(94.49deg, #500daf, #4355ba);
+  background: black;
 }
 
 .default-primary-button {
@@ -348,11 +365,11 @@
   border-radius: 10px;
   padding: 16px 0px 15px 0px;
   border: none;
-  background: linear-gradient(94.49deg, #500daf, #4355ba);
+  background: black;
 }
 
 .default-primary-button:active {
-  border-color: rgb(103, 27, 199);
+  border-color: black;
 }
 
 .extra-Secondary-small {
@@ -391,9 +408,13 @@
 }
 
 .update_button {
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   cursor: pointer;
-  border: 1px solid #6818C7;
+  border: 1px solid black;
+}
+.update_button:hover {
+  background: black;
+  border: 1px solid black !important;
 }
 
 .delete_button {
@@ -408,14 +429,11 @@
 }
 
 .warning_button {
-  background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
-  color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 21.9px;
   text-align: center;
   border-radius: 10px;
-  border: 1px solid #bd0303;
   padding: 8px 22px;
 }
 @media (max-width: 576px) {
@@ -424,21 +442,16 @@
     padding: 4px 15px;
   }
 }
-.warning_button:hover {
-  background: #fff;
-  border: 1px solid #bd0303;
-  color: #bd0303;
-}
 
 .header_success_button {
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 21.9px;
   text-align: center;
   border-radius: 10px;
-  border: 1px solid #6818C7;
+  border: 1px solid black;
   padding: 8px 22px;
 }
 @media (max-width: 576px) {
@@ -449,19 +462,19 @@
 }
 .header_success_button:hover {
   background: #fff;
-  border: 1px solid #6818C7;
-  color: #6818c7;
+  border: 1px solid black;
+  color: black;
 }
 
 .header_danger_button {
-  background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+  background: red;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
   line-height: 21.9px;
   text-align: center;
   border-radius: 10px;
-  border: 1px solid #bd0303;
+  border: 1px solid red;
   padding: 8px 22px;
 }
 @media (max-width: 576px) {
@@ -472,8 +485,8 @@
 }
 .header_danger_button:hover {
   background: #fff;
-  border: 1px solid #bd0303;
-  color: #bd0303;
+  border: 1px solid red;
+  color: red;
 }
 
 .confirmbtn {
@@ -492,11 +505,11 @@
 }
 
 .sweetsuccess {
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
-  border: 1px solid #6818C7;
+  background: black;
+  border: 1px solid black;
 }
 .sweetsuccess:hover {
-  color: #6818C7;
+  color: black;
   background: #fff !important;
 }
 
@@ -522,17 +535,17 @@
   font-size: 14px;
   text-decoration: none;
   padding: 8px 24px;
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
-  border: 1px solid #6818C7;
+  background: black;
+  border: 1px solid black;
 }
 .swal2-confirm:hover {
-  color: #6818C7;
+  color: black;
   background: #fff !important;
 }
 
 .alert-success .close {
   padding: 0px 10px;
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   border: none;
   color: #fff;
   border-radius: 6px;
@@ -771,13 +784,21 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   border-radius: 6px;
 }
 .form-container .default-form input:focus:required:invalid, .form-container .default-form select:focus:required:invalid {
-  border: 1px solid rgb(225, 0, 0);
+  border: 1px solid rgb(197, 195, 195);
+  box-shadow: none;
 }
 .form-container .default-form input:required:valid, .form-container .default-form select:required:valid {
   border: 1px solid rgb(222, 226, 230);
 }
 .form-container .default-form .ck-content {
   min-height: 220px;
+}
+.form-container .default-form .form-control:focus:required:invalid, .form-container .default-form select:focus:required:invalid {
+  border: 1px solid rgb(197, 195, 195);
+  box-shadow: none !important;
+}
+.form-container .default-form .form-control:required:valid, .form-container .default-form select:required:valid {
+  border: 1px solid rgb(222, 226, 230);
 }
 .form-container .label-name {
   font-size: 12px;
@@ -807,7 +828,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   background-color: #fff;
 }
 .form-container .card-details-pills-active {
-  border: 2px solid rgb(82, 0, 174);
+  border: 2px solid black;
 }
 .form-container .or-line {
   color: rgba(26, 26, 26, 0.5);
@@ -846,7 +867,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 }
 .table-container .default-table .table-text-type-coin {
   background-color: rgb(225, 207, 255);
-  color: rgb(110, 65, 167);
+  color: black;
 }
 .table-container .default-table .table-text-type-sucess {
   background-color: rgb(208, 255, 207);
@@ -856,7 +877,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   border: none;
 }
 .table-container .default-table .default-progress-bar {
-  background-color: rgb(103, 27, 199);
+  background-color: black;
 }
 .table-container .pagination .page-item-number, .table-container .page-link-next {
   color: rgb(255, 255, 255);
@@ -879,7 +900,8 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   border-radius: 10px !important;
 }
 .table-container .pagination .page-item .page-link {
-  background: linear-gradient(94.49deg, #500daf, #4355ba);
+  background: black;
+  border: 2px solid black;
 }
 .table-container .pagination .page-item.disabled .page-link {
   background: rgb(193, 193, 193);
@@ -948,7 +970,7 @@ table.dataTable thead > tr > th.dt-orderable-asc:hover, table.dataTable thead > 
   border-radius: 10px;
 }
 .sidebar_wrapper .sidebar li .nav-link:hover {
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+  background: black;
   color: #fff;
 }
 .sidebar_wrapper .sidebar li .nav-link:hover img {
@@ -959,7 +981,7 @@ table.dataTable thead > tr > th.dt-orderable-asc:hover, table.dataTable thead > 
   border-radius: 8px;
 }
 .sidebar_wrapper .nav-link.active {
-  color: rgb(103, 27, 199);
+  color: black;
 }
 .sidebar_wrapper .nav-link {
   color: rgb(25, 30, 59);
@@ -972,7 +994,7 @@ table.dataTable thead > tr > th.dt-orderable-asc:hover, table.dataTable thead > 
   font-size: 0.8rem;
 }
 .sidebar_wrapper .toggle-icon.active {
-  color: rgb(103, 27, 199);
+  color: black;
 }
 
 .buttons-container {

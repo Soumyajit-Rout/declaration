@@ -331,16 +331,15 @@
 
                         <div class="form-group mb-0 mt-4 d-flex justify-content-end">
                             <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
-                            <button type="button" id="delete-btn" class="delete-button warning_button w-20 me-2">Delete Item</button>
+                            <button type="button" id="delete-btn" class="btn delete-button btn-danger warning_button w-20 me-2">Delete Item</button>
                         </div>
                         
                         {% endfor %}
                     </div> 
                 </div>
             </div>
+            <button type="submit" class="submit-button">Submit</button>
         </div>
-       <button type="submit"  class="submit-button w-100 mt-5">Submit</button>
-
     </form>
 </section>
 

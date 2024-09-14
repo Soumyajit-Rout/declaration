@@ -5,7 +5,7 @@
     .gradient-text {
        font-size: 14px;
        font-weight: 700;
-       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       background: black;
        -webkit-background-clip: text;
        background-clip: text;
        color: transparent;
@@ -14,27 +14,41 @@
    
    // Button for navbar
    .navbar-card-button {
-       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       background: black;
        color: #fff;
        font-size: 14px;
        font-weight: 500;
        line-height: 21.9px;
        text-align: center;
        border-radius: 10px;
-       border: 1px solid #6818C7;
+       border: 1px solid black;
        padding: 8px 16px;
        &:hover{
         background: #fff;
-        border: 1px solid #6818C7;
-        color: #6818c7 !important;
+        border: 1px solid black;
+        color: black !important;
        }
        @media (max-width: 576px) {
            font-size: 12px;
       }
    }
+   .add-card-button {
+    background: black;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21.9px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 8px 16px;
+    @media (max-width: 576px) {
+        font-size: 12px;
+   }
+}
    
    .submit-button {
-       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       background: black;
        color: #fff;
        font-size: 18px;
        font-weight: 500;
@@ -51,17 +65,17 @@
        border-radius: 10px;
        padding: 15px 27px 15px 27px;
        border: none;
-       background: linear-gradient(94.49deg, #500daf, #4355ba);
+       background: black;
    }
    .default-primary-button{
        color: #fff;
        border-radius: 10px;
        padding: 16px 0px 15px 0px;
        border: none;
-       background: linear-gradient(94.49deg, #500daf, #4355ba);
+       background: black;
    }
    .default-primary-button:active{
-       border-color: rgba(103, 27, 199, 1);
+       border-color: black;
    }
    .extra-Secondary-small{
        padding: 15px 27px 16px 27px;
@@ -94,9 +108,13 @@
        padding: 12px 10px 11px 10px;
    }
    .update_button{
-       background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+       background: black;
        cursor: pointer;
-       border: 1px solid #6818C7;
+       border: 1px solid black;
+       &:hover{
+        background: black;
+        border: 1px solid black !important;
+       }
    }
    .delete_button{
        background: linear-gradient(91.37deg, #ff0808 1.57%, #c1355a 98.04%);
@@ -110,14 +128,14 @@
    }
 
 //      .update_button{
-//        background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+//        background: black;
 //        color: #fff;
 //        font-size: 14px;
 //        font-weight: 500;
 //        line-height: 21.9px;
 //        text-align: center;
 //        border-radius: 10px;
-//        border: 1px solid #6818C7;
+//        border: 1px solid black;
 //        padding: 6px 22px;
 //        @media (max-width: 576px) {
 //         font-size: 12px;
@@ -125,19 +143,19 @@
 //        }
 //        &:hover{
 //         background: #fff;
-//         border: 1px solid #6818C7;
-//         color: #6818c7;
+//         border: 1px solid black;
+//         color: black;
 //        }
 //    }
 //    .delete_button{
-//        background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+//        background: red;
 //        color: #fff;
 //        font-size: 14px;
 //        font-weight: 500;
 //        line-height: 21.9px;
 //        text-align: center;
 //        border-radius: 10px;
-//        border: 1px solid #bd0303;
+//        border: 1px solid red;
 //        padding: 8px 22px;
 //        @media (max-width: 576px) {
 //         font-size: 12px;
@@ -145,40 +163,32 @@
 //        }
 //        &:hover{
 //         background: #fff;
-//         border: 1px solid #bd0303;
-//         color: #bd0303;
+//         border: 1px solid red;
+//         color: red;
 //        }
 //    }
    .warning_button{
-    background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
-    color: #fff;
     font-size: 14px;
     font-weight: 500;
     line-height: 21.9px;
     text-align: center;
     border-radius: 10px;
-    border: 1px solid #bd0303;
     padding: 8px 22px;
     @media (max-width: 576px) {
         font-size: 12px;
         padding: 4px 15px;
     }
-    &:hover{
-        background: #fff;
-        border: 1px solid #bd0303;
-        color: #bd0303;
-       }
    }
 
    .header_success_button{
-    background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+    background: black;
     color: #fff;
     font-size: 14px;
     font-weight: 500;
     line-height: 21.9px;
     text-align: center;
     border-radius: 10px;
-    border: 1px solid #6818C7;
+    border: 1px solid black;
     padding: 8px 22px;
     @media (max-width: 576px) {
         font-size: 12px;
@@ -186,8 +196,8 @@
     }
     &:hover{
      background: #fff;
-     border: 1px solid #6818C7;
-     color: #6818c7;
+     border: 1px solid black;
+     color: black;
     }
     // &:focus:not(:focus-visible){
     //     color: #fff;
@@ -195,14 +205,14 @@
    }
 
    .header_danger_button{
-    background: linear-gradient(91.37deg, #bd0303 1.57%, #c1355a 98.04%);
+    background: red;
     color: #fff;
     font-size: 14px;
     font-weight: 500;
     line-height: 21.9px;
     text-align: center;
     border-radius: 10px;
-    border: 1px solid #bd0303;
+    border: 1px solid red;
     padding: 8px 22px;
     @media (max-width: 576px) {
         font-size: 12px;
@@ -210,8 +220,8 @@
     }
     &:hover{
      background: #fff;
-     border: 1px solid #bd0303;
-     color: #bd0303;
+     border: 1px solid red;
+     color: red;
     }
     
    }
@@ -232,10 +242,10 @@
     padding: 8px 24px;
 }
 .sweetsuccess{
-  background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
-  border: 1px solid #6818C7;
+  background: black;
+  border: 1px solid black;
   &:hover{
-  color: #6818C7;
+  color: black;
   background: #fff !important;
   }
 }
@@ -262,10 +272,10 @@
     font-size: 14px;
     text-decoration: none;
     padding: 8px 24px;
-    background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
-    border: 1px solid #6818C7;
+    background: black;
+    border: 1px solid black;
     &:hover{
-    color: #6818C7;
+    color: black;
     background: #fff !important;
     }
 }
@@ -273,7 +283,7 @@
 .alert-success{
     .close{
         padding: 0px 10px;
-        background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+        background: black;
         border: none;
         color: #fff;
         border-radius: 6px;
