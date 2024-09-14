@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from kombu import Queue,Exchange
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -148,8 +149,22 @@ CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
 
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
+# Other optional Celery settings
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_DEFAULT_QUEUE = 'declaration_management'
+CELERY_TASK_QUEUES = (
+    Queue('declaration_management', Exchange('declaration_management'), routing_key='declaration_management'),
+)
+CELERY_TASK_ROUTES = {
+    '*': {'queue': 'declaration_management'},
+}
+
 CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL = os.getenv(
     "CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL", "http://127.0.0.1:8001/api/smart-contracts")
 
 STATIC_API_TOKEN = os.getenv('STATIC_API_TOKEN')
 AI_URL = os.getenv('AI_URL')
+
