@@ -79,7 +79,7 @@ def create_declaration(request):
                     
                     if not declaration.save_as_draft:
                         sent_items_to_ai.delay(declaration.id)
-                Declaration_log.objects.create(declaration=declaration,status=0)
+                # Declaration_log.objects.create(declaration=declaration,status=declaration.is_verified)
                 messages.success(request, 'Declaration added successfully.')
                 return redirect('view_declaration')
             except Exception as e:
@@ -236,7 +236,6 @@ def update_declaration(request, pk):
         declaration.save()
         sent_items_to_ai.delay(declaration.id)
         get_updated_id.delay((declaration.id))
-        Declaration_log.objects.create(declaration=declaration,status=0,comment=declaration.comments)
         messages.success(request, 'Declaration updated successfully.')            
         # Redirect to prevent resubmission
         return redirect('view_declaration')

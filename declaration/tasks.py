@@ -11,7 +11,7 @@ from substrateinterface import Keypair, SubstrateInterface
 from substrateinterface.contracts import ContractCode, ContractInstance
 import random
 import string
-from .models import Declaration,Items,HsCode,Document
+from .models import Declaration,Items,HsCode,Document,Declaration_log
 from .serializers import DeclarationDataContractSerializer,ItemDataContractSerializer
 
 
@@ -535,7 +535,7 @@ def sent_items_to_ai(id):
         else:
             declaration_data.is_verified = 1
             declaration_data.save()
-
+        Declaration_log.objects.create(declaration=declaration_data,status=declaration_data.is_verified)
         print("response_data",response_data)
         if response.status_code != 200:
             print(f"API request failed with status {response.status_code}: {response.text}")
