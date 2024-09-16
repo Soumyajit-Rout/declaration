@@ -114,16 +114,16 @@
                             <td class="table-data">
                                 <div class="btn-group px-3">
                                     <a href="{% url 'view-logs' declaration.pk %}"
-                                    class="btn btn-sm btn-primary update_button me-1">Logs</a>
+                                    class="btn btn-sm btn-primary update_button me-1 rounded">Logs</a>
                                     {% if declaration.is_verified != 0 and declaration.is_verified != 1 %}
                                     <a href="{% url 'update_declaration' declaration.pk %}"
-                                        class="btn btn-sm btn-primary update_button me-1">Update</a>
+                                        class="btn btn-sm btn-primary update_button me-1 rounded">Update</a>
                                         {% endif %}
                                     <a href="{% url 'list_declaration' declaration.pk %}"
-                                        class="btn btn-sm btn-primary  update_button me-1">View</a>
+                                        class="btn btn-sm btn-primary  update_button me-1 rounded">View</a>
                                     <!-- <a href="{% url 'delete_declaration' declaration.pk %}"
                                     id="delete-bttn" class="btn btn-sm btn-danger border-0 delete_button">Delete</a> -->
-                                    <button class="btn btn-sm btn-danger delete_button" data-declaration-id="{{ declaration.pk }}">
+                                    <button class="btn btn-sm btn-danger rounded delete_button" data-declaration-id="{{ declaration.pk }}">
                                         Delete
                                     </button>
                                 </div>
