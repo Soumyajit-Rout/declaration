@@ -9,7 +9,7 @@ from substrateinterface import Keypair, SubstrateInterface
 from substrateinterface.contracts import ContractCode, ContractInstance
 import random
 import string
-from .models import Declaration,Items,HsCode,Document
+from .models import Declaration,Items,HsCode,Document,Declaration_log
 from .serializers import DeclarationDataContractSerializer,ItemDataContractSerializer
 from django.conf import settings
 
@@ -500,3 +500,43 @@ def update_declaration_to_contract(declaration_data,items_data):
 
 def generate_salt(length=8):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+
+@shared_task
+def sent_items_to_ai(id):
+    print("declaration_id",id)
+    declaration_data = get_object_or_404(Declaration, id=id) 
+    data = Items.objects.filter(declaration=declaration_data)
+    items_data = []
+    for item in data:
+        print("loop1")
+        hs_code = item.hs_code.hs_code
+        item_data = {
+            "HS Code": hs_code,
+            "Item Description": item.goods_description,
+            "Country of Origin": "other",  
+            "Declared Value (USD)": item.duty_fee,  
+            "Quantity": item.static_quantity_unit,
+            "Weight (kg)": item.supp_quantity_unit,
+            "Previous Risk Flag": "other" 
+        }
+        items_data.append(item_data)
+        print("items_data",items_data)
+    
+        api_url = settings.AI_URL
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(api_url, json=items_data, headers=headers)
+        response_data = response.json()['predictions']
+        if 'High' in response_data:
+            declaration_data.is_verified = 0
+            declaration_data.save()
+        else:
+            declaration_data.is_verified = 1
+            declaration_data.save()
+        # Declaration_log.objects.create(declaration=declaration_data,status=declaration_data.is_verified)
+        print("response_data",response_data)
+        if response.status_code != 200:
+            print(f"API request failed with status {response.status_code}: {response.text}")
+        else:
+            print(f"API response: {response.json()}")  
+    Declaration_log.objects.create(declaration=declaration_data,status=declaration_data.is_verified)

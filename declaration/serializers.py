@@ -41,13 +41,15 @@ class DeclarationSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     number_of_packages = serializers.SerializerMethodField()
     detail = serializers.SerializerMethodField()
+    assign_user_id = serializers.SerializerMethodField()
+    assign_user_name = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Declaration
         fields = ["id","created_at","declaration_date","name","declaration_no","net_weight",
                   "gross_weight","measurements","number_of_packages","regime_type","cargo_type","declaration_type","cargo_channel",
-                  "transaction_type","trade_type","detail"]
+                  "transaction_type","trade_type","detail", "assign_user_id", "assign_user_name"]
     
 
 
@@ -78,11 +80,17 @@ class DeclarationSerializer(serializers.ModelSerializer):
     def get_trade_type(self, obj):
         return obj.trade_type.name
     
+    def get_assign_user_id(self, obj):
+        return obj.assign_user_id
+
+    def get_assign_user_name(self, obj):
+        return obj.assign_user_name
+    
 class DelcarationListSerilaizer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     class Meta:
         model = Declaration
-        fields = ["id","name","declaration_no","net_weight","measurements","created_at"]
+        fields = ["id","name","declaration_no","net_weight","measurements","created_at","assign_user_id", "assign_user_name"]
 
 
     def get_name(self, obj):

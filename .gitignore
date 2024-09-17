@@ -216,3 +216,6 @@ flycheck_*.el
 /network-security.data
 
 # Emacs - end
+
+#IDE
+.vscode

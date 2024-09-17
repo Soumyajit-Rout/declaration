@@ -31,7 +31,7 @@
                 background: #eee;
                 border-radius: 10px;
                 &:hover{
-                    background: linear-gradient(91.37deg, #6818C7 1.57%, #5E77D3 98.04%);
+                    background: black;
                     color: #fff;
                 }
                 &:hover img{
@@ -48,7 +48,7 @@
     }
 
     .nav-link.active {
-        color: rgba(103, 27, 199, 1);
+        color: black;
     }
 
     .nav-link {
@@ -64,6 +64,6 @@
     }
 
     .toggle-icon.active {
-        color: rgba(103, 27, 199, 1);
+        color: black;
     }
 }

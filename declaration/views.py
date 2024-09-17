@@ -19,7 +19,16 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 import requests
-from .tasks import get_id,update_declaration_info_to_contract,get_updated_id
+from .tasks import get_id,update_declaration_info_to_contract,get_updated_id,sent_items_to_ai
+from rest_framework.views import APIView
+from rest_framework import renderers, status
+from rest_framework.response import Response
+from urllib.request import Request
+from DeclarationManagement.utils import Authentication
+from django.forms.models import model_to_dict
+
+# pylint: disable=E1101,W0702,E1133
+
 
 
 """
@@ -38,18 +47,20 @@ def create_declaration(request):
             try:
                 with transaction.atomic():
                     user_id = request.session.get('id', None)
-                    print("user_id",user_id)
                     declaration = declaration_form.save(commit=False)
+                              
                     if user_id:
                         declaration.iam_user_id = user_id
+                    if 'save_draft' in request.POST:
+                        declaration.save_as_draft = True
+                        declaration.is_verified = 3
+                    else:
+                        declaration.save_as_draft = False
+
                     declaration.save()
 
                     item_formset.instance = declaration
-                    items = item_formset.save()
-
-                    for deleted_item in item_formset.deleted_objects:
-                        deleted_item.delete()
-                    
+                    items = item_formset.save()         
                     for item_index, item in enumerate(items):
                         hs_code = item.hs_code
                         if hs_code:
@@ -64,8 +75,10 @@ def create_declaration(request):
                                         file=request.FILES[file_field_name],
                                         required_doc = req_doc
                                     )
-                                    get_id.delay((declaration.id,))
-                Declaration_log.objects.create(declaration=declaration,status=0)
+                    get_id.delay((declaration.id,))
+                    if not declaration.save_as_draft:
+                        sent_items_to_ai.delay(declaration.id)
+                # Declaration_log.objects.create(declaration=declaration,status=declaration.is_verified)
                 messages.success(request, 'Declaration added successfully.')
                 return redirect('view_declaration')
             except Exception as e:
@@ -178,7 +191,6 @@ def update_declaration(request, pk):
         pattern = re.compile(r'documents_item_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
         new_pattern = re.compile(r'new_documents_(?P<item_id>[a-fA-F0-9\-]+)_(?P<doc_id>[a-fA-F0-9\-]+)')
         doc = []
-        get_updated_id.delay((declaration.id))
 
         for key, file in request.FILES.items():
             if key.startswith('documents_item'):
@@ -220,9 +232,9 @@ def update_declaration(request, pk):
                                             file=request.FILES[key],
                                             required_doc=required_doc
                                             )
-        declaration.is_verified = 0
         declaration.save()
-        Declaration_log.objects.create(declaration=declaration,status=0,comment=declaration.comments)
+        sent_items_to_ai.delay(declaration.id)
+        get_updated_id.delay((declaration.id))
         messages.success(request, 'Declaration updated successfully.')            
         # Redirect to prevent resubmission
         return redirect('view_declaration')
@@ -489,11 +501,19 @@ class RetrieveDeclaration(APIView):
             return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             declaration = Declaration.objects.get(is_verified=0, id=id)
+            opinion_data = Opinion.objects.filter(
+                declaration_id=id
+            ).order_by("-created_at")
+            opinions = []
+            if opinion_data:
+                for obj in opinion_data:
+                    entry = model_to_dict(obj)
+                    opinions.append(entry)
         except Declaration.DoesNotExist:
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = DeclarationSerializer(declaration)
-        return Response({"status":status.HTTP_200_OK,"registration_data":serializer.data})
+        return Response({"status":status.HTTP_200_OK,"registration_data":serializer.data, "opinions": opinions})
     
 """
 Basic api to update the declarations based on id 
@@ -635,3 +655,144 @@ def connect_wallet(request):
         "iam_base_url": iam_base_url 
     }
     return render(request, 'home.html',context)
+
+class CreateDeclarationOpinion(APIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+    def post(self, request: Request):
+
+        # To use authentcation
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        declaration_id = request.data.get("declarationId")
+        department_ids = request.data.get("departmentIds")
+        if not (declaration_id and department_ids):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            opinion_object = Opinion(
+                declaration_id = declaration_id,
+                department_ids = department_ids,
+            )
+            opinion_object.save()
+            return Response(
+                {"result": "Opinion Data Successfully Saved"},
+                status=status.HTTP_200_OK,
+            )
+        except ValidationError as e:
+            return Response(data={"Result": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+
+            return Response(
+                data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+    serializer_class = DelcarationListSerilaizer
+
+    def get_queryset(self, declaration_ids):
+            return Declaration.objects.filter(is_verified=0).order_by('-updated_at')
+    
+    def get(self, request: Request):
+
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        department_id = request.GET.get("departmentId")
+
+        if not department_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        opinion_data = Opinion.objects.filter(
+            department_ids__contains=[int(department_id)]
+        ).order_by("-created_at")
+
+        try:
+            if opinion_data:
+                declaration_ids = []
+
+                opinion_data_entries = []
+                if opinion_data:
+                    for opinion_obj in opinion_data:
+                        entry = model_to_dict(opinion_obj)
+                        entry['id'] = opinion_obj.id
+                        opinion_data_entries.append(entry)
+                        declaration_ids.append(opinion_obj.declaration_id)
+
+                queryset = self.get_queryset(declaration_ids)
+                serializer = self.get_serializer(queryset, many=True)
+
+                return Response({"status": status.HTTP_200_OK,"declaration_data": serializer.data, "opinion_data":opinion_data_entries})
+        except ValidationError as e:
+            return Response(data={"Result": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+
+            return Response(
+                data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class UpdateDeclarationOpinionData(APIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+
+    def put(self, request: Request):
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        opinion_id = request.data.get("opinionId")
+        comment = request.data.get("comment","")
+        opinion_status = request.data.get("status")
+        employee_id = request.data.get("employeeId")
+        employee_name = request.data.get("employeeName")
+
+        if not (opinion_id and opinion_status and employee_id and employee_name):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        opinion_object = Opinion.objects.get(id=opinion_id)
+        if not opinion_object:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            opinion_object.comment = comment
+            opinion_object.status = int(opinion_status)
+            opinion_object.employee_id = employee_id
+            opinion_object.employee_name = employee_name
+
+            with transaction.atomic():
+                opinion_object.save()
+
+            return Response(
+                {"result": "Opinion Status Successfully Updated"},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class DeclarationAssignUserIdView(APIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+
+    def put(self, request: Request):
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        declaration_id = request.data.get("warehouse_id")
+        assign_user_id = request.data.get("assign_user_id")
+        assign_user_name = request.data.get("assign_user_name")
+
+        if not declaration_id or not assign_user_id or not assign_user_name:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        declaration_object = Declaration.objects.get(id=declaration_id)
+        if not declaration_object:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            declaration_object.assign_user_id = assign_user_id
+            declaration_object.assign_user_name = assign_user_name
+            with transaction.atomic():
+                declaration_object.save()
+
+            return Response(
+                {"result": "User Successfully Assigned"},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
