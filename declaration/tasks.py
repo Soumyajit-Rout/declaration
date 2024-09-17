@@ -513,11 +513,13 @@ def sent_items_to_ai(id):
         hs_code = item.hs_code.hs_code
         item_data = {
             "hs_code": hs_code,
-            "goods_description": item.goods_description,
-            "Country of Origin": "other",  
+            "goods_description": item.goods_description, 
             "duty_fee": item.duty_fee,  
             "static_quantity_unit": item.static_quantity_unit,
             "supp_quantity_unit": item.supp_quantity_unit,
+            "unit_weight":item.unit_weight,
+            "goods_value":item.goods_value,
+            "cif_value":item.cif_value,
             "Previous Risk Flag": "other" 
         }
         items_data.append(item_data)
