@@ -535,9 +535,10 @@ def sent_items_to_ai(id):
         else:
             declaration_data.is_verified = 1
             declaration_data.save()
-        Declaration_log.objects.create(declaration=declaration_data,status=declaration_data.is_verified)
+        # Declaration_log.objects.create(declaration=declaration_data,status=declaration_data.is_verified)
         print("response_data",response_data)
         if response.status_code != 200:
             print(f"API request failed with status {response.status_code}: {response.text}")
         else:
             print(f"API response: {response.json()}")  
+    Declaration_log.objects.create(declaration=declaration_data,status=declaration_data.is_verified)
