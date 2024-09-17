@@ -1,8 +1,6 @@
 import logging
 import os
 import threading
-
-
 import requests
 from celery import shared_task
 from django.conf import settings
@@ -13,6 +11,8 @@ import random
 import string
 from .models import Declaration,Items,HsCode,Document,Declaration_log
 from .serializers import DeclarationDataContractSerializer,ItemDataContractSerializer
+from django.conf import settings
+
 
 
 logger = logging.getLogger("custom_logger")
@@ -42,7 +42,7 @@ def get_id(id):
            "Starting send_declaration_info_to_contract in a new thread"
        )
        thread = threading.Thread(
-           target=send_company_registration_info_to_contract,
+           target=send_declaration_info_to_contract,
            args=(declaration_data,items_datas),
        )
        thread.start()
@@ -65,7 +65,7 @@ def get_id(id):
 
 
 @shared_task
-def send_company_registration_info_to_contract(declaration_data,items_data):
+def send_declaration_info_to_contract(declaration_data,items_data):
    try:
        declaration_info = {
            "_id": declaration_data.get("id"),
@@ -87,13 +87,11 @@ def send_company_registration_info_to_contract(declaration_data,items_data):
            "_is_verified":" ",
            "_updated_by_user":" ",
        }
-       substrate = SubstrateInterface(url="wss://contract-node.finloge.com/")
-       keypair = Keypair.create_from_uri("//Alice")
+       print("settings.ALICE_URL",settings.ALICE_URL)
+       substrate = SubstrateInterface(url=settings.SUBSTRATE_URL)
+       keypair = Keypair.create_from_uri(settings.ALICE_URL)
     
-
-
        try:
-        
                code = ContractCode.create_from_contract_files(
                    metadata_file=os.path.join(
                        os.path.dirname(__file__),
@@ -120,7 +118,7 @@ def send_company_registration_info_to_contract(declaration_data,items_data):
                         "proof_size": 2097152,
                     },
                     deployment_salt=salt,
-                    upload_code=False,
+                    upload_code=True,
                 )
                contract_address = contract.contract_address
                id = declaration_data.get("id")
@@ -227,8 +225,8 @@ def update_declaration_info_to_contract(id):
            "_newStatus": declaration_data.get("is_verified"),
            "_declarationId": declaration_data.get("id"),
        }
-       substrate = SubstrateInterface(url="wss://contract-node.finloge.com/")
-       keypair = Keypair.create_from_uri("//Alice")
+       substrate = SubstrateInterface(url=settings.SUBSTRATE_URL)
+       keypair = Keypair.create_from_uri(settings.ALICE_URL)
 
        try:
             contract_info = substrate.query(
@@ -384,8 +382,8 @@ def update_declaration_to_contract(declaration_data,items_data):
            "_is_verified":" ",
            "_updated_by_user":" ",
        }
-       substrate = SubstrateInterface(url="wss://contract-node.finloge.com/")
-       keypair = Keypair.create_from_uri("//Alice")
+       substrate = SubstrateInterface(url=settings.SUBSTRATE_URL)
+       keypair = Keypair.create_from_uri(settings.ALICE_URL)
 
 
        try:
