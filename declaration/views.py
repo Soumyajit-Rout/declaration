@@ -75,8 +75,7 @@ def create_declaration(request):
                                         file=request.FILES[file_field_name],
                                         required_doc = req_doc
                                     )
-                                    get_id.delay((declaration.id,))
-                    
+                    get_id.delay((declaration.id,))
                     if not declaration.save_as_draft:
                         sent_items_to_ai.delay(declaration.id)
                 # Declaration_log.objects.create(declaration=declaration,status=declaration.is_verified)
