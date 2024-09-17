@@ -31,6 +31,28 @@ class CargoTypeSerializer(serializers.ModelSerializer):
         model = CargoType
         fields = '__all__'
 
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Document
+        fields = ["file"]
+        
+class ItemSerializer(serializers.ModelSerializer):
+    hs_code = serializers.SerializerMethodField() 
+    documents =  serializers.SerializerMethodField()
+
+    class Meta:
+        model = Items
+        fields = ["goods_description", "static_quantity_unit", "supp_quantity_unit", "unit_weight", 
+                  "goods_value", "cif_value", "duty_fee", "hs_code","documents"]
+
+    def get_hs_code(self, obj):
+        return obj.hs_code.hs_code if obj.hs_code else None 
+    
+    def get_documents(self, obj):
+        document = Document.objects.filter(item=obj)
+        return DocumentSerializer(document, many=True).data
+
 class DeclarationSerializer(serializers.ModelSerializer):
     regime_type = serializers.SerializerMethodField()
     cargo_type = serializers.SerializerMethodField()
@@ -43,15 +65,15 @@ class DeclarationSerializer(serializers.ModelSerializer):
     detail = serializers.SerializerMethodField()
     assign_user_id = serializers.SerializerMethodField()
     assign_user_name = serializers.SerializerMethodField()
+    items = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Declaration
         fields = ["id","created_at","declaration_date","name","declaration_no","net_weight",
                   "gross_weight","measurements","number_of_packages","regime_type","cargo_type","declaration_type","cargo_channel",
-                  "transaction_type","trade_type","detail", "assign_user_id", "assign_user_name"]
+                  "transaction_type","trade_type","detail", "assign_user_id", "assign_user_name","items"]
     
-
 
     def get_detail (self, obj):
         return obj.declaration_no
@@ -85,6 +107,10 @@ class DeclarationSerializer(serializers.ModelSerializer):
 
     def get_assign_user_name(self, obj):
         return obj.assign_user_name
+
+    def get_items(self, obj):
+        items = Items.objects.filter(declaration=obj)
+        return ItemSerializer(items, many=True).data 
     
 class DelcarationListSerilaizer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
