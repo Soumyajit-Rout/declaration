@@ -125,7 +125,7 @@ class Opinion(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     declaration_id = models.CharField(max_length=250)
-    department_ids = models.JSONField(default=list)
+    department_id = models.IntegerField(choices=department_choices, default=1)
     status = models.IntegerField(choices=status_choices, default=0)
     comment = models.CharField(max_length=250, null=True, blank=True)
     employee_id = models.CharField(max_length=250, null=True, blank=True)
@@ -136,9 +136,10 @@ class Opinion(models.Model):
         db_table = 'opinons'
 
     def save(self, *args, **kwargs):
-        valid_department_ids = [choice[0] for choice in self.department_choices]
-        if not all(dept_id in valid_department_ids for dept_id in self.department_ids):
-            raise ValidationError("One or more selected departments are invalid.")
+
+        if self.department_id not in dict(self.department_choices):
+            raise ValidationError(f"Invalid department_id: {self.department_id}")
+
         if self.status not in dict(self.status_choices):
             raise ValidationError(f"Invalid status: {self.status}")
         super(Opinion, self).save(*args, **kwargs)

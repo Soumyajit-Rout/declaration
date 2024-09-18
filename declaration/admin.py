@@ -110,7 +110,7 @@ class Declaration_logAdmin(admin.ModelAdmin):
 class Declaration_opinionAdmin(admin.ModelAdmin):
      list_display = (
           'declaration_id',
-          'department_ids',
+          'department_id',
           'id',
           'status',
           'comment',
