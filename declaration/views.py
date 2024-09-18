@@ -670,11 +670,13 @@ class CreateDeclarationOpinion(APIView):
         if not (declaration_id and department_ids):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
-            opinion_object = Opinion(
-                declaration_id = declaration_id,
-                department_ids = department_ids,
-            )
-            opinion_object.save()
+            with transaction.atomic():
+                for department_id in department_ids:
+                    opinion_object = Opinion(
+                        declaration_id = declaration_id,
+                        department_id = department_id,
+                    )
+                    opinion_object.save()
             return Response(
                 {"result": "Opinion Data Successfully Saved"},
                 status=status.HTTP_200_OK,
@@ -705,7 +707,7 @@ class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         opinion_data = Opinion.objects.filter(
-            department_ids__contains=[int(department_id)]
+            department_id=int(department_id)
         ).order_by("-created_at")
 
         try:
