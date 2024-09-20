@@ -45,7 +45,7 @@
 <section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
     <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="default-form mb-4">
+        <div class="default-form mb-4 ">
             <!-- <div class="d-flex justify-content-end">
                 <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
             </div> -->
@@ -59,91 +59,81 @@
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_declaration_date">Declaration Date:</label>
                                 {{ form.declaration_date }}
-                                {{ form.declaration_date.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_request_noe">Request No:</label>
                                 {{ form.request_no }}
-                                {{ form.request_no.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_declaration_no">Declaration No:</label>
                                 {{ form.declaration_no }}
-                                {{ form.declaration_no.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_net_weight">Net Weight:</label>
                                 {{ form.net_weight }}
-                                {{ form.net_weight.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_gross_weight">Gross Weight:</label>
                                 {{ form.gross_weight }}
-                                {{ form.gross_weight.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_measurements">Measurements:</label>
                                 {{ form.measurements }}
-                                {{ form.measurements.errors }}
+
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_nmbr_of_packages">Number of Packages:</label>
                                 {{ form.nmbr_of_packages }}
-                                {{ form.nmbr_of_packages.errors }}
+                                
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_cargo_type">Cargo Type:</label>
                                 {{ form.cargo_type }}
-                                {{ form.cargo_type.errors }}
+                                
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_declaration_type">Declaration Type:</label>
                                 {{ form.declaration_type }}
-                                {{ form.declaration_type.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_cargo_channel">Cargo Channel:</label>
                                 {{ form.cargo_channel }}
-                                {{ form.cargo_channel.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_transaction_type">Transaction Type:</label>
                                 {{ form.transaction_type }}
-                                {{ form.transaction_type.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_trade_type">Trade Type:</label>
                                 {{ form.trade_type }}
-                                {{ form.trade_type.errors }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-3">
                                 <label class="font-14" for="id_regime_type">Regime Type:</label>
                                 {{ form.regime_type }}
-                                {{ form.regime_type.errors }}
                             </div>
                         </div>
                     </div>
@@ -310,8 +300,8 @@
                 documentsCell.dataset.itemIndex = currentFormCount;
                
             }
-   
-    var inputs = newForm.querySelectorAll('input, textarea');
+
+    var inputs = newForm.querySelectorAll('input, textarea,select');
     inputs.forEach(function (input) {
                 if (input.type === 'hidden') {
                     input.value = '';
@@ -319,7 +309,14 @@
                     input.value = '';
                     input.removeAttribute('readonly');
                 } 
+                         // Remove any error span elements
+         var errorSpan = input.nextElementSibling;
+         console.log("errorSpan",errorSpan)
+        if (errorSpan && errorSpan.tagName.toLowerCase() === 'span') {
+            errorSpan.remove();
+        }
     });
+
 
     mainForm.appendChild(newForm);
     totalForms.value = currentFormCount + 1;
@@ -412,7 +409,9 @@ console.log("originalDescriptions",originalDescriptions)
             // Clear the HS code dropdown
             var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
             if (hsCodeDropdown) {
-                hsCodeDropdown.value = '';  // Reset the HS code dropdown
+                hsCodeDropdown.value = '';
+                hsCodeDropdown.removeAttribute('readonly');
+                 // Reset the HS code dropdown
             }
 
             // Clear the document fields
@@ -432,8 +431,6 @@ console.log("originalDescriptions",originalDescriptions)
                 documentForm.innerHTML = '';
                 documentForm.appendChild(label);
                 documentForm.appendChild(fileInput  );
-
-                
                 
             }
 
@@ -441,8 +438,6 @@ console.log("originalDescriptions",originalDescriptions)
             if (descriptionField && originalDescriptions[descriptionField.name]) {
                 delete originalDescriptions[descriptionField.name];
             }
-
-            console.log("Form reset");
         }
     });
 
@@ -485,7 +480,8 @@ document.querySelector('.item').addEventListener('click', function (e) {
 
             hsCodeDropdown.addEventListener('change', function () {
                 originalDescriptions[descriptionField.name] = descriptionField.value;
-                descriptionField.readOnly = true; 
+                descriptionField.readOnly = true;
+                hsCodeDropdown.setAttribute('readonly', true);
             });
            
         })
@@ -537,13 +533,11 @@ document.querySelector('.item').addEventListener('change', function (e) {
 });
 
 
-
   // Form submission validation
 document.querySelector('form').addEventListener('submit', function (e) {
     var isValid = true;
     console.log("i am in ",originalDescriptions)
     
-    // Check for required file inputs
     var requiredFiles = document.querySelectorAll('.required-file');
     requiredFiles.forEach(function (input) {
         if (!input.files.length) {
@@ -551,12 +545,75 @@ document.querySelector('form').addEventListener('submit', function (e) {
             alert('You must upload all required files.');
         }
     });
-
-    // Select all item forms in the grid
     var items = document.querySelectorAll('.item-form');
+    let hasError = false;
+
+  // Validate Declaration Information fields
+  const form = document.getElementById('declaration-form');
+  const declarationFields = form.querySelectorAll('.default-form.mb-4 input, .default-form.mb-4 textarea, .default-form.mb-4 select');
+        declarationFields.forEach(function(input) {
+            // Skip validation for checkboxes and document inputs
+            if (input.type === 'checkbox' || input.closest('.document-form')) {
+                return; 
+            }
+
+            if (!input.value.trim()) {
+                let errorSpan = input.nextElementSibling;
+                if (!errorSpan || !errorSpan.classList.contains('error-message')) {
+                    errorSpan = document.createElement('span');
+                    errorSpan.className = 'error-message';
+                    errorSpan.style.color = 'rgb(220, 53, 69)';
+                    errorSpan.textContent = 'This field is required';
+                    input.parentNode.insertBefore(errorSpan, input.nextSibling);
+                }
+                errorSpan.style.display = 'inline';
+                hasError = true;
+            } else {
+                let errorSpan = input.nextElementSibling;
+                if (errorSpan && errorSpan.classList.contains('error-message')) {
+                    errorSpan.style.display = 'none'; 
+                }
+            }
+        });
+
+    
+    items.forEach(function (itemForm) {
+            const inputs = itemForm.querySelectorAll('input,textarea,select');
+            inputs.forEach(function (input) {
+        let errorSpan = input.parentNode.querySelector('.error-message');
+
+        if (input.type === 'checkbox' && input.classList.contains('delete-row')) {
+            return;         }
+        if (input.classList.contains('document-input')) {
+            return; 
+        }
+        
+        if (input.name === 'documents') {
+    return; 
+}
+        if (!input.value.trim()) {
+            
+            if (!errorSpan) {
+                errorSpan = document.createElement('span');
+                errorSpan.classList.add('error-message'); 
+                errorSpan.style.color = 'rgb(220, 53, 69)'; 
+                errorSpan.textContent = 'This field is required';
+                input.parentNode.insertBefore(errorSpan, input.nextSibling); 
+            }
+            errorSpan.style.display = 'inline'; 
+            hasError = true;
+        } else {
+            if (errorSpan) {
+                errorSpan.style.display = 'none'; 
+            }
+        }
+    });
+});
+        if (hasError) {
+            event.preventDefault(); 
+        }
 
     items.forEach(function (item) {
-        console.log("inside items")
         var hsCodeDropdown = item.querySelector('select[name*="hs_code"]');
         var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
 
@@ -565,7 +622,6 @@ document.querySelector('form').addEventListener('submit', function (e) {
         
         var requiredDocs = requiredDocsData[hsCode] || [];
         
-        // Validate file uploads for each required document
         requiredDocs.forEach(function (doc) {
             var fileInput = item.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
             if (fileInput && fileInput.files.length > 0) {
