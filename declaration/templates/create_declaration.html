@@ -301,7 +301,6 @@
                
             }
 
-   
     var inputs = newForm.querySelectorAll('input, textarea,select');
     inputs.forEach(function (input) {
                 if (input.type === 'hidden') {
@@ -410,7 +409,9 @@ console.log("originalDescriptions",originalDescriptions)
             // Clear the HS code dropdown
             var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
             if (hsCodeDropdown) {
-                hsCodeDropdown.value = '';  // Reset the HS code dropdown
+                hsCodeDropdown.value = '';
+                hsCodeDropdown.removeAttribute('readonly');
+                 // Reset the HS code dropdown
             }
 
             // Clear the document fields
@@ -430,8 +431,6 @@ console.log("originalDescriptions",originalDescriptions)
                 documentForm.innerHTML = '';
                 documentForm.appendChild(label);
                 documentForm.appendChild(fileInput  );
-
-                
                 
             }
 
@@ -439,8 +438,6 @@ console.log("originalDescriptions",originalDescriptions)
             if (descriptionField && originalDescriptions[descriptionField.name]) {
                 delete originalDescriptions[descriptionField.name];
             }
-
-            console.log("Form reset");
         }
     });
 
@@ -483,7 +480,8 @@ document.querySelector('.item').addEventListener('click', function (e) {
 
             hsCodeDropdown.addEventListener('change', function () {
                 originalDescriptions[descriptionField.name] = descriptionField.value;
-                descriptionField.readOnly = true; 
+                descriptionField.readOnly = true;
+                hsCodeDropdown.setAttribute('readonly', true);
             });
            
         })
@@ -547,8 +545,6 @@ document.querySelector('form').addEventListener('submit', function (e) {
             alert('You must upload all required files.');
         }
     });
-
-    
     var items = document.querySelectorAll('.item-form');
     let hasError = false;
 
@@ -579,8 +575,6 @@ document.querySelector('form').addEventListener('submit', function (e) {
                 }
             }
         });
-
-
 
     
     items.forEach(function (itemForm) {
@@ -615,13 +609,11 @@ document.querySelector('form').addEventListener('submit', function (e) {
         }
     });
 });
-
         if (hasError) {
             event.preventDefault(); 
         }
 
     items.forEach(function (item) {
-        console.log("inside items")
         var hsCodeDropdown = item.querySelector('select[name*="hs_code"]');
         var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
 

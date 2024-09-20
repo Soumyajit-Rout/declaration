@@ -62,6 +62,12 @@
      color: #6818C7;
      background: #fff !important;
 }
+select[readonly] {
+    pointer-events: none; /* Disable click */
+    touch-action: none; /* Disable touch */
+    background-color: #e9ecef; /* Greyed-out look similar to disabled */
+}
+
   </style>
 </head>
 
