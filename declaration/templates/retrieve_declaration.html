@@ -1,179 +1,323 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-<section class="section">
-    <div class="section-header bg-white">
-        <div class="d-flex justify-content-between align-items-center py-3 px-3 px-md-5">
-            <div>
-                <h1>View Declaration</h1>
+
+ <!-- Content -->
+ <main class="grow content pt-7" id="content" role="content">
+   <!-- Toolbar -->
+     <div class="pb-7">
+      <!-- Container -->
+      <div class="container-fixed flex items-center justify-between flex-wrap gap-3">
+       <div class="flex flex-col flex-wrap gap-1">
+        <h1 class="font-medium text-lg text-gray-900">
+          Declaration details
+        </h1>
+        <div class="flex items-center gap-1 text-sm font-normal">
+         <a class="text-gray-700 hover:text-primary" href="#">
+          Home
+         </a>
+         <span class="text-gray-400 text-sm">
+          /
+         </span>
+         <span class="text-gray-900">
+            Declaration details
+         </span>
+        </div>
+       </div>
+      
+      </div>
+      <!-- End of Container -->
+     </div>
+     <!-- End of Toolbar -->
+   <style>
+    .hero-bg {
+    background-image: url('assets/media/images/2600x1200/bg-1.png');
+ }
+ .dark .hero-bg {
+    background-image: url('assets/media/images/2600x1200/bg-1-dark.png');
+ }
+   </style>
+   
+   
+   <!-- Container -->
+   <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full mb-10">
+        <div class="card-header flex-wrap gap-2 justify-between ">
+         
+           <div class="menu gap-3 border-b-2" data-menu="true">
+       
+               <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary active">
+                  <a class="menu-link gap-1.5 px-2" href="/details/" tabindex="0">
+                  <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+                    Details
+                  </span>
+                  </a>
+               </div>
+               <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary">
+               <a class="menu-link gap-1.5 px-2" href="/items/" tabindex="0">
+               <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+                  Items
+               </span>
+               </a>
+               </div>
             </div>
             
-            <div class="d-flex align-items-center">
-                <div class="">
-                    <a href="{% url 'view_declaration' %}" class="nav-link text-center header_success_button" >
-                        <span class=" d-xl-inline">Back</span>
-                    </a>
-                </div>
-            </div>
-                
+           
         </div>
-    </div>
-</section>
 
-<section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
-    <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="default-form mb-4">
-            <div class="mb-4 form_heading">
-                <h2 class="font-20 py-2 px-3">View Declaration</h2>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="20" class="datatable-initialized">
+          <div class="scrollable-x-auto">
+           <table class="table align-middle text-sm text-gray-500 norow-border" id="general_info_table" data-datatable-table="true">
+            
+            
+           <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" data-datatable-spinner="true" style="display: none;">
+						<div class="flex items-center gap-2 px-4 py-2 font-medium leading-none text-2sm border border-gray-200 shadow-default rounded-md text-gray-500 bg-light">
+							<svg class="animate-spin -ml-1 h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+							Loading...
+						</div>
+					</div>
+                    <tbody>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Declaration Id. :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                            56
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Declaration date :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                                July 19th 2024
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Declaration type :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                                Declarationtype1
+                            </td>
+                        </tr>
+                       
+                       <tr>
+                        <td class="text-gray-600 font-normal">
+                            Status :
+                        </td>
+                        <td class="text-gray-800 font-normal">
+                         <span class="badge badge-sm badge-outline badge-released min-w-20">
+                            Released
+                         </span>
+                        </td>
+                       </tr>
+
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Net weight :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            90
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Gross weight :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            0
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Measurements :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            0
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Number of packages :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            09
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Cargo type :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            dummycargotype1
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Transaction type :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            Sea
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Trade type :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            dummytradetype1
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Regime type :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            dummytradetype1
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal flex">
+                            Comment
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            <textarea class="text-gray-600 bg-gray-100 border p-3 w-full" placeholder="Write your comment here..." id="" name="" rows="8" ></textarea>
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal ">
+                            
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            <div class="flex justify-end py-10">
+                            <button class="btn btn-secondary min-w-32 flex justify-center mr-5">
+                                Hold
+                            </button>
+                            <button class="btn btn-primary min-w-32 flex justify-center">
+                                Release
+                            </button>
+                            </div>
+                        </td>
+                       </tr>
+                      </tbody>
+        </table>
+          </div>
+          
+         </div>
+        </div>
+
+
+            <!-- Tracking details section -->
+        <div class="tracking-details-wrap p-5 mt-5">
+            <div class="text-left mb-10">
+                <h3 class="text-gray-900 text-lg font-semibold leading-5 mb-1.5">Tracking Details</h3>
+                <span class="text-gray-700 text-sm block mb-5">
+                All the details related to tracking
+                </span>
+                
             </div>
-            <div class="d-flex flex-wrap">
-                <div class="col-12">
-                    <div class="row gx-3 pe-sm-3">
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_date">Declaration Date:</label>
-                                <input type="text" class="form-control" id="declaration_date" name="declaration_date" value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="equest_noe">Request No:</label>
-                                <input type="text" class="form-control" id="request_no" name="request_no" value="{{ declaration_data.request_no }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_no">Declaration No:</label>
-                                <input type="text" class="form-control" id="declaration_no" name="declaration_no" value="{{ declaration_data.declaration_no }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="net_weight">Net Weight:</label>
-                                <input type="number" step="any" class="form-control" id="net_weight" name="net_weight" value="{{ declaration_data.net_weight }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="gross_weight">Gross Weight:</label>
-                                <input type="number" step="any" class="form-control" id="gross_weight" name="gross_weight" value="{{ declaration_data.gross_weight }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="measurements">Measurements:</label>
-                                <input type="number" class="form-control" id="measurements" name="measurements" value="{{ declaration_data.measurements }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="nmbr_of_packages">Number of Packages:</label>
-                                <input type="number" class="form-control" id="nmbr_of_packages" name="nmbr_of_packages" value="{{ declaration_data.nmbr_of_packages }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="cargo_type">Cargo Type:</label>
-                                <input type="text" class="form-control" id="cargo_type" name="cargo_type" value="{{ declaration_data.cargo_types }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_type">Declaration Type:</label>
-                                <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.declaration_types }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_type">Cargo Channel:</label>
-                                <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.cargo_channel }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_type">Transaction Type:</label>
-                                <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.transaction_type }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_type">Trade Type:</label>
-                                <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.trade_type }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_type">Regime Type:</label>
-                                <input type="text" class="form-control" id="declaration_types" name="declaration_types" value="{{ declaration_data.regime_type }}" readonly>
-                            </div>
-                        </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5 mb-8 wrap-track-card">
+                
+                <div class="card tracking-card shadow-lg p-4">
+                    <div class="flex flex-wrap justify-between items-center">
+                    <div class="flex items-center">
+                    
+                    <div class="flex flex-col">
+                    <div class="text-base font-medium text-gray-900" >
+                        20220412123
+                    </div>
+                    </div>
+                    </div>
 
-                        <div class="mb-4 form_heading my-4">
-                            <h2 class="font-20 py-2 px-3">Items</h2>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="item-table" class="table table-bordered table-for-items">
-                                <thead class="default-table-head border">
-                                    <tr>
-                                        <th scope="col" class="font-15">Description</th>
-                                        <th scope="col" class="font-15">HsCode</th>
-                                        <th scope="col" class="font-15">Documents</th>
-                                        <th scope="col" class="font-15">Static Quantity Unit</th>
-                                        <th scope="col" class="font-15">Supplementary Quantity Unit</th>
-                                        <th scope="col" class="font-15">Unit Weight</th>
-                                        <th scope="col" class="font-15">Goods Value</th>
-                                        <th scope="col" class="font-15">CIF Value</th>
-                                        <th scope="col" class="font-15">Duty Fee</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in items_data %}
-                                        <tr data-item-id="{{ item.id }}">
-                                            <input type="hidden" name="items_set-id" value="{{ item.id }}">
-                                            <td>
-                                               
-                                                <textarea class="form-control" readonly name="items_set-{{ forloop.counter0 }}-description" rows="1">{{ item.description }} </textarea>
-                                            </td>
-                                            <td>
-                                                <!-- <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
-                                                    {% for hs_code in hs_codes %}
-                                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
-                                                    {% endfor %}
-                                                </select> -->
-                                                <input type="text" class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code" value="{{ item.hs_code.hs_code }}" readonly>
-                
-                                            </td>
-                                            <td class="documents">
-                                                {% for document_formset in document_formsets %}
-                                                    {% if document_formset.item.id == item.id %}
-                                                        {% for doc in document_formset.documents %}
-                                                           
-                                                            {% if doc.file %}
-                                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </td>
-                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" readonly></td>
-                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" readonly></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" readonly></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" readonly></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" readonly></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}"readonly></td>
-                
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="flex flex-wrap items-center">
+                    
+                    <div class="flex flex-col items-center">
+                    <span class="text-gray-900 text-xs ">
+                        September
+                    </span>
+                    <div class="text-primary font-bold text-base">
+                        02
+                    </div>
+                    <div class="text-gray-900 text-xs ">
+                        2024
+                    </div>
+                    </div>
+                    
+                    </div>
                     </div>
                 </div>
-            </div>
+                <div class="card tracking-card shadow-lg p-4">
+                    <div class="flex flex-wrap justify-between items-center">
+                    <div class="flex items-center">
+                    
+                    <div class="flex flex-col">
+                    <div class="text-base font-medium text-gray-900" >
+                        20220412123
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center">
+                    
+                    <div class="flex flex-col items-center">
+                    <span class="text-gray-900 text-xs ">
+                        September
+                    </span>
+                    <div class="text-primary font-bold text-base">
+                        02
+                    </div>
+                    <div class="text-gray-900 text-xs ">
+                        2024
+                    </div>
+                    </div>
+                    
+                    </div>
+                    </div>
+                </div>
+                <div class="card tracking-card shadow-lg p-4">
+                    <div class="flex flex-wrap justify-between items-center">
+                    <div class="flex items-center">
+                    
+                    <div class="flex flex-col">
+                    <div class="text-base font-medium text-gray-900" >
+                        20220412123
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center">
+                    
+                    <div class="flex flex-col items-center">
+                    <span class="text-gray-900 text-xs ">
+                        September
+                    </span>
+                    <div class="text-primary font-bold text-base">
+                        02
+                    </div>
+                    <div class="text-gray-900 text-xs ">
+                        2024
+                    </div>
+                    </div>
+                    
+                    </div>
+                    </div>
+                </div>
+           </div>
         </div>
-    </form>
-</section>
+
+       </div>
+       
+      </div>
+     </div>
+   <!-- End of Container -->
+  </main>
+  <!-- End of Content -->
 
 {% endblock content %}

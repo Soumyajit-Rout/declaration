@@ -2,45 +2,83 @@
 {% load static %}
 
 
-  <!-- navbar -->
-  <nav class="navbar navbar-expand-lg custom-navbar shadow-sm fixed-top d-flex justify-content-end align-items-end">
-    <div class="row w-100">
-         <!-- search input feild -->
-          <div class="d-flex justify-content-between align-items-center px-0">
-            <div class="col d-none d-lg-block ms-3">
-              <div class="d-flex justify-content-end align-items-center">
-                <p class="pe-2 font-16">Hi, {{ request.session.name }}</p>
-              </div>
-            </div>
-                <!-- navbar toggler button -->
-                <button class="navbar-toggler " type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-               
-          </div>
-           <!-- navbar items -->
-           <div class="collapse navbar-collapse" style="width: 300px;" id="navbarTogglerDemo02">
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item py-3">
-                  <a class="nav-link" href="">
-                    <span class=" d-xl-inline font-16">Hi, user</span>
-                  </a> 
-                </li>
-                <li class="nav-item py-3">
-                      <a class="nav-link">
-                        <span class=" d-xl-inline font-16">Dashboard</span>
-                      </a> 
-                </li>
-                <li class="nav-item py-3">
-                      <button class="navbar-card-button">Button</button>
-                <a class="btn navbar-card-button text-white px-4">Back</a>
-
-                </li>
-            </ul>
-            </div>
+<!-- Header -->
+<header class="header shadow-sm active fixed top-0 z-10 left-0 right-0 flex items-stretch shrink-0 bg-[--tw-page-bg] dark:bg-[--tw-page-bg-dark]" data-sticky="true" data-sticky-class="shadow-sm" data-sticky-name="header" id="header">
+  <!-- Container -->
+  <div class="container-fixed flex justify-between lg:justify-end items-stretch lg:gap-4" id="header_container">
+   <!-- Mobile Logo -->
+   <div class="flex gap-1 lg:hidden items-center -ml-1">
+    <a class="shrink-0" href="#">
+     <img class="max-h-[25px] w-full" src="{% static 'assets/media/app/mini-logo.svg' %}"/>
+    </a>
+    <div class="flex items-center">
+     <button class="btn btn-icon btn-light btn-clear btn-sm" data-drawer-toggle="#sidebar">
+      <i class="ki-filled ki-menu">
+      </i>
+     </button>
     </div>
-</nav>
+   </div>
+   <!-- End of Mobile Logo -->
+  
+   <!-- Topbar -->
+   <div class="flex items-center gap-2 lg:gap-3.5">
+    <div class="menu" data-menu="true">
+     <div class="menu-item" data-menu-item-offset="20px, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+      <div class="menu-toggle btn btn-icon rounded-full">
+       <img alt="" class="size-9 rounded-full border-2 border-success shrink-0" src="{% static 'assets/media/avatars/300-2.png' %}">
+       </img>
+      </div>
+      <div class="menu-dropdown menu-default light:border-gray-300 w-screen max-w-[250px]">
+       <div class="flex items-center justify-between px-5 py-1.5 gap-1.5">
+        <div class="flex items-center gap-2">
+         <img alt="" class="size-9 rounded-full border-2 border-success" src="{% static 'assets/media/avatars/300-2.png' %}">
+          <div class="flex flex-col gap-1.5">
+           <span class="text-sm text-gray-800 font-semibold leading-none">
+            {{ request.session.name }}
+           </span>
+           <a class="text-xs text-gray-600 hover:text-primary font-medium leading-none">
+            c.fisher@gmail.com
+           </a>
+          </div>
+         </img>
+        </div>
+        <span class="badge badge-xs badge-primary badge-outline">
+         Pro
+        </span>
+       </div>
+       <div class="menu-separator">
+       </div>
+       <div class="flex flex-col">
+        <div class="menu-item mb-0.5">
+         <div class="menu-link">
+          <span class="menu-icon">
+           <i class="ki-filled ki-moon">
+           </i>
+          </span>
+          <span class="menu-title">
+           Dark Mode
+          </span>
+          <label class="switch switch-sm">
+           <input data-theme-state="dark" data-theme-toggle="true" name="check" type="checkbox" value="1">
+           </input>
+          </label>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- End of Topbar -->
+  </div>
+  <!-- End of Container -->
+ </header>
+ <!-- End of Header -->
+
 
 {% endblock content %}
+
+
+
+
+
