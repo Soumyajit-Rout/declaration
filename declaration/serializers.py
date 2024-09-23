@@ -43,7 +43,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Items
-        fields = ["goods_description", "static_quantity_unit", "supp_quantity_unit", "unit_weight", 
+        fields = ["id", "goods_description", "static_quantity_unit", "supp_quantity_unit", "unit_weight", 
                   "goods_value", "cif_value", "duty_fee", "hs_code","documents"]
 
     def get_hs_code(self, obj):

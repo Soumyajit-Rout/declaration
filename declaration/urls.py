@@ -34,6 +34,8 @@ urlpatterns = [
      path('api/DeclarationOpinion/getDeclarationOpinionDataByDepartmentId', views.GetDeclarationOpinionDataByDepartmentId.as_view(),name='get_declaration_opinion'),
      path('api/DeclarationOpinion/updateDeclarationOpinionData', views.UpdateDeclarationOpinionData.as_view(),name='update_declaration_opinion'),
 
+     #General
+     path('api/Declaration/getDeclarationItem', views.GetItemsByDeclarationId.as_view(),name='get_item'),
 ]
 
 if settings.DEBUG:

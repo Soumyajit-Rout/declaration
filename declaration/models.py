@@ -120,7 +120,7 @@ class Opinion(models.Model):
     )
     status_choices = (
         (0, 'Under Review'),
-        (1, 'Release'),
+        (1, 'Released'),
         (-1, 'On Hold'),
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

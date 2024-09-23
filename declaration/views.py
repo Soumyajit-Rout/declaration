@@ -497,17 +497,25 @@ class RetrieveDeclaration(APIView):
 
     def get(self, request):
         id = request.query_params.get("id")
+        department_id = request.query_params.get("departmentId")
         if not id:
             return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             declaration = Declaration.objects.get(is_verified=0, id=id)
-            opinion_data = Opinion.objects.filter(
-                declaration_id=id
-            ).order_by("-created_at")
+            if not department_id:
+                opinion_data = Opinion.objects.filter(
+                    declaration_id=id
+                ).order_by("-created_at")
+            else:
+                opinion_data = Opinion.objects.filter(
+                    declaration_id=id,
+                    department_id=int(department_id)
+                ).order_by("-created_at")
             opinions = []
             if opinion_data:
                 for obj in opinion_data:
                     entry = model_to_dict(obj)
+                    entry['id'] = obj.id
                     opinions.append(entry)
         except Declaration.DoesNotExist:
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -694,21 +702,29 @@ class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
     renderer_classes = [renderers.JSONRenderer]
     serializer_class = DelcarationListSerilaizer
 
-    def get_queryset(self, declaration_ids):
-            return Declaration.objects.filter(is_verified=0).order_by('-updated_at')
-    
+    def get_queryset(self, declaration_ids, ascending):
+        if ascending == "True":
+            return Declaration.objects.filter(is_verified=0, id__in=declaration_ids).order_by('updated_at')
+        return Declaration.objects.filter(is_verified=0, id__in=declaration_ids).order_by('-updated_at')
+
     def get(self, request: Request):
 
         if not Authentication.is_authenticated(request):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         department_id = request.GET.get("departmentId")
+        ascending = request.GET.get("ascending")
 
         if not department_id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        opinion_data = Opinion.objects.filter(
-            department_id=int(department_id)
-        ).order_by("-created_at")
+        if ascending == "True":
+            opinion_data = Opinion.objects.filter(
+                department_id=int(department_id)
+            ).order_by("created_at")
+        else:
+            opinion_data = Opinion.objects.filter(
+                department_id=int(department_id)
+            ).order_by("-created_at")
 
         try:
             if opinion_data:
@@ -722,7 +738,7 @@ class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
                         opinion_data_entries.append(entry)
                         declaration_ids.append(opinion_obj.declaration_id)
 
-                queryset = self.get_queryset(declaration_ids)
+                queryset = self.get_queryset(declaration_ids, ascending)
                 serializer = self.get_serializer(queryset, many=True)
 
                 return Response({"status": status.HTTP_200_OK,"declaration_data": serializer.data, "opinion_data":opinion_data_entries})
@@ -798,3 +814,36 @@ class DeclarationAssignUserIdView(APIView):
             )
         except Exception as e:
             return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class GetItemsByDeclarationId(generics.ListAPIView):
+
+    renderer_classes = [renderers.JSONRenderer]
+    serializer_class = ItemSerializer
+
+    def get_queryset(self, item_id):
+        return Items.objects.filter(id=item_id)
+
+    def get(self, request: Request):
+
+        if not Authentication.is_authenticated(request):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        item_id = request.GET.get("id")
+
+        if not item_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            queryset = self.get_queryset(item_id)
+            serializer = self.get_serializer(queryset, many=True)
+            for item in serializer.data:
+                for doc in item.get("documents"):
+                    doc["file"] = request.build_absolute_uri(f'{doc.get("file")}')
+            return Response({"status": status.HTTP_200_OK,"item_data": serializer.data})
+        except ValidationError as e:
+            return Response(data={"Result": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+
+            return Response(
+                data={"Result": e.args}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
