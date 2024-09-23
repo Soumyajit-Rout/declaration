@@ -742,6 +742,8 @@ class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
                 serializer = self.get_serializer(queryset, many=True)
 
                 return Response({"status": status.HTTP_200_OK,"declaration_data": serializer.data, "opinion_data":opinion_data_entries})
+            return Response({"status": status.HTTP_200_OK,"declaration_data": [], "opinion_data":[]})
+
         except ValidationError as e:
             return Response(data={"Result": e.args}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
