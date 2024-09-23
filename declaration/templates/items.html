@@ -43,36 +43,32 @@
    <div class="container-fixed">
       <div class="grid gap-5 lg:gap-7.5">
        <div class="card card-grid min-w-full">
-        <div class="card-header flex-wrap gap-2 justify-between ">
-         
+         <div class="card-header flex-wrap gap-2 justify-between">
             <div class="menu gap-3 border-b-2" data-menu="true">
-       
-                <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary">
-                   <a class="menu-link gap-1.5 px-2" href="/details/" tabindex="0">
-                   <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                     Details
-                   </span>
-                   </a>
-                </div>
-                <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary active">
+              <div
+                class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary active"
+              >
+                <a class="menu-link gap-1.5 px-2" href="/details/" tabindex="0">
+                  <span
+                    class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
+                  >
+                    Details
+                  </span>
+                </a>
+              </div>
+              <div
+                class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary"
+              >
                 <a class="menu-link gap-1.5 px-2" href="/items/" tabindex="0">
-                <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                   Items
-                </span>
+                  <span
+                    class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
+                  >
+                    Items
+                  </span>
                 </a>
-                </div>
-                <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary">
-                <a class="menu-link gap-1.5 px-2" href="/opinion/" tabindex="0">
-                <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                   Opinion
-                </span>
-                </a>
-                </div>
-            
-             </div>
-            
-           
-        </div>
+              </div>
+            </div>
+          </div>
 
         <div class="card-body">
          <div data-datatable="true" data-datatable-page-size="20" class="datatable-initialized">
@@ -116,7 +112,6 @@
                  </span>
                 </span>
                </th>
-              
               <th class="w-[60px]">
                <span class="sort asc">
                   <span class="sort-label font-normal text-gray-700">
@@ -138,13 +133,15 @@
 						</div>
 					</div>
                <tbody>
-                  <tr>
+                  {% for item in items_data %}
+                  <tr data-item-id="{{ item.id }}">
+                     <input type="hidden" name="items_set-id" value="{{ item.id }}">
                      <td class="text-gray-800 font-normal text-center">
-                        12121
+                        {{ item.hs_code.hs_code }}
                      </td>
                 
                      <td class="text-gray-800 font-normal text-center">
-                        <span>Lorem ipsum dolor sit amet consectetur.</span>  
+                        <span>{{ item.description }}</span>  
                      </td>
                      <td class="text-gray-800 font-normal text-center">
                         10
@@ -192,116 +189,7 @@
                         </div>
                      </td>
                   </tr>
-                  <tr>
-                    <td class="text-gray-800 font-normal text-center">
-                       12121
-                    </td>
-               
-                    <td class="text-gray-800 font-normal text-center">
-                       <span>Lorem ipsum dolor sit amet consectetur.</span>  
-                    </td>
-                    <td class="text-gray-800 font-normal text-center">
-                       10
-                    </td>
-                    <td class="text-gray-800 font-normal text-center">
-                       120
-                    </td>
-                       
-                       <td class="text-center"><div class="menu justify-center" data-menu="true">
-                       <div class="menu-item menu-item-dropdown" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
-                       <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
-                          <i class="ki-filled ki-dots-vertical">
-                          </i>
-                       </button>
-                       <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
-                          <div class="menu-item">
-                          <a class="menu-link" href="#">
-                          <span class="menu-icon">
-                             <i class="ki-filled ki-search-list">
-                             </i>
-                          </span>
-                          <span class="menu-title">
-                             View
-                          </span>
-                          </a>
-                          </div>
-                          
-                          <div class="menu-separator">
-                          </div>
-                          <div class="menu-item">
-                          <a class="menu-link" href="#">
-                          <span class="menu-icon">
-                             <i class="ki-filled ki-pencil">
-                             </i>
-                          </span>
-                          <span class="menu-title">
-                             Edit
-                          </span>
-                          </a>
-                          </div>
-                          
-                          
-                       </div>
-                       </div>
-                       </div>
-                    </td>
-                 </tr>
-                 <tr>
-                    <td class="text-gray-800 font-normal text-center">
-                       12121
-                    </td>
-               
-                    <td class="text-gray-800 font-normal text-center">
-                       <span>Lorem ipsum dolor sit amet consectetur.</span>  
-                    </td>
-                    <td class="text-gray-800 font-normal text-center">
-                       10
-                    </td>
-                    <td class="text-gray-800 font-normal text-center">
-                       120
-                    </td>
-                       
-                       <td class="text-center"><div class="menu justify-center" data-menu="true">
-                       <div class="menu-item menu-item-dropdown" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
-                       <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
-                          <i class="ki-filled ki-dots-vertical">
-                          </i>
-                       </button>
-                       <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
-                          <div class="menu-item">
-                          <a class="menu-link" href="#">
-                          <span class="menu-icon">
-                             <i class="ki-filled ki-search-list">
-                             </i>
-                          </span>
-                          <span class="menu-title">
-                             View
-                          </span>
-                          </a>
-                          </div>
-                          
-                          <div class="menu-separator">
-                          </div>
-                          <div class="menu-item">
-                          <a class="menu-link" href="#">
-                          <span class="menu-icon">
-                             <i class="ki-filled ki-pencil">
-                             </i>
-                          </span>
-                          <span class="menu-title">
-                             Edit
-                          </span>
-                          </a>
-                          </div>
-                          
-                          
-                       </div>
-                       </div>
-                       </div>
-                    </td>
-                 </tr>
-                  
-              
+                  {% endfor %}
             </tbody></table>
           </div>
          
