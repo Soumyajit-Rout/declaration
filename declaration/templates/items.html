@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+ <!-- Content -->
+ <main class="grow content pt-7" id="content" role="content">
+   <!-- Toolbar -->
+     <div class="pb-7">
+      <!-- Container -->
+      <div class="container-fixed flex items-center justify-between flex-wrap gap-3">
+        <div class="flex flex-col flex-wrap gap-1">
+         <h1 class="font-medium text-lg text-gray-900">
+           Declaration details
+         </h1>
+         <div class="flex items-center gap-1 text-sm font-normal">
+          <a class="text-gray-700 hover:text-primary" href="#">
+           Home
+          </a>
+          <span class="text-gray-400 text-sm">
+           /
+          </span>
+          <span class="text-gray-900">
+             Declaration details
+          </span>
+         </div>
+        </div>
+       
+       </div>
+      <!-- End of Container -->
+     </div>
+     <!-- End of Toolbar -->
+   <style>
+    .hero-bg {
+    background-image: url('assets/media/images/2600x1200/bg-1.png');
+ }
+ .dark .hero-bg {
+    background-image: url('assets/media/images/2600x1200/bg-1-dark.png');
+ }
+   </style>
+   
+   
+   <!-- Container -->
+   <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+         <div class="card-header flex-wrap gap-2 justify-between">
+            <div class="menu gap-3 border-b-2" data-menu="true">
+              <div
+                class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary active"
+              >
+                <a class="menu-link gap-1.5 px-2" href="/details/" tabindex="0">
+                  <span
+                    class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
+                  >
+                    Details
+                  </span>
+                </a>
+              </div>
+              <div
+                class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary"
+              >
+                <a class="menu-link gap-1.5 px-2" href="/items/" tabindex="0">
+                  <span
+                    class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
+                  >
+                    Items
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="20" class="datatable-initialized">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="min-w-[140px] text-center">
+               <span class="sort asc">
+                  <span class="sort-label font-normal text-gray-700">
+                    Hs code
+                  </span>
+                  <span class="sort-icon">
+                  </span>
+                 </span>
+              </th>
+              <th class="min-w-[280px] text-center">
+               <span class="sort asc">
+                <span class="sort-label font-normal text-gray-700">
+                    Description
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[140px] text-center">
+                <span class="sort asc">
+                 <span class="sort-label font-normal text-gray-700">
+                    Quantity
+                 </span>
+                 <span class="sort-icon">
+                 </span>
+                </span>
+               </th>
+               <th class="min-w-[140px] text-center">
+                <span class="sort asc">
+                 <span class="sort-label font-normal text-gray-700">
+                    Weight (Kgs)
+                 </span>
+                 <span class="sort-icon">
+                 </span>
+                </span>
+               </th>
+              <th class="w-[60px]">
+               <span class="sort asc">
+                  <span class="sort-label font-normal text-gray-700">
+                    Documents
+                  </span>
+                
+               </span>
+              </th>
+             </tr>
+            </thead>
+            
+           <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" data-datatable-spinner="true" style="display: none;">
+						<div class="flex items-center gap-2 px-4 py-2 font-medium leading-none text-2sm border border-gray-200 shadow-default rounded-md text-gray-500 bg-light">
+							<svg class="animate-spin -ml-1 h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+							Loading...
+						</div>
+					</div>
+               <tbody>
+                  {% for item in items_data %}
+                  <tr data-item-id="{{ item.id }}">
+                     <input type="hidden" name="items_set-id" value="{{ item.id }}">
+                     <td class="text-gray-800 font-normal text-center">
+                        {{ item.hs_code.hs_code }}
+                     </td>
+                
+                     <td class="text-gray-800 font-normal text-center">
+                        <span>{{ item.description }}</span>  
+                     </td>
+                     <td class="text-gray-800 font-normal text-center">
+                        10
+                     </td>
+                     <td class="text-gray-800 font-normal text-center">
+                        120
+                     </td>
+                        
+                        <td class="text-center"><div class="menu justify-center" data-menu="true">
+                        <div class="menu-item menu-item-dropdown" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                        <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                           <i class="ki-filled ki-dots-vertical">
+                           </i>
+                        </button>
+                        <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                           <div class="menu-item">
+                           <a class="menu-link" href="/itemsdetails/">
+                           <span class="menu-icon">
+                              <i class="ki-filled ki-search-list">
+                              </i>
+                           </span>
+                           <span class="menu-title">
+                              View
+                           </span>
+                           </a>
+                           </div>
+                           
+                           <div class="menu-separator">
+                           </div>
+                           <div class="menu-item">
+                           <a class="menu-link" href="#">
+                           <span class="menu-icon">
+                              <i class="ki-filled ki-pencil">
+                              </i>
+                           </span>
+                           <span class="menu-title">
+                              Edit
+                           </span>
+                           </a>
+                           </div>
+                           
+                           
+                        </div>
+                        </div>
+                        </div>
+                     </td>
+                  </tr>
+                  {% endfor %}
+            </tbody></table>
+          </div>
+         
+         </div>
+        </div>
+       </div>
+       
+       
+      </div>
+     </div>
+   <!-- End of Container -->
+  </main>
+  <!-- End of Content -->
+
+{% endblock content %}

@@ -1,352 +1,425 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
 
-<section class="section">
-    <div class="section-header bg-white">
-        <div class="d-flex justify-content-between align-items-center py-3 px-3 px-md-5">
-            <div>
-                <h1>Update Declaration</h1>
-            </div>
-            
-            <div class="d-flex align-items-center">
-                <div class="">
-                    <a href="{% url 'view_declaration' %}" class="nav-link text-center header_success_button" >
-                        <span class=" d-xl-inline">Back</span>
-                    </a>
-                </div>
-            </div>
-                
+
+<style>
+  .font-7 {
+    font-size: 0.7rem !important;
+  }
+  .sub-heading {
+    min-height: auto;
+    padding: 0 0 12px 0 !important;
+  }
+  .file-input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    outline: none;
+    font-size: 0.8125rem;
+    line-height: 2.8;
+    background-color: var(--tw-light-active);
+    border-radius: 0.375rem;
+    height: 2.5rem;
+    padding: 0 1rem 0 0;
+    border: 1px solid var(--tw-gray-300);
+    color: var(--tw-gray-700);
+  }
+  input::file-selector-button {
+    color: var(--tw-gray-700);
+    background-color: transparent;
+    border: none;
+    border-right: 1px solid var(--tw-gray-300);
+  }
+  select[readonly] {
+    pointer-events: none; /* Disable click */
+    touch-action: none; /* Disable touch */
+    background-color: white; /* Greyed-out look similar to disabled */
+}
+</style>
+<!-- Content -->
+<main class="grow content pt-7" id="content" role="content">
+  <!-- Toolbar -->
+  <div class="pb-7">
+    <!-- Container -->
+    <div
+      class="container-fixed flex items-center justify-between flex-wrap gap-3"
+    >
+      <div class="flex flex-col flex-wrap gap-1">
+        <h1 class="font-medium text-lg text-gray-900">Update Declaration</h1>
+        <div class="flex items-center gap-1 text-sm font-normal">
+          <a class="text-gray-700 hover:text-primary" href="#"> Home </a>
+          <span class="text-gray-400 text-sm"> / </span>
+          <span class="text-gray-900"> Update Declaration </span>
         </div>
+      </div>
     </div>
-</section>
+    <!-- End of Container -->
+  </div>
+  <!-- End of Toolbar -->
+  <style>
+    .hero-bg {
+      background-image: url("assets/media/images/2600x1200/bg-1.png");
+    }
+    .dark .hero-bg {
+      background-image: url("assets/media/images/2600x1200/bg-1-dark.png");
+    }
+  </style>
 
-<section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
-    <form class="needs-validation" id="update-declaration-form" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="default-form mb-4">
-            <!-- <div class="d-flex justify-content-end">
-                <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
-            </div> -->
-            <div class="mb-4 form_heading">
-                <h2 class="font-20 py-2 px-3">Update Declaration</h2>
+  <form
+    class="needs-validation"
+    novalidate
+    id="declaration-form"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <!-- Container -->
+    {% csrf_token %}
+    <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+        <div class="card card-grid min-w-full p-10">
+          <div class="grid grid-cols-2 gap-4">
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_declaration_date">
+                Declaration Date: <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="declaration_date" name="declaration_date"
+                  placeholder=""
+                  type="date"
+                  value="{{ declaration_data.declaration_date|date:'Y-m-d' }}"
+                  required
+                />
+              </div>
             </div>
-            <div class="d-flex flex-wrap">
-                <div class="col-12">
-                    <div class="row gx-3 pe-sm-3">
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_date">Declaration Date:</label>
-                                <input type="date" class="form-control" id="declaration_date" name="declaration_date"
-                                    value="{{ declaration_data.declaration_date|date:'Y-m-d' }}" required >
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="request_noe">Request No:</label>
-                                <input type="text" class="form-control" id="request_no" name="request_no"
-                                    value="{{ declaration_data.request_no }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_no">Declaration No:</label>
-                                <input type="text" class="form-control" id="declaration_no" name="declaration_no"
-                                    value="{{ declaration_data.declaration_no }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="net_weight">Net Weight:</label>
-                                <input type="number" step="any" class="form-control" id="net_weight" name="net_weight"
-                                    value="{{ declaration_data.net_weight }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="gross_weight">Gross Weight:</label>
-                                <input type="number" step="any" class="form-control" id="gross_weight"
-                                    name="gross_weight" value="{{ declaration_data.gross_weight }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="measurements">Measurements:</label>
-                                <input type="number" class="form-control" id="measurements" name="measurements"
-                                    value="{{ declaration_data.measurements }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="nmbr_of_packages">Number of Packages:</label>
-                                <input type="number" class="form-control" id="nmbr_of_packages" name="nmbr_of_packages"
-                                    value="{{ declaration_data.nmbr_of_packages }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="cargo_type">Cargo Type:</label>
-                                <select class="form-control" id="cargo_type" name="cargo_type">
-                                    {% for cargo_type in cargo_types %}
-                                        <option value="{{ cargo_type.id }}" {% if cargo_type.id == declaration_data.cargo_type.id %}selected{% endif %}>
-                                            {{ cargo_type.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="declaration_type">Declaration Type:</label>
-                                <select class="form-control" id="declaration_type" name="declaration_type">
-                                    {% for declaration_type in declaration_types %}
-                                        <option value="{{ declaration_type.id }}" {% if declaration_type.id == declaration_data.declaration_type.id %}selected{% endif %}>
-                                            {{ declaration_type.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="cargo_channel">Cargo Channel:</label>
-                                <select class="form-control" id="cargo_channel" name="cargo_channel">
-                                    {% for cargo_channel in cargo_channels %}
-                                        <option value="{{ cargo_channel.id }}" {% if cargo_channel.id == declaration_data.cargo_channel.id %}selected{% endif %}>
-                                            {{ cargo_channel.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="transaction_type">Transaction Type:</label>
-                                <select class="form-control" id="transaction_type" name="transaction_type">
-                                    {% for transaction_type in transaction_types %}
-                                        <option value="{{ transaction_type.id }}" {% if transaction_type.id == declaration_data.transaction_type.id %}selected{% endif %}>
-                                            {{ transaction_type.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="trade_type">Trade Type:</label>
-                                <select class="form-control" id="trade_type" name="trade_type">
-                                    {% for trade_type in trade_types %}
-                                        <option value="{{ trade_type.id }}" {% if trade_type.id == declaration_data.trade_type.id %}selected{% endif %}>
-                                            {{ trade_type.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="regime_type">Regime Type:</label>
-                                <select class="form-control" id="regime_type" name="regime_type">
-                                    {% for regime_type in regime_types %}
-                                        <option value="{{ regime_type.id }}" {% if regime_type.id == declaration_data.regime_type.id %}selected{% endif %}>
-                                            {{ regime_type.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <!-- <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="comments">Comments</label>
-                                <input  class="form-control" 
-                                value="{{ declaration_log.comment }}" >
-                                <textarea class="form-control" id="comments"
-                                    name="comments" rows="1">{{ declaration_data.comments }}</textarea>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="mb-4 form_heading my-4">
-                            <h2 class="font-20 py-2 px-3">Items</h2>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="item-table" class="table table-bordered table-for-items">
-                                <thead class="default-table-head border">
-                                    <tr>
-                                        <th scope="col" class="font-15">Description</th>
-                                        <th scope="col" class="font-15">HsCode</th>
-                                        <th scope="col" class="font-15">Documents</th>
-                                        <th scope="col" class="font-15">Static Quantity Unit</th>
-                                        <th scope="col" class="font-15">Supplementary Quantity Unit</th>
-                                        <th scope="col" class="font-15">Unit Weight</th>
-                                        <th scope="col" class="font-15">Goods Value</th>
-                                        <th scope="col" class="font-15">CIF Value</th>
-                                        <th scope="col" class="font-15">Duty Fee</th>
-                                        <th scope="col" class="font-15 table-action">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in items_data %}
-                                        <tr data-item-id="{{ item.id }}">
-                                            <input type="hidden" name="items_set-id" value="{{ item.id }}">
-                                            <td>
-                                               
-                                                <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1">{{ item.description }}</textarea>
-                                                <button type="button" class="search-btn navbar-card-button mt-2">Search</button>
-                                            </td>
-                                            <td>
-                                                <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
-                                                    {% for hs_code in hs_codes %}
-                                                        <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                            <td class="documents">
-                                                {% for document_formset in document_formsets %}
-                                                    {% if document_formset.item.id == item.id %}
-                                                        {% for doc in document_formset.documents %}
-                                                            <input type="file" class="form-control-file" name="documents_item_{{ document_formset.item.id }}_{{ doc.required_doc.id }}">
-                                                            {% if doc.file %}
-                                                                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </td>
-                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" required></td>
-                                            <td><input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" required></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" required></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" required></td>
-                                            <td><input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required></td>
-                                            <td>
-                                                {% if item.id %}
-                                                    <button type="button" class="btn btn-danger delete_button">Delete</button>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group mb-0 mt-4">
-                            <button type="submit" class="navbar-card-button" style="float: right;">Update
-                                Declaration</button>
-                        </div> -->
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_request_noe">
+                Request No<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="request_no" name="request_no"
+                  placeholder=""
+                  type="number"
+                  value="{{ declaration_data.request_no }}" required
+                />
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_declaration_no">
+                Declaration No<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="declaration_no" name="declaration_no"
+                  placeholder=""
+                  type="number"
+                  value="{{ declaration_data.declaration_no }}" required
+                />
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_net_weight">
+                Net Weight<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="net_weight" name="net_weight"
+                  placeholder=""
+                  type="number"
+                  value="{{ declaration_data.net_weight }}" required
+                />
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_gross_weight">
+                Gross Weight<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="gross_weight" name="gross_weight" 
+                  placeholder=""
+                  type="number"
+                  value="{{ declaration_data.gross_weight }}" required
+                />
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_measurements">
+                Measurements<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="measurements" name="measurements"
+                  placeholder=""
+                  type="number"
+                  value="{{ declaration_data.measurements }}" required
+                />
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_nmbr_of_packages">
+                Number of Packages<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <input
+                  class="input"
+                  id="nmbr_of_packages" name="nmbr_of_packages"
+                  placeholder=""
+                  type="number"
+                  value="{{ declaration_data.nmbr_of_packages }}" required
+                />
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_cargo_type">
+                Cargo Type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <select class="select" id="cargo_type" name="cargo_type">
+                  {% for cargo_type in cargo_types %}
+                    <option value="{{ cargo_type.id }}" {% if cargo_type.id == declaration_data.cargo_type.id %}selected{% endif %}>
+                        {{ cargo_type.name }}
+                    </option>
+                 {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_declaration_type">
+                Declaration Type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <select class="select" id="declaration_type" name="declaration_type">
+                    {% for declaration_type in declaration_types %}
+                    <option value="{{ declaration_type.id }}" {% if declaration_type.id == declaration_data.declaration_type.id %}selected{% endif %}>
+                        {{ declaration_type.name }}
+                    </option>
+                {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_cargo_channel">
+                Cargo Channel <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <select class="select" name="select" id="cargo_channel" name="cargo_channel">
+                    {% for cargo_channel in cargo_channels %}
+                    <option value="{{ cargo_channel.id }}" {% if cargo_channel.id == declaration_data.cargo_channel.id %}selected{% endif %}>
+                        {{ cargo_channel.name }}
+                    </option>
+                {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_transaction_type">
+                Transaction Type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <select class="select" id="transaction_type" name="transaction_type">
+                    {% for transaction_type in transaction_types %}
+                    <option value="{{ transaction_type.id }}" {% if transaction_type.id == declaration_data.transaction_type.id %}selected{% endif %}>
+                        {{ transaction_type.name }}
+                    </option>
+                {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_trade_type">
+                Trade type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <select class="select" id="trade_type" name="trade_type">
+                    {% for trade_type in trade_types %}
+                    <option value="{{ trade_type.id }}" {% if trade_type.id == declaration_data.trade_type.id %}selected{% endif %}>
+                        {{ trade_type.name }}
+                    </option>
+                {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_regime_type">
+                Regime type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                <select class="select" name="select" id="regime_type" name="regime_type">
+                    {% for regime_type in regime_types %}
+                    <option value="{{ regime_type.id }}" {% if regime_type.id == declaration_data.regime_type.id %}selected{% endif %}>
+                        {{ regime_type.name }}
+                    </option>
+                {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-grid min-w-full p-10">
+            <div class="card-header sub-heading">
+                <h3 class="card-title">
+                    Items details
+                </h3>
+            </div>
+            <div class="item">
+            {{ item_formset.management_form }}
+            {% for item in items_data %}
+            <div class="item-form" data-item-id="{{ item.id }}">
+                <input type="hidden" name="items_set-id" value="{{ item.id }}">
+            <div class="grid grid-cols-1 gap-4 pt-5">
+                <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_declaration_date">
+                        Description <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input class="input" placeholder="" type="text" name="items_set-{{ forloop.counter0 }}-description" value="{{ item.description }}">
+                        <span class="btn btn-primary update_button search-bttn">
+                            Search
+                        </span>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        HsCode <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="input-group">
+                            <select class="select input" name="items_set-{{ forloop.counter0 }}-hs_code">
+                                {% for hs_code in hs_codes %}
+                                <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
+                            {% endfor %}
+                            </select>
+                        <span class="btn btn-primary update_button reset-btn">
+                            Reset
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="default-form mb-4">
-            <div class="mb-4 form_heading">
-                <h2 class="font-20 py-2 px-3">Items</h2>
-            </div>
-            <div class="d-flex flex-wrap">
-                <div class="col-12 item">
-                    {{ item_formset.management_form }}
-                    {% for item in items_data %}
-                    <div class="row gx-3 pe-sm-3 item-form mb-5" data-item-id="{{ item.id }}">
-                        <input type="hidden" name="items_set-id" value="{{ item.id }}">
-                        
-                        <div class="col-12">
-                            <label class="font-14" for="id_declaration_date">Description</label>
-                                <div class="row mb-3 form-group">
-                                    <div class="col-11">
-                                        <textarea class="form-control" name="items_set-{{ forloop.counter0 }}-description" rows="1" aria-label="With textarea" readOnly>{{ item.description }}</textarea>
-                                    </div>
-                                    <div class="col-1">
-                                        <button type="button" class="input-group-text update_button text-white justify-content-center search-bttn">Search</button>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">HsCode</label>
-                            <div class="row">
-                                <div class="col-11">
-                                    <select class="form-control" name="items_set-{{ forloop.counter0 }}-hs_code">
-                                        {% for hs_code in hs_codes %}
-                                            <option value="{{ hs_code.id }}" {% if hs_code.id == item.hs_code.id %}selected{% endif %}>{{ hs_code.hs_code }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col-1">
-                                    <button type="button" class="input-group-text update_button text-white justify-content-center reset-btn">Reset</button>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3 document-form" data-item-index="{{ forloop.counter0 }}" >
-                                <label class="font-14" for="id_request_noe">Documents</label>
-                                {% for document_formset in document_formsets %}
+            <div class="grid grid-cols-2 gap-4 pt-5">
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5 document-form form-group" data-item-index="{{ forloop.counter0 }}">
+                    <label class="form-label" for="id_request_noe">
+                        Documents <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                        {% for document_formset in document_formsets %}
                                                     {% if document_formset.item.id == item.id %}
                                                         {% for doc in document_formset.documents %}
-                                                            <input type="file" class="form-control" name="documents_item_{{ document_formset.item.id }}_{{ doc.required_doc.id }}"value="{{ doc.file }}">
+                                                            <input type="file" class="file-input custom-file-input form-control" name="documents_item_{{ document_formset.item.id }}_{{ doc.required_doc.id }}"value="{{ doc.file }}">
                                                             {% if doc.file %}
                                                                 <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
                                                             {% endif %}
                                                         {% endfor %}
                                                     {% endif %}
                                                 {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Static Quantity Unit</label>
-                                <input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" required>
-
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Supplementary Quantity Unit</label>
-                                <input type="number" class="form-control" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required>
-
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Unit Weight</label>
-                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Goods Value</label>
-                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">CIF Value</label>
-                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" required>
-
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Duty Fee</label>
-                                <input type="number" step="any" class="form-control" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-0 mt-4 d-flex justify-content-end">
-                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
-                            <button type="button" id="delete-btn" class="btn delete-button btn-danger warning_button w-20 me-2">Delete Item</button>
-                        </div>
-                        
-                        {% endfor %}
-                    </div> 
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Static Quantity Unit <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      <input class="input" placeholder="" type="number" name="items_set-{{ forloop.counter0 }}-static_quantity_unit" value="{{ item.static_quantity_unit }}" required/>
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Supplementary Quantity Unit <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      <input class="input" placeholder="" type="number" vname="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required/>
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Unit Weight <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      <input class="input" placeholder="" type="number" name="items_set-{{ forloop.counter0 }}-unit_weight" value="{{ item.unit_weight }}" required/>
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Goods Value <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      <input class="input" placeholder="" type="number" name="items_set-{{ forloop.counter0 }}-goods_value" value="{{ item.goods_value }}" required/>
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        CIF Value <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      <input class="input" placeholder="" type="number" name="items_set-{{ forloop.counter0 }}-cif_value" value="{{ item.cif_value }}" required/>
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Duty Fee <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      <input class="input" placeholder="" type="number" name="items_set-{{ forloop.counter0 }}-duty_fee" value="{{ item.duty_fee }}" required/>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="submit-button">Submit</button>
+            <div class="mt-5 pt-1 flex gap-4 justify-end">
+            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
+              <button class="btn btn-danger min-w-20 flex justify-center delete-button" id="delete-btn"> Delete 
+              </button>
+          </div>
+            {% endfor %}
         </div>
-    </form>
-</section>
-
+      </div>
+         </div>
+         <div class="mb-10 flex justify-end gap-4">
+            <button class="btn btn-primary min-w-20 flex justify-center" type="submit"  class="submit-button">
+              Submit 
+            </button>
+         </div>
+      </div>
+    </div>
+  </form>
+  <!-- End of Container -->
+</main>
+<!-- End of Content -->
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         var originalDescriptions = {};
@@ -576,6 +649,5 @@
     });
 
 </script>
-
 
 {% endblock content %}

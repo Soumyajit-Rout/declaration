@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% load widget_tweaks %}
-
 {% block content %}
 
 {% if form.non_field_errors %}
@@ -24,624 +23,732 @@
 </div>
 {% endif %}
 
-<section class="section">
-    <div class="section-header bg-white">
-        <div class="d-flex justify-content-between align-items-center py-3 px-3 px-md-5">
-            <div>
-                <h1>Create Declaration</h1>
-            </div>
-            
-            <div class="d-flex align-items-center">
-                <div class="">
-                    <a href="{% url 'view_declaration' %}" class="nav-link text-center header_success_button" >
-                        <span class=" d-xl-inline">Back</span>
-                    </a>
-                </div>
-            </div>
-                
+<style>
+  .font-7 {
+    font-size: 0.7rem !important;
+  }
+  .sub-heading {
+    min-height: auto;
+    padding: 0 0 12px 0 !important;
+  }
+  .file-input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    outline: none;
+    font-size: 0.8125rem;
+    line-height: 2.8;
+    background-color: var(--tw-light-active);
+    border-radius: 0.375rem;
+    height: 2.5rem;
+    padding: 0 1rem 0 0;
+    border: 1px solid var(--tw-gray-300);
+    color: var(--tw-gray-700);
+  }
+  input::file-selector-button {
+    color: var(--tw-gray-700);
+    background-color: transparent;
+    border: none;
+    border-right: 1px solid var(--tw-gray-300);
+  }
+  select[readonly] {
+    pointer-events: none; /* Disable click */
+    touch-action: none; /* Disable touch */
+    background-color: white; /* Greyed-out look similar to disabled */
+}
+</style>
+<!-- Content -->
+<main class="grow content pt-7" id="content" role="content">
+  <!-- Toolbar -->
+  <div class="pb-7">
+    <!-- Container -->
+    <div
+      class="container-fixed flex items-center justify-between flex-wrap gap-3"
+    >
+      <div class="flex flex-col flex-wrap gap-1">
+        <h1 class="font-medium text-lg text-gray-900">Create Declaration</h1>
+        <div class="flex items-center gap-1 text-sm font-normal">
+          <a class="text-gray-700 hover:text-primary" href="#"> Home </a>
+          <span class="text-gray-400 text-sm"> / </span>
+          <span class="text-gray-900"> Create Declaration </span>
         </div>
+      </div>
     </div>
-</section>
-<section class="section form-container mb-5 p-2 p-sm-3 p-md-5">
-    <form class="needs-validation" novalidate id="declaration-form" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="default-form mb-4 ">
-            <!-- <div class="d-flex justify-content-end">
-                <a class="btn navbar-card-button text-white px-4 mb-4" href="{% url 'view_declaration' %}">Back</a>
-            </div> -->
-            <div class="mb-4 form_heading">
-                <h2 class="font-20 py-2 px-3">Declaration Information</h2>
-            </div>
-            <div class="d-flex flex-wrap">
-                <div class="col-12">
-                    <div class="row gx-3 pe-sm-3">
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_declaration_date">Declaration Date:</label>
-                                {{ form.declaration_date }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Request No:</label>
-                                {{ form.request_no }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_declaration_no">Declaration No:</label>
-                                {{ form.declaration_no }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_net_weight">Net Weight:</label>
-                                {{ form.net_weight }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_gross_weight">Gross Weight:</label>
-                                {{ form.gross_weight }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_measurements">Measurements:</label>
-                                {{ form.measurements }}
+    <!-- End of Container -->
+  </div>
+  <!-- End of Toolbar -->
+  <style>
+    .hero-bg {
+      background-image: url("assets/media/images/2600x1200/bg-1.png");
+    }
+    .dark .hero-bg {
+      background-image: url("assets/media/images/2600x1200/bg-1-dark.png");
+    }
+  </style>
 
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_nmbr_of_packages">Number of Packages:</label>
-                                {{ form.nmbr_of_packages }}
-                                
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_cargo_type">Cargo Type:</label>
-                                {{ form.cargo_type }}
-                                
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_declaration_type">Declaration Type:</label>
-                                {{ form.declaration_type }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_cargo_channel">Cargo Channel:</label>
-                                {{ form.cargo_channel }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_transaction_type">Transaction Type:</label>
-                                {{ form.transaction_type }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_trade_type">Trade Type:</label>
-                                {{ form.trade_type }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_regime_type">Regime Type:</label>
-                                {{ form.regime_type }}
-                            </div>
-                        </div>
+  <form
+    class="needs-validation"
+    novalidate
+    id="declaration-form"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <!-- Container -->
+    <div class="container-fixed">
+      {% csrf_token %}
+      <div class="grid gap-5 lg:gap-7.5">
+        <div class="card card-grid min-w-full p-10 default-form">
+          <div class="grid grid-cols-2 gap-4">
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_declaration_date">
+                Declaration Date: <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.declaration_date|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_request_noe">
+                Request No<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.request_no|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_declaration_no">
+                Declaration No<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.declaration_no|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_net_weight">
+                Net Weight<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.net_weight|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_gross_weight">
+                Gross Weight<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.gross_weight|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_measurements">
+                Measurements<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.measurements|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_nmbr_of_packages">
+                Number of Packages<span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.nmbr_of_packages|add_class:"input" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_cargo_type">
+                Cargo Type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                  {{ form.cargo_type|add_class:"select" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_declaration_type">
+                Declaration Type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.declaration_type|add_class:"select" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_cargo_channel">
+                Cargo Channel <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.cargo_channel|add_class:"select" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_transaction_type">
+                Transaction Type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.transaction_type|add_class:"select" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_trade_type">
+                Trade type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.trade_type|add_class:"select" }}
+              </div>
+            </div>
+            <div
+              class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
+            >
+              <label class="form-label" for="id_regime_type">
+                Regime type <span class="text-danger pl-2">*</span>
+              </label>
+              <div class="flex flex-col w-full gap-1">
+                {{ form.regime_type|add_class:"select" }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-grid min-w-full p-10 default-form">
+            <div class="card-header sub-heading">
+                <h3 class="card-title">
+                    Items details
+                </h3>
+            </div>
+            <div>
+            <div class="item">
+            {{ item_formset.management_form }}
+            <div class="item-form">
+            {% for form in item_formset %}
+            <div class="grid grid-cols-1 gap-4 pt-5">
+                <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_declaration_date">
+                        Description <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="input-group form-group">
+                      {{ form.goods_description |add_class:"input"|attr:"rows:1" }}
+                      {{ form.goods_description.errors }}
+                        <span class="btn btn-primary update_button search-bttn">
+                            Search
+                        </span>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5 form-group">
+                    <label class="form-label" for="id_request_noe">
+                        HsCode <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="input-group">
+                      {{ form.hs_code |add_class:"select input"}}
+                      {{ form.hs_code.errors }}
+                        <span class="btn btn-primary update_button reset-btn">
+                            Reset
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="default-form mb-4">
-            <div class="mb-4 form_heading">
-                <h2 class="font-20 py-2 px-3">Items</h2>
-            </div>
-            <div class="d-flex flex-wrap">
-                <div class="col-12 item">
-                    {{ item_formset.management_form }}
-                    <div class="row gx-3 pe-sm-3 item-form">
-                        {% for form in item_formset %}
-                        <div class="col-12">
-                            <label class="font-14" for="id_declaration_date">Description</label>
-                                <div class="row mb-3 form-group">
-                                    <div class="col-11">
-                                        {{ form.goods_description |add_class:"form-control"|attr:"rows:1" }}
-                                        {{ form.goods_description.errors }}
-                                    </div>
-                                    <div class="col-1">
-                                        <button type="button" class="input-group-text update_button text-white justify-content-center search-bttn">Search</button>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">HsCode</label>
-                            <div class="row">
-                                <div class="col-11">
-                                    {{ form.hs_code |add_class:"form-control"}}
-                                    {{ form.hs_code.errors }}
-                                </div>
-                                <div class="col-1">
-                                    <button type="button" class="input-group-text update_button text-white justify-content-center reset-btn">Reset</button>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <template id="document-template">
-                                <div class="document-form">
-                                    <!-- Default document input fields go here -->
-                                    <label class="font-14 label" for="id_request_noe">Documents</label>
-                                    <input class="form-control" type="file" name="documents" placeholder="">
-                                </div>
-                            </template>
-                            <div class="form-group mb-3 document-form" data-item-index="{{ forloop.counter0 }}" >
-                                <label class="font-14 label" for="id_request_noe">Documents</label>
-                                <input class="form-control" type="file" name="documents" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Static Quantity Unit</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.static_quantity_unit |add_class:"form-control" }}
-                                {{ form.static_quantity_unit.errors }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Supplementary Quantity Unit</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.supp_quantity_unit |add_class:"form-control"}}
-                                {{ form.supp_quantity_unit.errors }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Unit Weight</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.unit_weight |add_class:"form-control"}}
-                                {{ form.unit_weight.errors }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Goods Value</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.goods_value|add_class:"form-control" }}
-                                {{ form.goods_value.errors }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">CIF Value</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.cif_value|add_class:"form-control" }}
-                                {{ form.cif_value.errors }}
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-3">
-                                <label class="font-14" for="id_request_noe">Duty Fee</label>
-                                <!-- <input class="form-control" type="text" name="" placeholder=""> -->
-                                {{ form.duty_fee|add_class:"form-control" }}
-                                {{ form.duty_fee.errors }}
-                            </div>
-                        </div>
-                        <div class="form-group mb-0 mt-4 d-flex justify-content-between">
-                            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
-                            <button type="button" id="delete-btn" class="btn delete-button btn-danger warning_button w-20 me-2 ">Delete Item</button>
-                        </div>
-                        
-                        {% endfor %}
-                    </div> 
-                    
+            <div class="grid grid-cols-2 gap-4 pt-5">
+              <template id="document-template">
+                <div class="document-form">
+                    <label class="font-14 label" for="id_request_noe">Documents</label>
+                    <input class="form-control" type="file" name="documents" placeholder="">
                 </div>
-                <button type="button" id="add-row" class="add-card-button w-20 me-2 mt-5">Add Item</button>
+            </template>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Documents <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1 document-form form-group" data-item-index="{{ forloop.counter0 }}">
+                        <input class="file-input form-control" type="file" class="custom-file-input" id="customFile" />
+                        <span class="form-hint">
+                          You can select files
+                      </span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Static Quantity Unit <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      {{ form.static_quantity_unit |add_class:"input" }}
+                                {{ form.static_quantity_unit.errors }}
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Supplementary Quantity Unit <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      {{ form.supp_quantity_unit |add_class:"input"}}
+                                {{ form.supp_quantity_unit.errors }}
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Unit Weight <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      {{ form.unit_weight |add_class:"input"}}
+                                {{ form.unit_weight.errors }}
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Goods Value <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      {{ form.goods_value|add_class:"input" }}
+                      {{ form.goods_value.errors }}
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        CIF Value <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      {{ form.cif_value|add_class:"input" }}
+                      {{ form.cif_value.errors }}
+                    </div>
+                </div>
+                <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                    <label class="form-label" for="id_request_noe">
+                        Duty Fee <span class="text-danger pl-2">*</span>
+                    </label>
+                    <div class="flex flex-col w-full gap-1">
+                      {{ form.duty_fee|add_class:"input" }}
+                                {{ form.duty_fee.errors }}
+                    </div>
+                </div>
             </div>
+            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
+            {% endfor %}
+          </div>
+            </div>
+            <div class="mt-5 pt-1 flex gap-4 justify-between">
+          <button type="button" id="add-row" class="add-card-button btn btn-primary min-w-20 flex justify-center"><i class="ki-solid ki-abstract-10 font-7"></i>Add Item</button>
+          <button class="btn btn-danger min-w-20 flex justify-center delete-button" id="delete-btn"> Delete 
+          </button>  
         </div>
-        <div class="row p-2">
-        <div class="form-group d-flex justify-content-between">
-            <button type="submit"  class="submit-button">Submit</button>
-            <button type="submit" name="save_draft" value="True" class="submit-button">Save as Draft</button>
         </div>
+         </div>
+         <div class="mb-10 flex justify-end gap-4">
+            <button class="btn btn-secondary min-w-20 flex justify-center" name="save_draft" value="True">
+                Save as draft 
+              </button>
+            <button class="btn btn-primary min-w-20 flex justify-center" type="submit"  class="submit-button">
+              Submit 
+            </button>
+         </div>
+      </div>
     </div>
-    </form>
-</section>
-
+  </form>
+  <!-- End of Container -->
+</main>
+<!-- End of Content -->
 <script type="text/javascript">
-      
-    document.addEventListener('DOMContentLoaded', function () {
-        var originalDescriptions = {};
-        let requiredDocsData = {};
+  document.addEventListener("DOMContentLoaded", function () {
+    var originalDescriptions = {};
+    let requiredDocsData = {};
 
-        function attachValidationListeners(row) {
-            var numericFields = row.querySelectorAll('input[type="number"]');
-            numericFields.forEach(function (field) {
-                var errorSpan = document.createElement('span');
-                errorSpan.style.display = 'none';
-                errorSpan.style.color = 'red';
-                errorSpan.textContent = 'Invalid number';
-                field.parentNode.insertBefore(errorSpan, field.nextSibling);
-                field.addEventListener('input', function () {
-                    if (!field.checkValidity()) {
-                        field.nextElementSibling.style.display = 'inline';
-                    } else {
-                        field.nextElementSibling.style.display = 'none';
-                    }
-                });
-            });
+    function attachValidationListeners(row) {
+      var numericFields = row.querySelectorAll('input[type="number"]');
+      numericFields.forEach(function (field) {
+        var errorSpan = document.createElement("span");
+        errorSpan.style.display = "none";
+        errorSpan.style.color = "red";
+        errorSpan.textContent = "Invalid number";
+        field.parentNode.insertBefore(errorSpan, field.nextSibling);
+        field.addEventListener("input", function () {
+          if (!field.checkValidity()) {
+            field.nextElementSibling.style.display = "inline";
+          } else {
+            field.nextElementSibling.style.display = "none";
+          }
+        });
+      });
+    }
+
+    document.getElementById("add-row").addEventListener("click", function () {
+      var mainForm = document.querySelector(".item");
+      var formContainer = document.querySelector(".item-form");
+      var newForm = formContainer.cloneNode(true);
+      var totalForms = document.getElementById("id_items_set-TOTAL_FORMS");
+      var currentFormCount = parseInt(totalForms.value);
+
+      var regex = new RegExp(`items_set-\\d+-`, "g");
+      newForm.innerHTML = newForm.innerHTML.replace(
+        regex,
+        `items_set-${currentFormCount}-`
+      );
+
+      var documentTemplate =
+        document.getElementById("document-template").innerHTML;
+      var documentsCell = newForm.querySelector(".document-form");
+      if (documentsCell) {
+        documentsCell.innerHTML = documentTemplate;
+        documentsCell.dataset.itemIndex = currentFormCount;
+      }
+
+      var inputs = newForm.querySelectorAll("input, textarea,select");
+      inputs.forEach(function (input) {
+        if (input.type === "hidden") {
+          input.value = "";
+        } else {
+          input.value = "";
+          input.removeAttribute("readonly");
         }
-
-    document.getElementById('add-row').addEventListener('click', function () {
-        
-    var mainForm = document.querySelector('.item')
-    var formContainer = document.querySelector('.item-form'); 
-    var newForm = formContainer.cloneNode(true);
-    var totalForms = document.getElementById('id_items_set-TOTAL_FORMS'); 
-    var currentFormCount = parseInt(totalForms.value); 
-   
-    var regex = new RegExp(`items_set-\\d+-`, 'g');
-    newForm.innerHTML = newForm.innerHTML.replace(regex, `items_set-${currentFormCount}-`);
-
-    var documentTemplate = document.getElementById('document-template').innerHTML;
-    var documentsCell = newForm.querySelector('.document-form');
-            if (documentsCell) {
-                documentsCell.innerHTML = documentTemplate;
-                documentsCell.dataset.itemIndex = currentFormCount;
-               
-            }
-
-    var inputs = newForm.querySelectorAll('input, textarea,select');
-    inputs.forEach(function (input) {
-                if (input.type === 'hidden') {
-                    input.value = '';
-                } else {
-                    input.value = '';
-                    input.removeAttribute('readonly');
-                } 
-                         // Remove any error span elements
-         var errorSpan = input.nextElementSibling;
-         console.log("errorSpan",errorSpan)
-        if (errorSpan && errorSpan.tagName.toLowerCase() === 'span') {
-            errorSpan.remove();
+        // Remove any error span elements
+        var errorSpan = input.nextElementSibling;
+        console.log("errorSpan", errorSpan);
+        if (errorSpan && errorSpan.tagName.toLowerCase() === "span") {
+          errorSpan.remove();
         }
+      });
+
+      mainForm.appendChild(newForm);
+      totalForms.value = currentFormCount + 1;
+      attachValidationListeners(newForm);
     });
 
+    function updateFormIndices() {
+      var forms = document.querySelectorAll(".item-form");
+      forms.forEach(function (form, index) {
+        form.setAttribute("data-item-index", index);
 
-    mainForm.appendChild(newForm);
-    totalForms.value = currentFormCount + 1;
-    attachValidationListeners(newForm);
-});
-
-
-function updateFormIndices() {
-    var forms = document.querySelectorAll('.item-form');
-    forms.forEach(function (form, index) {
-        form.setAttribute('data-item-index', index);
-        
-     
-        var inputs = form.querySelectorAll('input, select, textarea');
+        var inputs = form.querySelectorAll("input, select, textarea");
         inputs.forEach(function (input) {
-            if (input.name) {
-                input.name = input.name.replace(/items_set-\d+-/, `items_set-${index}-`);
-            }
-            if (input.id) {
-                input.id = input.id.replace(/items_set-\d+-/, `items_set-${index}-`);
-            }
+          if (input.name) {
+            input.name = input.name.replace(
+              /items_set-\d+-/,
+              `items_set-${index}-`
+            );
+          }
+          if (input.id) {
+            input.id = input.id.replace(
+              /items_set-\d+-/,
+              `items_set-${index}-`
+            );
+          }
         });
 
-   
-        var documentForm = form.querySelector('.document-form');
+        var documentForm = form.querySelector(".document-form");
         if (documentForm) {
-            
-            documentForm.setAttribute('data-item-index', index);
+          documentForm.setAttribute("data-item-index", index);
 
-        
-            var fileInputs = documentForm.querySelectorAll('input[type="file"]');
-            fileInputs.forEach(function (fileInput) {
-                var docIdMatch = fileInput.name.match(/documents_\d+_([a-f0-9\-]{36})/); // Capture the full UUID
-                if (docIdMatch) {
-                    var docId = docIdMatch[1];
-                    fileInput.name = `documents_${index}_${docId}`; 
-                }
-            });
+          var fileInputs = documentForm.querySelectorAll('input[type="file"]');
+          fileInputs.forEach(function (fileInput) {
+            var docIdMatch = fileInput.name.match(
+              /documents_\d+_([a-f0-9\-]{36})/
+            ); // Capture the full UUID
+            if (docIdMatch) {
+              var docId = docIdMatch[1];
+              fileInput.name = `documents_${index}_${docId}`;
+            }
+          });
         }
-    
+      });
+
+      var totalForms = document.getElementById("id_items_set-TOTAL_FORMS");
+      totalForms.value = forms.length;
+    }
+
+    document.getElementById("delete-btn").addEventListener("click", function (e) {
+      e.preventDefault();
+      var row = document.querySelector(".item-form");
+      console.log("row",row)
+
+        var descriptionField = row.querySelector(
+          'textarea[name*="description"]'
+        );
+
+        if (
+          descriptionField &&
+          originalDescriptions.hasOwnProperty(descriptionField.name)
+        ) {
+          delete originalDescriptions[descriptionField.name];
+        }
+        console.log("originalDescriptions", originalDescriptions);
+
+        var deleteCheckbox = row.querySelector('input[type="checkbox"]');
+        console.log("deleteCheckbox", deleteCheckbox);
+        deleteCheckbox.checked = true;
+        deleteCheckbox.value = "true";
+        row.remove();
+        updateFormIndices();
+      }
+    );
+
+    document.querySelector(".item").addEventListener("click", function (e) {
+      if (e.target.classList.contains("reset-btn")) {
+        var formGroup = e.target.closest(".item-form");
+
+        // Find the description field and clear it
+        var descriptionField = formGroup.querySelector(
+          'textarea[name*="goods_description"]'
+        );
+
+        if (descriptionField) {
+          descriptionField.value = ""; // Clear the description field
+          descriptionField.readOnly = false; // Re-enable the description field
+        }
+
+        // Clear the HS code dropdown
+        var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
+        if (hsCodeDropdown) {
+          hsCodeDropdown.value = "";
+          hsCodeDropdown.removeAttribute("readonly");
+          // Reset the HS code dropdown
+        }
+
+        // Clear the document fields
+        var documentForm = formGroup.querySelector(".document-form");
+        var documentsField = formGroup.querySelector('input[type="file"]');
+        var fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.name = "documents";
+        fileInput.required = true;
+        fileInput.classList.add("form-control file-input");
+
+        if (documentForm) {
+          documentForm.innerHTML = "";
+          documentForm.appendChild(fileInput);
+        }
+
+        // Optionally, remove from originalDescriptions if needed
+        if (descriptionField && originalDescriptions[descriptionField.name]) {
+          delete originalDescriptions[descriptionField.name];
+        }
+      }
     });
 
-    
-    var totalForms = document.getElementById('id_items_set-TOTAL_FORMS');
-    totalForms.value = forms.length;
-}
+    document.querySelector(".item").addEventListener("click", function (e) {
+      if (e.target.classList.contains("search-bttn")) {
+        var formGroup = e.target.closest(".form-group");
 
-
-document.querySelector('.item').addEventListener('click', function (e) {
-  
-            if (e.target.classList.contains('delete-button')) {
-          
-
-
-                e.preventDefault();
-                var row = e.target.closest('.item-form');
-
-                var descriptionField = row.querySelector('textarea[name*="description"]');
-
-
-if (descriptionField && originalDescriptions.hasOwnProperty(descriptionField.name)) {
-    delete originalDescriptions[descriptionField.name];
-}
-console.log("originalDescriptions",originalDescriptions)
-              
-                var deleteCheckbox = row.querySelector('input[type="checkbox"]');
-                console.log("deleteCheckbox",deleteCheckbox)
-                deleteCheckbox.checked = true;
-                deleteCheckbox.value = 'true';
-               row.remove();
-                updateFormIndices();
-
-            }
-        });
-
-    document.querySelector('.item').addEventListener('click', function (e) {
-        if (e.target.classList.contains('reset-btn')) {
-            var formGroup = e.target.closest('.item-form');
-            
-            // Find the description field and clear it
-            var descriptionField = formGroup.querySelector('textarea[name*="goods_description"]');
-            
-
-            if (descriptionField) {
-                
-                descriptionField.value = '';  // Clear the description field
-                descriptionField.readOnly = false;  // Re-enable the description field
-            }
-
-            // Clear the HS code dropdown
-            var hsCodeDropdown = formGroup.querySelector('select[name*="hs_code"]');
-            if (hsCodeDropdown) {
-                hsCodeDropdown.value = '';
-                hsCodeDropdown.removeAttribute('readonly');
-                 // Reset the HS code dropdown
-            }
-
-            // Clear the document fields
-            var documentForm = formGroup.querySelector('.document-form');
-            var documentsField = formGroup.querySelector('input[type="file"]');
-            var fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.name = 'documents';
-            fileInput.required = true;
-            fileInput.classList.add('form-control'); 
-            fileInput.placeholder = '';   
-            var label = document.createElement('label');
-            label.classList.add('font-14'); 
-             label.textContent = "Document";
-            
-            if (documentForm) {
-                documentForm.innerHTML = '';
-                documentForm.appendChild(label);
-                documentForm.appendChild(fileInput  );
-                
-            }
-
-            // Optionally, remove from originalDescriptions if needed
-            if (descriptionField && originalDescriptions[descriptionField.name]) {
-                delete originalDescriptions[descriptionField.name];
-            }
-        }
-    });
-
-
-document.querySelector('.item').addEventListener('click', function (e) {
-    if (e.target.classList.contains('search-bttn')) {
-       
-       
-        var formGroup = e.target.closest('.form-group');
-
-        var descriptionField = formGroup.querySelector('textarea');
+        var descriptionField = formGroup.querySelector("textarea");
         var descriptionData = descriptionField.value;
-        var hsCodeDropdown = formGroup.parentElement.nextElementSibling.querySelector('select[name*="hs_code"]');
+        var hsCodeDropdown =
+          formGroup.parentElement.nextElementSibling.querySelector(
+            'select[name*="hs_code"]'
+          );
 
-        fetch('/search-hscode/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({ description: descriptionData })
+        fetch("/search-hscode/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({ description: descriptionData }),
         })
-        .then(response => response.json())
-        .then(data => {
-            hsCodeDropdown.innerHTML = '';
+          .then((response) => response.json())
+          .then((data) => {
+            hsCodeDropdown.innerHTML = "";
 
-            var placeholderOption = document.createElement('option');
-            placeholderOption.value = '';
-            placeholderOption.textContent = 'Select your HS code';
+            var placeholderOption = document.createElement("option");
+            placeholderOption.value = "";
+            placeholderOption.textContent = "Select your HS code";
             hsCodeDropdown.appendChild(placeholderOption);
 
             data.hs_codes.forEach(function (hsCode) {
-                var option = document.createElement('option');
-                option.value = hsCode.id;
-                option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
-                hsCodeDropdown.appendChild(option);
+              var option = document.createElement("option");
+              option.value = hsCode.id;
+              option.textContent = `${hsCode.hs_code} - ${hsCode.description}`;
+              hsCodeDropdown.appendChild(option);
             });
 
             descriptionField.dataset.originalValue = descriptionField.value;
 
-            hsCodeDropdown.addEventListener('change', function () {
-                originalDescriptions[descriptionField.name] = descriptionField.value;
-                descriptionField.readOnly = true;
-                hsCodeDropdown.setAttribute('readonly', true);
+            hsCodeDropdown.addEventListener("change", function () {
+              originalDescriptions[descriptionField.name] =
+                descriptionField.value;
+              descriptionField.readOnly = true;
+              hsCodeDropdown.setAttribute("readonly", true);
             });
-           
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    });
     attachValidationListeners(document);
-        
-// Add event listener for hs_code change
-document.querySelector('.item').addEventListener('change', function (e) {
-    if (e.target.name.includes('hs_code')) {
-     
-      
-        var formGroup = e.target.closest('.form-group');
-       
+
+    // Add event listener for hs_code change
+    document.querySelector(".item").addEventListener("change", function (e) {
+      if (e.target.name.includes("hs_code")) {
+        var formGroup = e.target.closest(".form-group");
+
         var hsCode = e.target.value;
-       
-        var documentsField = formGroup.parentElement.nextElementSibling.querySelector('input[type="file"]');
-        var documentform = formGroup.parentElement.nextElementSibling.querySelector('.document-form')
-       
+
+        // var documentsField =
+        //   formGroup.parentElement.nextElementSibling.querySelector(
+        //     'input[type="file"]'
+        //   );
+        var documentform =
+          formGroup.parentElement.nextElementSibling.querySelector(
+            ".document-form"
+          );
         var itemIndex = documentform.dataset.itemIndex;
 
         fetch(`/get-required-docs/?hs_code=${hsCode}`)
-            .then(response => response.json())
-            .then(data => {
-            
-                documentform.innerHTML = '';
-                requiredDocsData[hsCode] = data.required_docs;
+          .then((response) => response.json())
+          .then((data) => {
+            documentform.innerHTML = "";
+            requiredDocsData[hsCode] = data.required_docs;
 
-    data.required_docs.forEach(function (doc) {
-    var label = document.createElement('label');
-    label.classList.add('font-14'); 
-    label.textContent = `${doc.name} (${doc.format})`;
+            data.required_docs.forEach(function (doc) {
 
-    var fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.name = `documents_${itemIndex}_${doc.id}`;
-    fileInput.required = true;
-    fileInput.classList.add('form-control','required-file'); 
-    fileInput.placeholder = ''; 
+              var fileInput = document.createElement("input");
+              fileInput.type = "file";
+              fileInput.name = `documents_${itemIndex}_${doc.id}`;
+              fileInput.required = true;
+              fileInput.classList.add("form-control","custom-file-input","file-input", "required-file");
+              fileInput.placeholder = "";
 
-    documentform.appendChild(label);
-    documentform.appendChild(fileInput);
-});
+              var label = document.createElement("span");
+              label.classList.add("form-hint");
+              label.textContent = ` Only select (${doc.format}) format`;
 
-})
-.catch(error => console.error('Error:', error));
-    }
-});
+              documentform.appendChild(fileInput);
+              documentform.appendChild(label);
+            });
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    });
 
+    // Form submission validation
+    document.querySelector("form").addEventListener("submit", function (e) {
+      var isValid = true;
+      console.log("i am in ", originalDescriptions);
 
-  // Form submission validation
-document.querySelector('form').addEventListener('submit', function (e) {
-    var isValid = true;
-    console.log("i am in ",originalDescriptions)
-    
-    var requiredFiles = document.querySelectorAll('.required-file');
-    requiredFiles.forEach(function (input) {
+      var requiredFiles = document.querySelectorAll(".required-file");
+      requiredFiles.forEach(function (input) {
         if (!input.files.length) {
-            e.preventDefault();
-            alert('You must upload all required files.');
+          e.preventDefault();
+          alert("You must upload all required files.");
         }
-    });
-    var items = document.querySelectorAll('.item-form');
-    let hasError = false;
+      });
+      var items = document.querySelectorAll(".item-form");
+      let hasError = false;
 
-  // Validate Declaration Information fields
-  const form = document.getElementById('declaration-form');
-  const declarationFields = form.querySelectorAll('.default-form.mb-4 input, .default-form.mb-4 textarea, .default-form.mb-4 select');
-        declarationFields.forEach(function(input) {
-            // Skip validation for checkboxes and document inputs
-            if (input.type === 'checkbox' || input.closest('.document-form')) {
-                return; 
-            }
-
-            if (!input.value.trim()) {
-                let errorSpan = input.nextElementSibling;
-                if (!errorSpan || !errorSpan.classList.contains('error-message')) {
-                    errorSpan = document.createElement('span');
-                    errorSpan.className = 'error-message';
-                    errorSpan.style.color = 'rgb(220, 53, 69)';
-                    errorSpan.textContent = 'This field is required';
-                    input.parentNode.insertBefore(errorSpan, input.nextSibling);
-                }
-                errorSpan.style.display = 'inline';
-                hasError = true;
-            } else {
-                let errorSpan = input.nextElementSibling;
-                if (errorSpan && errorSpan.classList.contains('error-message')) {
-                    errorSpan.style.display = 'none'; 
-                }
-            }
-        });
-
-    
-    items.forEach(function (itemForm) {
-            const inputs = itemForm.querySelectorAll('input,textarea,select');
-            inputs.forEach(function (input) {
-        let errorSpan = input.parentNode.querySelector('.error-message');
-
-        if (input.type === 'checkbox' && input.classList.contains('delete-row')) {
-            return;         }
-        if (input.classList.contains('document-input')) {
-            return; 
+      // Validate Declaration Information fields
+      const form = document.getElementById("declaration-form");
+      const declarationFields = form.querySelectorAll(
+        ".default-form input, .default-form textarea, .default-form select"
+      );
+      declarationFields.forEach(function (input) {
+        // Skip validation for checkboxes and document inputs
+        if (input.type === "checkbox" || input.closest(".document-form")) {
+          return;
         }
-        
-        if (input.name === 'documents') {
-    return; 
-}
+
         if (!input.value.trim()) {
-            
-            if (!errorSpan) {
-                errorSpan = document.createElement('span');
-                errorSpan.classList.add('error-message'); 
-                errorSpan.style.color = 'rgb(220, 53, 69)'; 
-                errorSpan.textContent = 'This field is required';
-                input.parentNode.insertBefore(errorSpan, input.nextSibling); 
-            }
-            errorSpan.style.display = 'inline'; 
-            hasError = true;
+          let errorSpan = input.nextElementSibling;
+          if (!errorSpan || !errorSpan.classList.contains("error-message")) {
+            errorSpan = document.createElement("span");
+            errorSpan.className = "error-message";
+            errorSpan.style.color = "rgb(220, 53, 69)";
+            errorSpan.textContent = "This field is required";
+            input.parentNode.insertBefore(errorSpan, input.nextSibling);
+          }
+          errorSpan.style.display = "inline";
+          hasError = true;
         } else {
-            if (errorSpan) {
-                errorSpan.style.display = 'none'; 
-            }
+          let errorSpan = input.nextElementSibling;
+          if (errorSpan && errorSpan.classList.contains("error-message")) {
+            errorSpan.style.display = "none";
+          }
         }
-    });
-});
-        if (hasError) {
-            event.preventDefault(); 
-        }
+      });
 
-    items.forEach(function (item) {
+      items.forEach(function (itemForm) {
+        const inputs = itemForm.querySelectorAll("input,textarea,select");
+        inputs.forEach(function (input) {
+          let errorSpan = input.parentNode.querySelector(".error-message");
+
+          if (
+            input.type === "checkbox" &&
+            input.classList.contains("delete-row")
+          ) {
+            return;
+          }
+          if (input.classList.contains("document-input")) {
+            return;
+          }
+
+          if (input.name === "documents") {
+            return;
+          }
+          if (!input.value.trim()) {
+            if (!errorSpan) {
+              errorSpan = document.createElement("span");
+              errorSpan.classList.add("error-message");
+              errorSpan.style.color = "rgb(220, 53, 69)";
+              errorSpan.textContent = "This field is required";
+              input.parentNode.insertBefore(errorSpan, input.nextSibling);
+            }
+            errorSpan.style.display = "inline";
+            hasError = true;
+          } else {
+            if (errorSpan) {
+              errorSpan.style.display = "none";
+            }
+          }
+        });
+      });
+      if (hasError) {
+        event.preventDefault();
+      }
+
+      items.forEach(function (item) {
         var hsCodeDropdown = item.querySelector('select[name*="hs_code"]');
         var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
 
-        var documentField = item.querySelector('.document-form');
-        var itemIndex = documentField.getAttribute('data-item-index');
-        
+        var documentField = item.querySelector(".document-form");
+        var itemIndex = documentField.getAttribute("data-item-index");
+
         var requiredDocs = requiredDocsData[hsCode] || [];
-        
+
         requiredDocs.forEach(function (doc) {
-            var fileInput = item.querySelector(`input[name="documents_${itemIndex}_${doc.id}"]`);
-            if (fileInput && fileInput.files.length > 0) {
-                var file = fileInput.files[0];
-                var ext = file.name.split('.').pop().toLowerCase();
-                if (!doc.format.split(',').includes(ext)) {
-                    e.preventDefault();
-                    alert(`Invalid file format for ${doc.name}: ${ext}`);
-                    fileInput.value = ''; // Clear the invalid file input
-                }
+          var fileInput = item.querySelector(
+            `input[name="documents_${itemIndex}_${doc.id}"]`
+          );
+          if (fileInput && fileInput.files.length > 0) {
+            var file = fileInput.files[0];
+            var ext = file.name.split(".").pop().toLowerCase();
+            if (!doc.format.split(",").includes(ext)) {
+              e.preventDefault();
+              alert(`Invalid file format for ${doc.name}: ${ext}`);
+              fileInput.value = ""; // Clear the invalid file input
             }
+          }
         });
+      });
     });
-
-
-        
-    
-});
-    });
-
+  });
 </script>
 
 {% endblock content %}
