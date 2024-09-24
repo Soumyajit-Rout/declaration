@@ -55,6 +55,11 @@
     border: none;
     border-right: 1px solid var(--tw-gray-300);
   }
+  select[readonly] {
+    pointer-events: none; /* Disable click */
+    touch-action: none; /* Disable touch */
+    background-color: white; /* Greyed-out look similar to disabled */
+}
 </style>
 <!-- Content -->
 <main class="grow content pt-7" id="content" role="content">
@@ -93,10 +98,10 @@
     enctype="multipart/form-data"
   >
     <!-- Container -->
-    {% csrf_token %}
     <div class="container-fixed">
+      {% csrf_token %}
       <div class="grid gap-5 lg:gap-7.5">
-        <div class="card card-grid min-w-full p-10">
+        <div class="card card-grid min-w-full p-10 default-form">
           <div class="grid grid-cols-2 gap-4">
             <div
               class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5"
@@ -105,13 +110,7 @@
                 Declaration Date: <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="date"
-                  value=""
-                />
+                {{ form.declaration_date|add_class:"input" }}
               </div>
             </div>
             <div
@@ -121,13 +120,7 @@
                 Request No<span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="number"
-                  value=""
-                />
+                {{ form.request_no|add_class:"input" }}
               </div>
             </div>
             <div
@@ -137,13 +130,7 @@
                 Declaration No<span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="number"
-                  value=""
-                />
+                {{ form.declaration_no|add_class:"input" }}
               </div>
             </div>
             <div
@@ -153,13 +140,7 @@
                 Net Weight<span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="number"
-                  value=""
-                />
+                {{ form.net_weight|add_class:"input" }}
               </div>
             </div>
             <div
@@ -169,13 +150,7 @@
                 Gross Weight<span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="number"
-                  value=""
-                />
+                {{ form.gross_weight|add_class:"input" }}
               </div>
             </div>
             <div
@@ -185,13 +160,7 @@
                 Measurements<span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="number"
-                  value=""
-                />
+                {{ form.measurements|add_class:"input" }}
               </div>
             </div>
             <div
@@ -201,13 +170,7 @@
                 Number of Packages<span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <input
-                  class="input"
-                  name=""
-                  placeholder=""
-                  type="number"
-                  value=""
-                />
+                {{ form.nmbr_of_packages|add_class:"input" }}
               </div>
             </div>
             <div
@@ -217,11 +180,7 @@
                 Cargo Type <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <select class="select" name="select">
-                  <option value="1">Select type</option>
-                  <option value="2">Option 2</option>
-                  <option value="3">Option 3</option>
-                </select>
+                  {{ form.cargo_type|add_class:"select" }}
               </div>
             </div>
             <div
@@ -231,11 +190,7 @@
                 Declaration Type <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <select class="select" name="select">
-                  <option value="1">Select Emirates</option>
-                  <option value="2">Option 2</option>
-                  <option value="3">Option 3</option>
-                </select>
+                {{ form.declaration_type|add_class:"select" }}
               </div>
             </div>
             <div
@@ -245,11 +200,7 @@
                 Cargo Channel <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <select class="select" name="select">
-                  <option value="1">Select Area</option>
-                  <option value="2">Option 2</option>
-                  <option value="3">Option 3</option>
-                </select>
+                {{ form.cargo_channel|add_class:"select" }}
               </div>
             </div>
             <div
@@ -259,11 +210,7 @@
                 Transaction Type <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <select class="select" name="select">
-                  <option value="1">Select type</option>
-                  <option value="2">Option 2</option>
-                  <option value="3">Option 3</option>
-                </select>
+                {{ form.transaction_type|add_class:"select" }}
               </div>
             </div>
             <div
@@ -273,11 +220,7 @@
                 Trade type <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <select class="select" name="select">
-                  <option value="1">Select Emirates</option>
-                  <option value="2">Option 2</option>
-                  <option value="3">Option 3</option>
-                </select>
+                {{ form.trade_type|add_class:"select" }}
               </div>
             </div>
             <div
@@ -287,41 +230,42 @@
                 Regime type <span class="text-danger pl-2">*</span>
               </label>
               <div class="flex flex-col w-full gap-1">
-                <select class="select" name="select">
-                  <option value="1">Select Area</option>
-                  <option value="2">Option 2</option>
-                  <option value="3">Option 3</option>
-                </select>
+                {{ form.regime_type|add_class:"select" }}
               </div>
             </div>
           </div>
         </div>
-        <div class="card card-grid min-w-full p-10">
+        <div class="card card-grid min-w-full p-10 default-form">
             <div class="card-header sub-heading">
                 <h3 class="card-title">
                     Items details
                 </h3>
             </div>
+            <div>
+            <div class="item">
             {{ item_formset.management_form }}
+            <div class="item-form">
             {% for form in item_formset %}
             <div class="grid grid-cols-1 gap-4 pt-5">
                 <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5">
                     <label class="form-label" for="id_declaration_date">
                         Description <span class="text-danger pl-2">*</span>
                     </label>
-                    <div class="input-group">
-                        <input class="input" placeholder="" type="text" value="">
+                    <div class="input-group form-group">
+                      {{ form.goods_description |add_class:"input"|attr:"rows:1" }}
+                      {{ form.goods_description.errors }}
                         <span class="btn btn-primary update_button search-bttn">
                             Search
                         </span>
                     </div>
                 </div>
-                <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5">
+                <div class="flex flex-col flex-wrap lg:flex-nowrap gap-2.5 form-group">
                     <label class="form-label" for="id_request_noe">
                         HsCode <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="input-group">
-                        <input class="input" placeholder="" type="text" value="">
+                      {{ form.hs_code |add_class:"select input"}}
+                      {{ form.hs_code.errors }}
                         <span class="btn btn-primary update_button reset-btn">
                             Reset
                         </span>
@@ -329,12 +273,21 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4 pt-5">
+              <template id="document-template">
+                <div class="document-form">
+                    <label class="font-14 label" for="id_request_noe">Documents</label>
+                    <input class="form-control" type="file" name="documents" placeholder="">
+                </div>
+            </template>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label class="form-label" for="id_request_noe">
                         Documents <span class="text-danger pl-2">*</span>
                     </label>
-                    <div class="flex flex-col w-full gap-1">
-                        <input class="file-input" type="file" class="custom-file-input" id="customFile" />
+                    <div class="flex flex-col w-full gap-1 document-form form-group" data-item-index="{{ forloop.counter0 }}">
+                        <input class="file-input form-control" type="file" class="custom-file-input" id="customFile" />
+                        <span class="form-hint">
+                          You can select files
+                      </span>
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -342,7 +295,8 @@
                         Static Quantity Unit <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" name="" placeholder="" type="number" value=""/>
+                      {{ form.static_quantity_unit |add_class:"input" }}
+                                {{ form.static_quantity_unit.errors }}
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -350,7 +304,8 @@
                         Supplementary Quantity Unit <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" name="" placeholder="" type="number" value=""/>
+                      {{ form.supp_quantity_unit |add_class:"input"}}
+                                {{ form.supp_quantity_unit.errors }}
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -358,7 +313,8 @@
                         Unit Weight <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" name="" placeholder="" type="number" value=""/>
+                      {{ form.unit_weight |add_class:"input"}}
+                                {{ form.unit_weight.errors }}
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -366,7 +322,8 @@
                         Goods Value <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" name="" placeholder="" type="number" value=""/>
+                      {{ form.goods_value|add_class:"input" }}
+                      {{ form.goods_value.errors }}
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -374,7 +331,8 @@
                         CIF Value <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" name="" placeholder="" type="number" value=""/>
+                      {{ form.cif_value|add_class:"input" }}
+                      {{ form.cif_value.errors }}
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -382,18 +340,21 @@
                         Duty Fee <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" name="" placeholder="" type="number" value=""/>
+                      {{ form.duty_fee|add_class:"input" }}
+                                {{ form.duty_fee.errors }}
                     </div>
                 </div>
             </div>
+            <input type="checkbox" name="{{ form.prefix }}-DELETE" class="delete-row" style="display: none;">
             {% endfor %}
-            <div class="mt-5 pt-1 flex gap-4 justify-between">
-                <button class="btn btn-primary min-w-20 flex justify-center" id="add-row">
-                    <i class="ki-solid ki-abstract-10 font-7"></i> Add 
-                </button>
-                <button class="btn btn-danger min-w-20 flex justify-center" > Delete 
-                </button>
+          </div>
             </div>
+            <div class="mt-5 pt-1 flex gap-4 justify-between">
+          <button type="button" id="add-row" class="add-card-button btn btn-primary min-w-20 flex justify-center"><i class="ki-solid ki-abstract-10 font-7"></i>Add Item</button>
+          <button class="btn btn-danger min-w-20 flex justify-center delete-button" id="delete-btn"> Delete 
+          </button>  
+        </div>
+        </div>
          </div>
          <div class="mb-10 flex justify-end gap-4">
             <button class="btn btn-secondary min-w-20 flex justify-center" name="save_draft" value="True">
@@ -516,10 +477,10 @@
       totalForms.value = forms.length;
     }
 
-    document.querySelector(".item").addEventListener("click", function (e) {
-      if (e.target.classList.contains("delete-button")) {
-        e.preventDefault();
-        var row = e.target.closest(".item-form");
+    document.getElementById("delete-btn").addEventListener("click", function (e) {
+      e.preventDefault();
+      var row = document.querySelector(".item-form");
+      console.log("row",row)
 
         var descriptionField = row.querySelector(
           'textarea[name*="description"]'
@@ -540,7 +501,7 @@
         row.remove();
         updateFormIndices();
       }
-    });
+    );
 
     document.querySelector(".item").addEventListener("click", function (e) {
       if (e.target.classList.contains("reset-btn")) {
@@ -571,15 +532,10 @@
         fileInput.type = "file";
         fileInput.name = "documents";
         fileInput.required = true;
-        fileInput.classList.add("form-control");
-        fileInput.placeholder = "";
-        var label = document.createElement("label");
-        label.classList.add("font-14");
-        label.textContent = "Document";
+        fileInput.classList.add("form-control file-input");
 
         if (documentForm) {
           documentForm.innerHTML = "";
-          documentForm.appendChild(label);
           documentForm.appendChild(fileInput);
         }
 
@@ -646,15 +602,14 @@
 
         var hsCode = e.target.value;
 
-        var documentsField =
-          formGroup.parentElement.nextElementSibling.querySelector(
-            'input[type="file"]'
-          );
+        // var documentsField =
+        //   formGroup.parentElement.nextElementSibling.querySelector(
+        //     'input[type="file"]'
+        //   );
         var documentform =
           formGroup.parentElement.nextElementSibling.querySelector(
             ".document-form"
           );
-
         var itemIndex = documentform.dataset.itemIndex;
 
         fetch(`/get-required-docs/?hs_code=${hsCode}`)
@@ -664,19 +619,20 @@
             requiredDocsData[hsCode] = data.required_docs;
 
             data.required_docs.forEach(function (doc) {
-              var label = document.createElement("label");
-              label.classList.add("font-14");
-              label.textContent = `${doc.name} (${doc.format})`;
 
               var fileInput = document.createElement("input");
               fileInput.type = "file";
               fileInput.name = `documents_${itemIndex}_${doc.id}`;
               fileInput.required = true;
-              fileInput.classList.add("form-control", "required-file");
+              fileInput.classList.add("form-control","custom-file-input","file-input", "required-file");
               fileInput.placeholder = "";
 
-              documentform.appendChild(label);
+              var label = document.createElement("span");
+              label.classList.add("form-hint");
+              label.textContent = ` Only select (${doc.format}) format`;
+
               documentform.appendChild(fileInput);
+              documentform.appendChild(label);
             });
           })
           .catch((error) => console.error("Error:", error));
@@ -701,7 +657,7 @@
       // Validate Declaration Information fields
       const form = document.getElementById("declaration-form");
       const declarationFields = form.querySelectorAll(
-        ".default-form.mb-4 input, .default-form.mb-4 textarea, .default-form.mb-4 select"
+        ".default-form input, .default-form textarea, .default-form select"
       );
       declarationFields.forEach(function (input) {
         // Skip validation for checkboxes and document inputs
