@@ -30,7 +30,6 @@ from django.forms.models import model_to_dict
 # pylint: disable=E1101,W0702,E1133
 
 
-
 """
 This function is to create a declaration form along with the items,here with each
 declaration object multiple items get saved to the database ,that is done using django's
@@ -97,20 +96,28 @@ This function is to display the declaration objects it is a normal list function
 renders the view_declaration.html page
 """
 def declaration_list(request):
-                    
     user_id = request.session.get('id')
-    declarations = Declaration.objects.filter(is_deleted=False,iam_user_id=user_id).order_by('declaration_date')
-    
+    declarations = Declaration.objects.filter(is_deleted=False, iam_user_id=user_id).order_by('declaration_date')
+
+    # Pagination setup
     page = request.GET.get('page', 1)
-    paginator = Paginator(declarations, 3) 
+    paginator = Paginator(declarations, 3)  # Show 5 declarations per page
+
     try:
         declarations = paginator.page(page)
     except PageNotAnInteger:
         declarations = paginator.page(1)
     except EmptyPage:
         declarations = paginator.page(paginator.num_pages)
-    
-    return render(request, 'view_declaration.html', {'declarations': declarations})
+
+    context = {
+        'declarations': declarations,
+        'page_obj': declarations,  # To keep consistency with Django’s pagination
+        'is_paginated': paginator.num_pages > 1,
+        'paginator': paginator,
+    }
+
+    return render(request, 'view_declaration.html', context)
 
 """
 This function is to update the declaration form as well as the item objects,here the 

@@ -231,9 +231,34 @@
             per page
            </div> -->
            <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">1-5 of 68</span>
-            <div class="pagination" data-datatable-pagination="true"><div class="pagination"><button class="btn disabled" disabled=""><i class="ki-outline ki-black-left"></i></button><button class="btn active disabled" disabled="">1</button><button class="btn">2</button><button class="btn">3</button><button class="btn">...</button><button class="btn"><i class="ki-outline ki-black-right"></i></button></div></div>
-           </div>
+            <span data-datatable-info="true">
+                {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }}
+            </span>
+        
+            <div class="pagination" data-datatable-pagination="true">
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="{% url 'view_declaration' %}?page={{ page_obj.previous_page_number }}" class="btn"><i class="ki-outline ki-black-left"></i></a>
+                    {% else %}
+                        <button class="btn disabled" disabled><i class="ki-outline ki-black-left"></i></button>
+                    {% endif %}
+        
+                    {% for page_num in page_obj.paginator.page_range %}
+                        {% if page_num == page_obj.number %}
+                            <button class="btn active disabled" disabled>{{ page_num }}</button>
+                        {% else %}
+                            <a  href="{% url 'view_declaration' %}?page={{ page_num }}">{{ page_num }}</a>
+                        {% endif %}
+                    {% endfor %}
+        
+                    {% if page_obj.has_next %}
+                        <a href="{% url 'view_declaration' %}?page={{ page_obj.next_page_number }}" class="btn"><i class="ki-outline ki-black-right"></i></a>
+                    {% else %}
+                        <button class="btn disabled" disabled><i class="ki-outline ki-black-right"></i></button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
           </div>
          </div>
         </div>
