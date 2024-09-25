@@ -364,7 +364,7 @@
                         Supplementary Quantity Unit <span class="text-danger pl-2">*</span>
                     </label>
                     <div class="flex flex-col w-full gap-1">
-                      <input class="input" placeholder="" type="number" vname="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required/>
+                      <input class="input" placeholder="" type="number" name="items_set-{{ forloop.counter0 }}-supp_quantity_unit" value="{{ item.supp_quantity_unit }}" required/>
                     </div>
                 </div>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
@@ -430,7 +430,7 @@
             if (e.target.classList.contains('search-bttn')) {
                 var row = e.target.closest('.item-form');
                 var itemId = row.dataset.itemId;
-                var descriptionField = row.querySelector('textarea');
+                var descriptionField = row.querySelector('input[name^="items_set-"][name$="-description"]');
                 var descriptionData = descriptionField.value;
                 var hsCodeDropdown = row.querySelector('select[name*="hs_code"]');
 
@@ -479,7 +479,7 @@
             var formGroup = e.target.closest('.item-form');
             
             
-            var descriptionField = formGroup.querySelector('textarea[name*="description"]');
+            var descriptionField = formGroup.querySelector('input[name^="items_set-"][name$="-description"]');
             
             if (descriptionField) {
                
@@ -503,17 +503,12 @@
                 documentForm.innerHTML = '';
                 documentForm.appendChild(label);
                 documentForm.appendChild(documentsField);
-
-                
-                
             }
 
           
             if (descriptionField && originalDescriptions[descriptionField.name]) {
                 delete originalDescriptions[descriptionField.name];
             }
-
-            console.log("Form reset");
         }
     });
 
@@ -585,7 +580,7 @@
                             fileInput.type = 'file';
                             fileInput.name = `new_documents_${item}_${doc.id}`;
                             fileInput.required = true;
-                            fileInput.classList.add('form-control','required-file');
+                            fileInput.classList.add('form-control','required-file',"custom-file-input","file-input");
                             var label = document.createElement('label');
                             label.classList.add('font-14'); 
                             label.textContent = `${doc.name} (${doc.format})`;
@@ -617,7 +612,6 @@
     var items = document.querySelectorAll('.item-form');
 
     items.forEach(function (item) {
-        console.log("inside items")
         var hsCodeDropdown = item.querySelector('select[name*="hs_code"]');
         var hsCode = hsCodeDropdown ? hsCodeDropdown.value : null;
 
