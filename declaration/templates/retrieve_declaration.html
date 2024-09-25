@@ -38,7 +38,7 @@
             <div
               class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary active"
             >
-              <a class="menu-link gap-1.5 px-2" href="/details/" tabindex="0">
+              <a class="menu-link gap-1.5 px-2" href="{% url 'list_declaration' declaration_data.id %}" tabindex="0">
                 <span
                   class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
                 >
@@ -49,7 +49,7 @@
             <div
               class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary"
             >
-              <a class="menu-link gap-1.5 px-2" href="/items/" tabindex="0">
+              <a class="menu-link gap-1.5 px-2" href="{% url 'list_items' declaration_data.id %}" tabindex="0">
                 <span
                   class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary"
                 >
