@@ -131,6 +131,7 @@ class Opinion(models.Model):
     employee_id = models.CharField(max_length=250, null=True, blank=True)
     employee_name = models.CharField(max_length=250, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    assignee_id = models.CharField(max_length=250, null=True, blank=True, default="") # Will be modified after clicking the assign to me button
 
     class Meta:
         db_table = 'opinons'
