@@ -132,11 +132,27 @@
                   <tr>
                     <td class="text-gray-600 font-normal">Status :</td>
                     <td class="text-gray-800 font-normal">
-                      <span
-                        class="badge badge-sm badge-outline badge-released min-w-20"
-                      >
-                        Released
+                      {% if declaration_data.is_verified == 1 %}
+                      <span class="badge badge-md badge-outline badge-success min-w-24">
+                          Approved
                       </span>
+                      {% elif declaration_data.is_verified == 0 %}
+                      <span class="badge badge-warning  badge-md badge-outline min-w-24">
+                          On-Hold
+                      </span>
+                      {% elif declaration_data.is_verified == -1 %}
+                      <span class="badge badge-md badge-outline badge-danger min-w-24">
+                          Rejected
+                      </span>
+                      {% elif declaration_data.is_verified == 2 %}
+                      <span class="badge badge-warning  badge-md badge-outline min-w-24">
+                          Re-Submit
+                      </span>
+                      {% elif declaration_data.is_verified == 3 %}
+                      <span class="badge badge-info badge-outline min-w-24">
+                          Saved as Draft
+                      </span>
+                      {% endif %}
                     </td>
                   </tr>
 
@@ -216,7 +232,7 @@
                         {{ declaration_data.regime_type }}
                     </td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td class="min-w-56 text-gray-600 font-normal flex">
                       Comment
                     </td>
@@ -229,16 +245,16 @@
                         rows="8"
                       ></textarea>
                     </td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <td class="min-w-56 text-gray-600 font-normal"></td>
                     <td class="min-w-48 w-full text-gray-800 font-normal">
                       <div class="flex justify-end py-10">
-                        <button
+                        <!-- <button
                           class="btn btn-primary min-w-32 flex justify-center"
                         >
                           Release
-                        </button>
+                        </button> -->
                       </div>
                     </td>
                   </tr>
@@ -248,7 +264,7 @@
           </div>
         </div>
 
-        <!-- Tracking details section -->
+        <!-- Tracking details section
         <div class="tracking-details-wrap p-5 mt-5">
           <div class="text-left mb-10">
             <h3 class="text-gray-900 text-lg font-semibold leading-5 mb-1.5">
@@ -323,7 +339,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- End of Container -->
 </main>
 <!-- End of Content -->

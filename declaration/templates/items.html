@@ -120,6 +120,15 @@
                 
                </span>
               </th>
+              <th class="min-w-[140px] text-center">
+               <span class="sort asc">
+                <span class="sort-label font-normal text-gray-700">
+                   Actions
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
              </tr>
             </thead>
             
@@ -148,6 +157,17 @@
                      </td>
                      <td class="text-gray-800 font-normal text-center">
                         120
+                     </td>
+                     <td class="text-gray-800 font-normal text-center">
+                        {% for document_formset in document_formsets %}
+                        {% if document_formset.item.id == item.id %}
+                            {% for doc in document_formset.documents %}
+                                {% if doc.file %}
+                                    <a href="{{ doc.file.url }}" target="_blank">{{ doc.file }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                      </td>
                         
                         <td class="text-center"><div class="menu justify-center" data-menu="true">

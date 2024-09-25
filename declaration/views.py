@@ -364,6 +364,7 @@ def list_declaration(request,pk):
             'comments': declaration.comments,
             'declaration_types': declaration.declaration_type,
             'cargo_types': declaration.cargo_type,
+            'is_verified':declaration.is_verified,
         }
         items_data = []
         for item in declaration.items_set.filter(is_deleted=False):
@@ -418,9 +419,23 @@ def list_items(request,pk):
                 'cif_value': item.cif_value,
                 'duty_fee': item.duty_fee,
             })
+        document_formsets = []
+        for item in declaration.items_set.all():
+            document_formset = []
+            for doc in item.document_set.filter(is_deleted=False):
+                document_formset.append({
+                    'id': doc.id,
+                    'file': doc.file,
+                    'required_doc': doc.required_doc,
+                })
+            document_formsets.append({
+                'item': item,
+                'documents': document_formset,
+            })
         context = {
             'items_data': items_data,
-            'declaration_id':declaration.id
+            'declaration_id':declaration.id,
+            'document_formsets': document_formsets,
         }
         return render(request, 'items.html', context)
 
