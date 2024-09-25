@@ -1,31 +1,30 @@
-from django.shortcuts import render,redirect,get_object_or_404
-from .models import *
-from .serializers import *
-from .forms import DeclarationForm,ItemFormSet,ItemUpdateFormSet,DocumentFormSet,DeclarationUpdateForm
-from django.db import transaction
-from django.db import transaction
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 import json
 import re
-from rest_framework import generics
-from .permissions import StaticTokenPermission
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.http import FileResponse, Http404
-from django.contrib import messages
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.conf import settings
-import requests
-from .tasks import get_id,update_declaration_info_to_contract,get_updated_id,sent_items_to_ai
-from rest_framework.views import APIView
-from rest_framework import renderers, status
-from rest_framework.response import Response
 from urllib.request import Request
-from DeclarationManagement.utils import Authentication
+
+import requests
+from django.conf import settings
+from django.contrib import messages
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import transaction
 from django.forms.models import model_to_dict
+from django.http import (FileResponse, Http404, HttpRequest, JsonResponse,
+                         QueryDict)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from rest_framework import generics, renderers, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from DeclarationManagement.utils import Authentication
+
+from .forms import DeclarationForm, ItemFormSet
+from .models import *
+from .permissions import StaticTokenPermission
+from .serializers import *
+from .tasks import (get_id, get_updated_id, sent_items_to_ai,
+                    update_declaration_info_to_contract)
 
 # pylint: disable=E1101,W0702,E1133
 
@@ -766,26 +765,51 @@ class UpdateDeclarationOpinionData(APIView):
         employee_id = request.data.get("employeeId")
         employee_name = request.data.get("employeeName")
 
-        if not (opinion_id and opinion_status and employee_id and employee_name):
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        opinion_object = Opinion.objects.get(id=opinion_id)
-        if not opinion_object:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        try:
-            opinion_object.comment = comment
-            opinion_object.status = int(opinion_status)
-            opinion_object.employee_id = employee_id
-            opinion_object.employee_name = employee_name
+        if int(opinion_status) != 2:
+            if not (opinion_id and opinion_status and employee_id and employee_name):
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            opinion_object = Opinion.objects.get(id=opinion_id)
+            if not opinion_object:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            try:
+                opinion_object.comment = comment
+                opinion_object.status = int(opinion_status)
+                opinion_object.employee_id = employee_id
+                opinion_object.employee_name = employee_name
 
-            with transaction.atomic():
-                opinion_object.save()
+                with transaction.atomic():
+                    opinion_object.save()
 
-            return Response(
-                {"result": "Opinion Status Successfully Updated"},
-                status=status.HTTP_200_OK,
-            )
-        except Exception as e:
-            return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(
+                    {"result": "Opinion Status Successfully Updated"},
+                    status=status.HTTP_200_OK,
+                )
+            except Exception as e:
+                return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            try:
+                class CustomRequest(HttpRequest):
+                    @property
+                    def query_params(self):
+                        return self.GET
+                new_request = CustomRequest()
+
+                query_params = QueryDict(mutable=True)  # Make it mutable
+                query_params["id"] = request.data.get("declarationId")
+                query_params["is_verified"] = int(opinion_status)
+                query_params["comment"] = comment
+                query_params["user_id"] = employee_id
+
+                new_request.GET = query_params
+                response = UpdateDeclaration().put(request=new_request)
+                with transaction.atomic():
+                    Opinion.objects.filter(declaration_id=request.data.get("declarationId")).delete()
+                return Response(
+                        {"result": "Status Successfully Updated"},
+                        status=status.HTTP_200_OK,
+                    )
+            except Exception as e:
+                return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DeclarationAssignUserIdView(APIView):
 
