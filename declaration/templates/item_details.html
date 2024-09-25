@@ -92,7 +92,7 @@
                                 Static Quantity Unit :
                             </td>
                             <td class="min-w-48 w-full text-gray-800 font-normal">
-                               10
+                               {{ items_data.static_quantity_unit}}
                             </td>
                         </tr>
                         <tr>
@@ -100,7 +100,8 @@
                                 Supplementary Quantity Unit :
                             </td>
                             <td class="min-w-48 w-full text-gray-800 font-normal">
-                                120
+                                {{ items_data.supp_quantity_unit}}
+
                             </td>
                         </tr>
                         <tr>
@@ -108,7 +109,8 @@
                                 Unit Weight :
                             </td>
                             <td class="min-w-48 w-full text-gray-800 font-normal">
-                                85 USD
+                                {{ items_data.unit_weight}}
+
                             </td>
                         </tr>
                        <tr>
@@ -116,7 +118,7 @@
                             Goods Value :
                         </td>
                         <td class="min-w-48 w-full text-gray-800 font-normal">
-                            90 m³
+                            {{ items_data.goods_value}}
                         </td>
                        </tr>
                        <tr>
@@ -124,7 +126,8 @@
                             CIF Value :
                         </td>
                         <td class="min-w-48 w-full text-gray-800 font-normal">
-                            90 m³
+                            {{ items_data.cif_value}}
+
                         </td>
                        </tr>
                        <tr>
@@ -132,11 +135,12 @@
                             Duty Fee :
                         </td>
                         <td class="min-w-48 w-full text-gray-800 font-normal">
-                            90 m³
+                            {{ items_data.duty_fee}}
+
                         </td>
                        </tr>
                        <tr>
-                        <td class="min-w-56 text-gray-600 font-normal flex">
+                        <!-- <td class="min-w-56 text-gray-600 font-normal flex">
                             Documents :
                         </td>
                         <td class="min-w-48 w-full text-gray-800 font-normal">
@@ -160,7 +164,7 @@
                                 <i class="ki-outline ki-exit-down "></i>
                                 Doc 5
                             </button>
-                        </td>
+                        </td> -->
                        </tr>
                       </tbody>
         </table>
