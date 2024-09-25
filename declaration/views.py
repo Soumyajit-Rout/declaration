@@ -25,6 +25,7 @@ from .permissions import StaticTokenPermission
 from .serializers import *
 from .tasks import (get_id, get_updated_id, sent_items_to_ai,
                     update_declaration_info_to_contract)
+from django.db.models import Q
 
 # pylint: disable=E1101,W0702,E1133
 
@@ -762,17 +763,20 @@ class GetDeclarationOpinionDataByDepartmentId(generics.ListAPIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         department_id = request.GET.get("departmentId")
         ascending = request.GET.get("ascending")
+        user_id = request.GET.get("userId")
 
         if not department_id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if ascending == "True":
             opinion_data = Opinion.objects.filter(
-                department_id=int(department_id)
+                Q(department_id=int(department_id)) & 
+                (Q(assignee_id="") | Q(assignee_id=user_id) | Q(assignee_id=None))
             ).order_by("created_at")
         else:
             opinion_data = Opinion.objects.filter(
-                department_id=int(department_id)
+                Q(department_id=int(department_id)) & 
+                (Q(assignee_id="") | Q(assignee_id=user_id) | Q(assignee_id=None))
             ).order_by("-created_at")
 
         try:
@@ -809,24 +813,27 @@ class UpdateDeclarationOpinionData(APIView):
         if not Authentication.is_authenticated(request):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+        assignee_id = request.data.get("assigneeId")
         opinion_id = request.data.get("opinionId")
         comment = request.data.get("comment","")
-        opinion_status = request.data.get("status")
+        opinion_status = request.data.get("status", 99)
         employee_id = request.data.get("employeeId")
         employee_name = request.data.get("employeeName")
 
-        if int(opinion_status) != 2:
-            if not (opinion_id and opinion_status and employee_id and employee_name):
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+        if (int(opinion_status) == 0 or int(opinion_status) == 1 or int(opinion_status) ==-1 or assignee_id) and opinion_id :
             opinion_object = Opinion.objects.get(id=opinion_id)
             if not opinion_object:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            try:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+            if assignee_id :
+                opinion_object.assignee_id = assignee_id
+            else :
+                if not (opinion_id and opinion_status and employee_id and employee_name):
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
                 opinion_object.comment = comment
                 opinion_object.status = int(opinion_status)
                 opinion_object.employee_id = employee_id
                 opinion_object.employee_name = employee_name
-
+            try:
                 with transaction.atomic():
                     opinion_object.save()
 
