@@ -530,7 +530,7 @@ class ListDeclarations(generics.ListAPIView):
     serializer_class = DelcarationListSerilaizer
 
     def get_queryset(self):
-            return Declaration.objects.filter(is_verified=0).order_by('-updated_at')
+            return Declaration.objects.all().order_by('-updated_at')
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -550,7 +550,7 @@ class RetrieveDeclaration(APIView):
         if not id:
             return Response({"detail": "ID parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            declaration = Declaration.objects.get(is_verified=0, id=id)
+            declaration = Declaration.objects.get(id=id)
             if not department_id:
                 opinion_data = Opinion.objects.filter(
                     declaration_id=id
