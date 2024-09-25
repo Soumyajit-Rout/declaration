@@ -275,10 +275,12 @@
             <div class="grid grid-cols-2 gap-4 pt-5">
               <template id="document-template">
                 <div class="document-form">
-                    <label class="font-14 label" for="id_request_noe">Documents</label>
-                    <input class="form-control" type="file" name="documents" placeholder="">
+                    <input class="file-input form-control" type="file" class="custom-file-input" id="customFile" />
+                    <span class="form-hint">
+                      You can select files
+                  </span>
                 </div>
-            </template>
+              </template>
                 <div class="flex flex-col items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                     <label class="form-label" for="id_request_noe">
                         Documents <span class="text-danger pl-2">*</span>
@@ -424,8 +426,7 @@
         }
         // Remove any error span elements
         var errorSpan = input.nextElementSibling;
-        console.log("errorSpan", errorSpan);
-        if (errorSpan && errorSpan.tagName.toLowerCase() === "span") {
+        if (errorSpan && errorSpan.classList.contains("error-message")) {
           errorSpan.remove();
         }
       });
@@ -480,8 +481,6 @@
     document.getElementById("delete-btn").addEventListener("click", function (e) {
       e.preventDefault();
       var row = document.querySelector(".item-form");
-      console.log("row",row)
-
         var descriptionField = row.querySelector(
           'textarea[name*="description"]'
         );
@@ -492,7 +491,6 @@
         ) {
           delete originalDescriptions[descriptionField.name];
         }
-        console.log("originalDescriptions", originalDescriptions);
 
         var deleteCheckbox = row.querySelector('input[type="checkbox"]');
         console.log("deleteCheckbox", deleteCheckbox);
@@ -642,7 +640,6 @@
     // Form submission validation
     document.querySelector("form").addEventListener("submit", function (e) {
       var isValid = true;
-      console.log("i am in ", originalDescriptions);
 
       var requiredFiles = document.querySelectorAll(".required-file");
       requiredFiles.forEach(function (input) {
