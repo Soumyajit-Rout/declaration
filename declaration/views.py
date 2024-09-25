@@ -843,7 +843,7 @@ class UpdateDeclarationOpinionData(APIView):
                 )
             except Exception as e:
                 return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
+        elif int(opinion_status) == 2:
             try:
                 class CustomRequest(HttpRequest):
                     @property
