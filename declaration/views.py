@@ -444,7 +444,6 @@ def retrieve_items(request,pk):
         return render(request, 'items.html', context)
 
 
-
 """
 This function is to search for the hscodes based on the description text here we will convert 
 the text into a list of items and query the database to match the list of words with the 
