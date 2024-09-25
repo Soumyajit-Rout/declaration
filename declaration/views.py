@@ -347,6 +347,7 @@ def list_declaration(request,pk):
         hs_codes = HsCode.objects.all()
 
         declaration_data = {
+            'id':declaration.id,
             'declaration_date': declaration.declaration_date,
             'request_no': declaration.request_no,
             'declaration_no': declaration.declaration_no,
@@ -400,6 +401,49 @@ def list_declaration(request,pk):
         }
 
         return render(request, 'retrieve_declaration.html', context)
+
+
+def list_items(request,pk):
+        declaration = Declaration.objects.get(id=pk)
+        items_data = []
+        for item in declaration.items_set.filter(is_deleted=False):
+            items_data.append({
+                'id': item.id,
+                'description': item.goods_description,
+                'hs_code': item.hs_code,
+                'static_quantity_unit': item.static_quantity_unit,
+                'supp_quantity_unit': item.supp_quantity_unit,
+                'unit_weight': item.unit_weight,
+                'goods_value': item.goods_value,
+                'cif_value': item.cif_value,
+                'duty_fee': item.duty_fee,
+            })
+        context = {
+            'items_data': items_data,
+            'declaration_id':declaration.id
+        }
+        return render(request, 'items.html', context)
+
+
+def retrieve_items(request,pk):
+        item = Items.objects.get(id=pk)
+        items_data = ({
+                'id': item.id,
+                'description': item.goods_description,
+                'hs_code': item.hs_code,
+                'static_quantity_unit': item.static_quantity_unit,
+                'supp_quantity_unit': item.supp_quantity_unit,
+                'unit_weight': item.unit_weight,
+                'goods_value': item.goods_value,
+                'cif_value': item.cif_value,
+                'duty_fee': item.duty_fee,
+            })
+        context = {
+            'items_data': items_data,
+        }
+        return render(request, 'items.html', context)
+
+
 
 """
 This function is to search for the hscodes based on the description text here we will convert 

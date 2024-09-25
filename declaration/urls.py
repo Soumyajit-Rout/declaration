@@ -12,6 +12,10 @@ urlpatterns = [
      path('delete/<uuid:pk>/', delete_declaration, name='delete_declaration'),
      path('search-hscode/', search_hscode, name='search_hscode'),
      path('update-search-hscode/<uuid:pk>/', update_search_hscode, name='update_search_hscode'),
+     path('list-items/<uuid:pk>/', list_items, name='list_items'),
+     path('retrive-items/<uuid:pk>/', retrieve_items, name='retrieve_items'),
+
+
      
      path('get-required-docs/', get_required_docs, name='get_required_docs'),
      path('get-document-data/', get_document_data, name='get-document-data'),
