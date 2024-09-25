@@ -457,7 +457,7 @@ def retrieve_items(request,pk):
         context = {
             'items_data': items_data,
         }
-        return render(request, 'items.html', context)
+        return render(request, 'item_details.html', context)
 
 
 """
