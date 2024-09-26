@@ -734,13 +734,17 @@ def delete_session(request):
     Returns: JSON response with success or error message.
     """
     try:
-        if 'wallet_address' in request.session:
+        if "wallet_address" in request.session:
             request.session.flush()
-            return JsonResponse({"message": "Wallet address removed from session"}, status=200)
+            return redirect("onboard")
         else:
-            return JsonResponse({"message": "No wallet address found in cookies"}, status=400)
+            return JsonResponse(
+                {"message": "No wallet address found in cookies"}, status=400
+            )
     except Exception as e:
-        return JsonResponse({"message": f"Failed to delete cookie: {str(e)}"}, status=500)
+        return JsonResponse(
+            {"message": f"Failed to delete cookie: {str(e)}"}, status=500
+        )
     
 
 def connect_wallet(request):
