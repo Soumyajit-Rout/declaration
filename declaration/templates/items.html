@@ -153,10 +153,10 @@
                         <span>{{ item.description }}</span>  
                      </td>
                      <td class="text-gray-800 font-normal text-center">
-                        10
+                        {{ item.static_quantity_unit }}
                      </td>
                      <td class="text-gray-800 font-normal text-center">
-                        120
+                        {{ item.unit_weight }}
                      </td>
                      <td class="text-gray-800 font-normal text-center">
                         {% for document_formset in document_formsets %}
