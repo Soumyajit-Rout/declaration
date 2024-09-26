@@ -66,13 +66,14 @@ class DeclarationSerializer(serializers.ModelSerializer):
     assign_user_id = serializers.SerializerMethodField()
     assign_user_name = serializers.SerializerMethodField()
     items = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Declaration
         fields = ["id","created_at","declaration_date","name","declaration_no","net_weight",
                   "gross_weight","measurements","number_of_packages","regime_type","cargo_type","declaration_type","cargo_channel",
-                  "transaction_type","trade_type","detail", "assign_user_id", "assign_user_name","items"]
+                  "transaction_type","trade_type","detail", "assign_user_id", "assign_user_name","items","status"]
     
 
     def get_detail (self, obj):
@@ -107,20 +108,28 @@ class DeclarationSerializer(serializers.ModelSerializer):
 
     def get_assign_user_name(self, obj):
         return obj.assign_user_name
+    
+    def get_status(self, obj):
+        return obj.is_verified
 
     def get_items(self, obj):
         items = Items.objects.filter(declaration=obj)
         return ItemSerializer(items, many=True).data 
     
+    
 class DelcarationListSerilaizer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
     class Meta:
         model = Declaration
-        fields = ["id","name","declaration_no","net_weight","measurements","created_at","assign_user_id", "assign_user_name"]
+        fields = ["id","name","declaration_no","net_weight","measurements","created_at","assign_user_id", "assign_user_name","status"]
 
 
     def get_name(self, obj):
         return obj.request_no
+    
+    def get_status(self, obj):
+        return obj.is_verified
     
     
 
