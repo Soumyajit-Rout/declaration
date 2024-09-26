@@ -97,11 +97,22 @@ renders the view_declaration.html page
 """
 def declaration_list(request):
     user_id = request.session.get('id')
+    status_filter = request.GET.get('status', '')
     declarations = Declaration.objects.filter(is_deleted=False, iam_user_id=user_id).order_by('declaration_date')
 
-    # Pagination setup
+    if status_filter:
+        if status_filter == 'old':
+            # Order by declaration_date in ascending order (oldest first)
+            declarations = declarations.order_by('declaration_date')
+        elif status_filter == 'new':
+            # Order by declaration_date in descending order (newest first)
+            declarations = declarations.order_by('-declaration_date')
+        else:
+            declarations = declarations.filter(is_verified=status_filter)
+
+   
     page = request.GET.get('page', 1)
-    paginator = Paginator(declarations, 3)  # Show 5 declarations per page
+    paginator = Paginator(declarations, 3)  
 
     try:
         declarations = paginator.page(page)
@@ -112,7 +123,7 @@ def declaration_list(request):
 
     context = {
         'declarations': declarations,
-        'page_obj': declarations,  # To keep consistency with Django’s pagination
+        'page_obj': declarations,  
         'is_paginated': paginator.num_pages > 1,
         'paginator': paginator,
     }
@@ -443,6 +454,15 @@ def list_items(request,pk):
 
 def retrieve_items(request,pk):
         item = Items.objects.get(id=pk)
+        document_formset = []
+
+        for doc in item.document_set.filter(is_deleted=False):
+                document_formset.append({
+                    'id': doc.id,
+                    'file': doc.file,
+                    'required_doc': doc.required_doc,
+                })
+        
         items_data = ({
                 'id': item.id,
                 'description': item.goods_description,
@@ -456,6 +476,7 @@ def retrieve_items(request,pk):
             })
         context = {
             'items_data': items_data,
+            'document_formsets': document_formset,
         }
         return render(request, 'item_details.html', context)
 

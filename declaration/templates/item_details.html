@@ -140,11 +140,20 @@
                         </td>
                        </tr>
                        <tr>
-                        <!-- <td class="min-w-56 text-gray-600 font-normal flex">
+                        <td class="min-w-56 text-gray-600 font-normal flex">
                             Documents :
                         </td>
                         <td class="min-w-48 w-full text-gray-800 font-normal">
-                            <button class="btn btn-secondary mr-5 mb-5">
+
+                            {% for doc in document_formsets %}
+                                    {% if doc.file %}
+                                        <button class="btn btn-secondary mr-5 mb-5"onclick="window.open('{{ doc.file.url }}', '_blank')">
+                                            <i class="ki-outline ki-exit-down "></i>
+                                            {{ doc.file.name }}
+                                        </button>
+                                    {% endif %}
+                        {% endfor %}
+                            <!-- <button class="btn btn-secondary mr-5 mb-5">
                                 <i class="ki-outline ki-exit-down "></i>
                                 Doc 1
                             </button>
@@ -163,8 +172,8 @@
                             <button class="btn btn-secondary mr-5 mb-5">
                                 <i class="ki-outline ki-exit-down "></i>
                                 Doc 5
-                            </button>
-                        </td> -->
+                            </button> -->
+                        </td>
                        </tr>
                       </tbody>
         </table>
