@@ -477,6 +477,7 @@ def retrieve_items(request,pk):
         context = {
             'items_data': items_data,
             'document_formsets': document_formset,
+            'declaration_id':item.declaration.id,
         }
         return render(request, 'item_details.html', context)
 
