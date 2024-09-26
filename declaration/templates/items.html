@@ -13,7 +13,7 @@
            Declaration details
          </h1>
          <div class="flex items-center gap-1 text-sm font-normal">
-          <a class="text-gray-700 hover:text-primary" href="#">
+          <a class="text-gray-700 hover:text-primary" href="{% url 'onboard' %}">
            Home
           </a>
           <span class="text-gray-400 text-sm">
@@ -153,10 +153,10 @@
                         <span>{{ item.description }}</span>  
                      </td>
                      <td class="text-gray-800 font-normal text-center">
-                        10
+                        {{ item.static_quantity_unit }}
                      </td>
                      <td class="text-gray-800 font-normal text-center">
-                        120
+                        {{ item.unit_weight }}
                      </td>
                      <td class="text-gray-800 font-normal text-center">
                         {% for document_formset in document_formsets %}

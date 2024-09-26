@@ -19,7 +19,7 @@
          Declarations
         </h1>
         <div class="flex items-center gap-1 text-sm font-normal">
-         <a class="text-gray-700 hover:text-primary" href="#">
+         <a class="text-gray-700 hover:text-primary" href=" {% url 'onboard' %}">
           Home
          </a>
          <span class="text-gray-400 text-sm">
@@ -58,18 +58,17 @@
             </div>
             <div class="dashboard-filter">
                <i class="ki-filled ki-filter-search"></i>
-               <select class="select select-sm w-28 pl-8">
-              
-                  <option value="1">
-                      Filter  
-                  </option>
-                  <option value="2">
-                  New
-                  </option>
-                  <option value="3">
-                  Oldest
-                  </option>
-              </select>
+               <form method="GET" action="{% url 'view_declaration' %}" id="status-filter-form">
+                <select class="select select-sm w-28 pl-8" name="status" id="status-filter" onchange="this.form.submit()">
+                    <option value="">Filter</option>
+                    <option value="new" {% if status_filter == "new" %}selected{% endif %}>New</option>
+                    <option value="old" {% if status_filter == "old" %}selected{% endif %}>Oldest</option>
+                    <option value="0" {% if status_filter == "0" %}selected{% endif %}>On-Hold</option>
+                    <option value="1" {% if status_filter == "1" %}selected{% endif %}>Approved</option>
+                    <option value="2" {% if status_filter == "2" %}selected{% endif %}>Re-Submit</option>
+                    <option value="3" {% if status_filter == "3" %}selected{% endif %}>Save as Draft</option>
+                </select>
+            </form>
             </div>
            
         </div>
