@@ -98,15 +98,15 @@ renders the view_declaration.html page
 def declaration_list(request):
     user_id = request.session.get('id')
     status_filter = request.GET.get('status', '')
-    declarations = Declaration.objects.filter(is_deleted=False, iam_user_id=user_id).order_by('declaration_date')
+    declarations = Declaration.objects.filter(is_deleted=False, iam_user_id=user_id).order_by('-created_at')
 
     if status_filter:
         if status_filter == 'old':
             # Order by declaration_date in ascending order (oldest first)
-            declarations = declarations.order_by('declaration_date')
+            declarations = declarations.order_by('created_at')
         elif status_filter == 'new':
             # Order by declaration_date in descending order (newest first)
-            declarations = declarations.order_by('-declaration_date')
+            declarations = declarations.order_by('-created_at')
         else:
             declarations = declarations.filter(is_verified=status_filter)
 
@@ -126,6 +126,7 @@ def declaration_list(request):
         'page_obj': declarations,  
         'is_paginated': paginator.num_pages > 1,
         'paginator': paginator,
+        'status_filter': status_filter,
     }
 
     return render(request, 'view_declaration.html', context)
@@ -568,7 +569,7 @@ class ListDeclarations(generics.ListAPIView):
     serializer_class = DelcarationListSerilaizer
 
     def get_queryset(self):
-            return Declaration.objects.all().order_by('-updated_at')
+            return Declaration.objects.filter(is_verified__in=[0, 1]).order_by('-updated_at')
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
