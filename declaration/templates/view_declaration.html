@@ -138,13 +138,9 @@
                         <span class="badge badge-md badge-outline badge-success min-w-24">
                             Approved
                         </span>
-                        {% elif declaration.is_verified == 0 %}
+                        {% elif declaration.is_verified == 0 or declaration.is_verified == -1 %}
                         <span class="badge badge-warning  badge-md badge-outline min-w-24">
                             On-Hold
-                        </span>
-                        {% elif declaration.is_verified == -1 %}
-                        <span class="badge badge-md badge-outline badge-danger min-w-24">
-                            Rejected
                         </span>
                         {% elif declaration.is_verified == 2 %}
                         <span class="badge badge-warning  badge-md badge-outline min-w-24">
