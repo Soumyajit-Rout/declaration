@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+ <!-- Content -->
+ <main class="grow content pt-7" id="content" role="content">
+   <!-- Toolbar -->
+     <div class="pb-7">
+      <!-- Container -->
+      <div class="container-fixed flex items-center justify-between flex-wrap gap-3">
+       <div class="flex flex-col flex-wrap gap-1">
+        <h1 class="font-medium text-lg text-gray-900">
+          Items details
+        </h1>
+        <div class="flex items-center gap-1 text-sm font-normal">
+         <a class="text-gray-700 hover:text-primary" href="{% url 'view_declaration' %}">
+          Home
+         </a>
+         <span class="text-gray-400 text-sm">
+          /
+         </span>
+         <a class="text-gray-700 hover:text-primary" href="{% url 'list_declaration' declaration_id %}">
+            Declaration details
+         </a>
+         <span class="text-gray-400 text-sm">
+            /
+         </span>
+        <span class="text-gray-900">
+        Items details
+        </span>
+        </div>
+       </div>
+      
+      </div>
+      <!-- End of Container -->
+     </div>
+     <!-- End of Toolbar -->
+   <style>
+    .hero-bg {
+    background-image: url('assets/media/images/2600x1200/bg-1.png');
+ }
+ .dark .hero-bg {
+    background-image: url('assets/media/images/2600x1200/bg-1-dark.png');
+ }
+   </style>
+   
+   
+   <!-- Container -->
+   <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full mb-10 pb-10">
+        <div class="text-left my-5 p-5">
+            <h3 class="text-gray-900 text-base font-semibold leading-5 mb-1.5 mt-4">Tracking Details</h3>
+            <span class="text-gray-700 text-sm block ">
+            All the details related to tracking.
+            </span>
+        </div>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="20" class="datatable-initialized">
+          <div class="scrollable-x-auto">
+           <table class="table align-middle text-sm text-gray-500 norow-border" id="general_info_table" data-datatable-table="true">
+            
+            
+           <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" data-datatable-spinner="true" style="display: none;">
+						<div class="flex items-center gap-2 px-4 py-2 font-medium leading-none text-2sm border border-gray-200 shadow-default rounded-md text-gray-500 bg-light">
+							<svg class="animate-spin -ml-1 h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+							Loading...
+						</div>
+					</div>
+          <tbody>
+            <tr>
+                <td class="min-w-56 text-gray-600 font-normal">
+                    Description :
+                </td>
+                <td class="min-w-48 w-full text-gray-800 font-normal">
+                    {{ items_data.description }}
+                </td>
+            </tr>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Hs code :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                              {{ items_data.hs_code.hs_code }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Static Quantity Unit :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                               {{ items_data.static_quantity_unit}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Supplementary Quantity Unit :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                                {{ items_data.supp_quantity_unit}}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-56 text-gray-600 font-normal">
+                                Unit Weight :
+                            </td>
+                            <td class="min-w-48 w-full text-gray-800 font-normal">
+                                {{ items_data.unit_weight}}
+
+                            </td>
+                        </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Goods Value :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            {{ items_data.goods_value}}
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            CIF Value :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            {{ items_data.cif_value}}
+
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal">
+                            Duty Fee :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+                            {{ items_data.duty_fee}}
+
+                        </td>
+                       </tr>
+                       <tr>
+                        <td class="min-w-56 text-gray-600 font-normal flex">
+                            Documents :
+                        </td>
+                        <td class="min-w-48 w-full text-gray-800 font-normal">
+
+                            {% for doc in document_formsets %}
+                                    {% if doc.file %}
+                                        <button class="btn btn-secondary mr-5 mb-5"onclick="window.open('{{ doc.file.url }}', '_blank')">
+                                            <i class="ki-outline ki-exit-down "></i>
+                                            {{ doc.file.name }}
+                                        </button>
+                                    {% endif %}
+                        {% endfor %}
+                            <!-- <button class="btn btn-secondary mr-5 mb-5">
+                                <i class="ki-outline ki-exit-down "></i>
+                                Doc 1
+                            </button>
+                            <button class="btn btn-secondary mr-5 mb-5">
+                                <i class="ki-outline ki-exit-down "></i>
+                                Doc 2
+                            </button>
+                            <button class="btn btn-secondary mr-5 mb-5">
+                                <i class="ki-outline ki-exit-down "></i>
+                                Doc 3
+                            </button>
+                            <button class="btn btn-secondary mr-5 mb-5">
+                                <i class="ki-outline ki-exit-down "></i>
+                                Doc 4
+                            </button>
+                            <button class="btn btn-secondary mr-5 mb-5">
+                                <i class="ki-outline ki-exit-down "></i>
+                                Doc 5
+                            </button> -->
+                        </td>
+                       </tr>
+                      </tbody>
+        </table>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+   <!-- End of Container -->
+  </main>
+  <!-- End of Content -->
+
+{% endblock content %}

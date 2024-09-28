@@ -1,0 +1,304 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Declaration</title>
+  <link rel="icon" href="{% static 'assets/uploads/favicon.ico' %}" />
+  <!-- General CSS Files -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Template CSS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/theme.css' %}">
+  
+  <style>
+    .fade-out {
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+
+    .fade-out.hidden {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+    <div class="container-fluid bg-light h-100vh">
+        <div class="row d-flex h-100">
+             <div class="col-lg-5 col-12 bg-white shadow-right px-100 py-46 position-relative">
+                <img src="{% static 'assets/uploads/logo-dubai.svg' %}" alt="" class="img-fluid">
+                <div class="tab">
+                    <p class="my-0 pt-100 pb-2">Step 1 :</p>
+                    <h2 class="my-0">Open The Extension</h2>
+                    
+                    <ul class="pt-4 ps-3 ms-1">
+                        <li class="mb-3">Locate the wallet extension icon in your browser's toolbar (typically in the upper-right corner).</li>
+                        <li class="mb-3">Click on the icon to open the extension.</li>
+                        <li class="mb-3">If the extension is locked, you will be prompted to enter your password. Enter the correct password to unlock your wallet and proceed.</li>
+                    </ul>
+                </div>
+                <div class="tab">
+                    <p class="my-0 pt-100 pb-2">Step 2 :</p>
+                    <h2 class="my-0">Select Your Account</h2>
+                    
+                    <ul class="pt-4 ps-3 ms-1">
+                        <li class="mb-3">After unlocking, the extension will display a list of accounts associated with your wallet.</li>
+                        <li class="mb-3">Browse through the list and select the account you want to connect to the application.</li>
+                        <li class="mb-3">Ensure that the selected account is the one you intend to use for this session.</li>
+                    </ul>
+                </div>
+                <div class="tab">
+                    <p class="my-0 pt-100 pb-2">Step 3 :</p>
+                    <h2 class="my-0">Connect and Log In</h2>
+                    <ul class="pt-4 ps-3 ms-1">
+                        <li class="mb-3">Once your account is successfully connected to the website, look for the "Login with Wallet" button on the application page.</li>
+                        <li class="mb-3">Click the "Login with Wallet" button to authenticate and gain access to the application.</li>
+                        <li class="mb-3">If the connection is successful and you are verified, you will be logged into the application.</li>
+                    </ul>
+                     
+                </div>
+                <div class="tab">
+                    <p class="my-0 pt-100 pb-2">Step 4 :</p>
+                    <h2 class="my-0">Account Creation (If Needed)</h2>
+                    <ul class="pt-4 ps-3 ms-1">
+                        <li class="mb-3">If you do not have an existing account on Talisman, you will need to create one.</li>
+                        <li class="mb-3">Visit the IAM Dubai Customs platform to register a new account.</li>
+                        <li class="mb-3">Follow the instructions provided on IAM Dubai Customs to set up your new account.</li>
+                        <li lass="mb-3">Once the account is created, return to the application, and repeat the above steps to connect and log in using your newly created account.</li>
+                    </ul>
+                    
+                </div>
+                <div class="row d-flex align-items-center pt-40">
+                    <div class="col-lg-12 col-12 h-100">
+                        <button  id="prevBtn" class="btn btn-link btn-back me-lg-3" onclick="nextPrev(-1)">
+                                {% comment %} <img src="{{asset('theme/images/arrow-left.svg')}}" alt="" class="img-fluid me-2"> {% endcomment %}
+                                Back
+                        </button>
+                        <button id="nextBtn" class="btn btn-theme btn navbar-card-button px-5 py-2" onclick="nextPrev(1)">
+                                Next
+                        </button>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-12 col-12">
+                        <a class="btn btn-link btn-back me-lg-3 pt-100 ms-auto d-block sign-up-btn" href="{{ iam_base_url }}register/">
+                            Sign Up
+                        </a>
+                    </div>
+                </div>
+             </div>
+             <div class="col-lg-7 col-12 p-lg-5 p-4">
+                  <button id="connect_wallet" class="btn btn-theme btn navbar-card-button ms-auto d-block">Connect Wallet</button>
+                  <h2 class="pt-100 text-center text-decoration-underline pb-4">Declaration onboarding</h2>
+                  <div class="d-block text-centre w-100">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/ktjBTuWafvU?si=oZn5yNqci6oE46wL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="youtube" allowfullscreen></iframe>
+                  </div>
+             </div>
+        </div>
+   </div>
+
+
+</body>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script src="{% static 'assets/js/jquery.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.alert').forEach(function (element) {
+            setTimeout(function () {
+                element.classList.add('hidden');
+            }, 3000); // 3000 milliseconds = 3 seconds
+        });
+
+        document.querySelectorAll('.sidebar .nav-link').forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                let nextEl = element.nextElementSibling;
+                let parentEl = element.parentElement;
+
+                if (nextEl && nextEl.classList.contains('submenu')) {
+                    e.preventDefault(); // Prevent the default link behavior
+
+                    let mycollapse = new bootstrap.Collapse(nextEl);
+
+                    // Check if the submenu is already shown
+                    if (nextEl.classList.contains('show')) {
+                        mycollapse.hide(); // Hide the submenu
+                        element.classList.remove('active'); // Remove 'active' class from the link
+                        element.querySelector('.toggle-icon').classList.remove('text-primary'); // Remove 'text-primary' class from the toggle icon
+                    } else {
+                        // Find any currently opened submenu
+                        let openedSubmenu = parentEl.parentElement.querySelector('.submenu.show');
+
+                        // If there's an opened submenu that is not the current one, close it
+                        if (openedSubmenu && openedSubmenu !== nextEl) {
+                            new bootstrap.Collapse(openedSubmenu); // Create a Collapse object for the opened submenu
+                            openedSubmenu.parentElement.querySelector('.nav-link .toggle-icon').classList.remove('text-primary'); // Remove 'text-primary' class from the toggle icon of the parent link
+                            openedSubmenu.parentElement.querySelector('.nav-link').classList.remove('active'); // Remove 'active' class from the parent link
+                        }
+
+                        // Show the clicked submenu
+                        mycollapse.show(); // Show the submenu
+                        element.classList.add('active'); // Add 'active' class to the link
+                        element.querySelector('.toggle-icon').classList.add('text-primary'); // Add 'text-primary' class to the toggle icon
+                    }
+                }
+            });
+        });
+    });
+    var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form ...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display = "block";
+  // ... and fix the Previous/Next buttons:
+  if (n == 0) {
+    document.getElementById("prevBtn").style.display = "none";
+  } else {
+    document.getElementById("prevBtn").style.display = "inline";
+  }
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").style.display = "none";
+  } else {
+    document.getElementById("nextBtn").innerHTML = "Next";
+    document.getElementById("nextBtn").style.display = "inline";
+
+  }
+  // ... and run a function that displays the correct step indicator:
+
+}
+
+function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form... :
+  
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+  </script>
+  <script type="module">
+
+    import { web3Enable, web3Accounts, isWeb3Injected } from 'https://cdn.jsdelivr.net/npm/@polkadot/extension-dapp@latest/+esm';
+var talisman_extension = true;
+
+function error_function() {
+        Swal.fire({
+        text: "Your wallet is not configured properly, check video",
+        showCancelButton: false,
+        position: "center",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: 'OK',
+        customClass: {
+            confirmButton: 'confirmbtn sweetdanger',
+        }
+        });
+}
+
+async function loginWithTalisman() {
+    try {
+        if (!isWeb3Injected) {
+            
+            Swal.fire({
+                text: "Please install wallet extension, redirecting to wallet download page",
+                showCancelButton: false,
+                position: "center",
+                icon: "warning",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'confirmbtn sweetdanger',
+                }
+                });
+
+            
+            document.addEventListener("visibilitychange", (event) => {
+                if (document.visibilityState == "visible") {
+                    window.location.reload();
+                    
+                } else {
+                  console.log("tab is inactive")
+                }
+            });
+            return;
+        }
+        // Retrieve all accounts the user has allowed access to
+        const extensions = await web3Enable('Talisman Wallet Demo');
+        const talismanExtension = extensions.find(ext => ext.name.toLowerCase().includes('talisman'));
+        if (!talismanExtension) {
+            error_function();
+            const extensions = await web3Enable('Talisman Wallet Demo');
+            return;
+        }
+
+        const allAccounts = await web3Accounts();
+
+        if (allAccounts.length === 0) {
+            error_function();
+            return;
+        }
+
+        const response = await fetch('/fetch/user/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')  // Assumes you have a function to get the CSRF token
+            },
+            body: JSON.stringify({ accounts: allAccounts})
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'error') {
+            Swal.fire({
+                text: data.message,
+                showCancelButton: false,
+                position: "center",
+                icon: "warning",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'confirmbtn sweetdanger',
+                }
+                
+                });
+        } else {
+            window.location.href = 'view-declaration/';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.getElementById('connect_wallet').addEventListener('click', loginWithTalisman);
+  </script>
+</html>

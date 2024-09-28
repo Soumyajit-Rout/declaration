@@ -8,3 +8,4 @@ sudo systemctl status declaration-management
 
 sudo systemctl restart nginx
 sudo supervisorctl restart declaration_group:declaration-management
+sudo supervisorctl restart declaration_group:celery_declaration

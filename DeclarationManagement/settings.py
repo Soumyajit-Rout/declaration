@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from kombu import Queue,Exchange
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'declaration',
     'rest_framework',
 ]
@@ -87,6 +89,7 @@ DATABASES = {
         'PORT': os.getenv('DATABASE_PORT'),
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -128,8 +131,43 @@ STATICFILES_DIRS = [
 ]
 
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+USER_API_KEY = os.getenv('USER_API_KEY')
+IAM_URL = os.getenv('IAM_URL')
+
+# Celery settings
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# Other optional Celery settings
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_DEFAULT_QUEUE = 'declaration_management'
+CELERY_TASK_QUEUES = (
+    Queue('declaration_management', Exchange('declaration_management'), routing_key='declaration_management'),
+)
+CELERY_TASK_ROUTES = {
+    '*': {'queue': 'declaration_management'},
+}
+
+CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL = os.getenv(
+    "CUSTOM_BLOCKCHAIN_SMART_CONTRACT_URL", "http://127.0.0.1:8001/api/smart-contracts")
+
+STATIC_API_TOKEN = os.getenv('STATIC_API_TOKEN')
+SUBSTRATE_URL = os.getenv('SUBSTRATE_URL')
+ALICE_URL = os.getenv('ALICE_URL')
+AI_URL = os.getenv('AI_URL')
+

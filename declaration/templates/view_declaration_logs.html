@@ -1,0 +1,157 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<!-- Content -->
+<main class="grow content pt-7" id="content" role="content">
+  <!-- Toolbar -->
+  <div class="pb-7">
+    <!-- Container -->
+    <div
+      class="container-fixed flex items-center justify-between flex-wrap gap-3"
+    >
+      <div class="flex flex-col flex-wrap gap-1">
+        <h1 class="font-medium text-lg text-gray-900">Declaration Log</h1>
+        <div class="flex items-center gap-1 text-sm font-normal">
+          <a class="text-gray-700 hover:text-primary" href="{% url 'view_declaration' %}"> Home </a>
+          <span class="text-gray-400 text-sm"> / </span>
+          <span class="text-gray-900"> Declaration Log </span>
+        </div>
+      </div>
+    </div>
+    <!-- End of Container -->
+  </div>
+  <!-- End of Toolbar -->
+  <style>
+    .hero-bg {
+      background-image: url("assets/media/images/2600x1200/bg-1.png");
+    }
+    .dark .hero-bg {
+      background-image: url("assets/media/images/2600x1200/bg-1-dark.png");
+    }
+  </style>
+
+  <!-- Container -->
+  <div class="container-fixed">
+    <div class="grid gap-5 lg:gap-7.5">
+      <div class="card card-grid min-w-full mb-10">
+        <div class="card-body">
+          <div
+            data-datatable="true"
+            data-datatable-page-size="20"
+            class="datatable-initialized"
+          >
+            <div class="scrollable-x-auto">
+              <table
+                class="table align-middle text-sm text-gray-500 norow-border"
+                id="general_info_table"
+                data-datatable-table="true"
+              >
+                <div
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  data-datatable-spinner="true"
+                  style="display: none"
+                >
+                  <div
+                    class="flex items-center gap-2 px-4 py-2 font-medium leading-none text-2sm border border-gray-200 shadow-default rounded-md text-gray-500 bg-light"
+                  >
+                    <svg
+                      class="animate-spin -ml-1 h-5 w-5 text-gray-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="3"
+                      ></circle>
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Loading...
+                  </div>
+                </div>
+                {% for log in logs %}
+                <tbody>
+                  <tr>
+                    <td class="min-w-56 text-gray-600 font-normal">
+                        Date :
+                    </td>
+                    <td class="min-w-48 w-full text-gray-800 font-normal">
+                        {{ log.created_at|date:"F j, Y, g:i a" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="min-w-56 text-gray-600 font-normal">
+                        Current Status :
+                    </td>
+                    <td class="min-w-48 w-full text-gray-800 font-normal">
+                        {% if log.status == 1 %}
+                        <span class="badge badge-md badge-outline badge-success min-w-24">
+                            Approved
+                        </span>
+                        {% endif %}
+                        {% if log.status == 0 %}
+                        <span class="badge badge-warning  badge-md badge-outline min-w-24">
+                            On-Hold
+                        </span>
+                        {% endif %}
+                        {% if log.status == -1 %}
+                        <span class="badge badge-md badge-outline badge-danger min-w-24">
+                            Rejected
+                        </span>
+                        {% endif %}
+                        {% if log.status == 2 %}
+                        <span class="badge badge-warning  badge-md badge-outline min-w-24">
+                            Resubmit for modification
+                        </span>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="min-w-56 text-gray-600 font-normal">
+                        Comment :
+                    </td>
+                    <td class="min-w-48 w-full text-gray-800 font-normal">
+                        {{ log.comment }}
+                    </td>
+                  </tr>
+                  {% if log.created_by == True %}
+                  <tr>
+                    <td class="min-w-56 text-gray-600 font-normal">
+                        Update Done By :
+                    </td>
+                    <td class="min-w-48 w-full text-gray-800 font-normal">
+                        Verification Team
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% if log.created_by == False %}
+                  <tr>
+                    <td class="min-w-56 text-gray-600 font-normal">
+                        Update Done By :
+                    </td>
+                    <td class="min-w-48 w-full text-gray-800 font-normal">
+                        {{ request.session.name }}
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of Container -->
+</main>
+<!-- End of Content -->
+
+{% endblock content %}

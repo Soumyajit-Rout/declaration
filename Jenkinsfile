@@ -3,54 +3,54 @@ pipeline {
     environment {
         SONARQUBE_TOKEN = credentials('sonarqube')
     }
+
     stages {
         stage('Setup Python Virtual ENV') {
             steps {
                 script {
-                    sh '''
+                    def setupLog = sh(script: '''
                     chmod u+x env.sh
-                    ./env.sh >> build-output.log 2>&1
-                    cat build-output.log
-                    '''
+                    ./env.sh 2>&1
+                    ''', returnStdout: true).trim()
+                    echo setupLog
+                    currentBuild.description = (currentBuild.description ?: "") + "\n" + setupLog
                 }
             }
         }
         stage('Gunicorn Setup') {
             steps {
                 script {
-                    sh '''
+                    def gunicornLog = sh(script: '''
                     chmod u+x gunicorn.sh
-                    ./gunicorn.sh >> build-output.log 2>&1
-                    cat build-output.log
-                    '''
+                    ./gunicorn.sh 2>&1
+                    ''', returnStdout: true).trim()
+                    echo gunicornLog
+                    currentBuild.description = currentBuild.description + "\n" + gunicornLog
                 }
             }
         }
         stage('NGINX Setup') {
             steps {
                 script {
-                    sh '''
+                    def nginxLog = sh(script: '''
                     chmod u+x nginx.sh
-                    ./nginx.sh >> build-output.log 2>&1
-                    cat build-output.log
-                    '''
-                }
-            }
-        }
-        stage('Verify Log File') {
-            steps {
-                script {
-                    sh 'ls -l build-output.log'
-                    sh 'cat build-output.log'
+                    ./nginx.sh 2>&1
+                    ''', returnStdout: true).trim()
+                    echo nginxLog
+                    currentBuild.description = currentBuild.description + "\n" + nginxLog
                 }
             }
         }
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarQube Scanner' // Adjust to the name of your SonarQube Scanner installation
-                    withSonarQubeEnv('SonarQube Server') { // Adjust to the name of your SonarQube server configuration
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=declaration-Staging-server -Dsonar.sources=. -Dsonar.host.url=http://54.147.128.77:9000 -Dsonar.login=${SONARQUBE_TOKEN}"
+                    def scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube Server') {
+                        sh(script: """
+                        ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=declaration-staging-server \
+                        -Dsonar.sources=. -Dsonar.host.url=http://54.147.128.77:9000 -Dsonar.login=${SONARQUBE_TOKEN} 2>&1
+                        """)
+                        // SonarQube logs are not appended to currentBuild.description
                     }
                 }
             }
@@ -62,10 +62,13 @@ pipeline {
             script {
                 def jobName = env.JOB_NAME
                 def buildNumber = env.BUILD_NUMBER
-                def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
+                def pipelineStatus = currentBuild.result ?: 'SUCCESS'
                 def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
 
-                // Email body
+                // Capture the final log output from currentBuild.description excluding SonarQube logs
+                def finalLog = currentBuild.description ?: "No logs available."
+
+                // Email body with styled log
                 def body = """
                     <html>
                         <body>
@@ -74,7 +77,8 @@ pipeline {
                                 <div style="background-color: ${bannerColor}; padding: 10px;">
                                     <h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
                                 </div>
-                                <p>Please find the build console output attached.</p>
+                                <p>Please find the build log details below:</p>
+                                <pre style="background-color: black; color: white; padding: 10px; border-radius: 5px; font-family: 'Courier New', Courier, monospace; font-size: 14px;">${finalLog}</pre>
                             </div>
                         </body>
                     </html>
@@ -83,10 +87,9 @@ pipeline {
                 emailext(
                     subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
                     body: body,
-                    to: 'krishna@finloge.com,samarth@finloge.com,kamlesh@finloge.com',
+                     to: 'krishna@finloge.com,samarth@finloge.com',
                     from: 'soumyajit.rout@finloge.com',
                     replyTo: 'soumyajit.rout@finloge.com',
-                    attachmentsPattern: 'build-output.log',
                     mimeType: 'text/html'
                 )
             }

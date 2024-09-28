@@ -3,7 +3,7 @@ from rest_framework.request import Request
 
 
 
-STATIC_API_TOKEN = "12345"
+STATIC_API_TOKEN = "0fedbdc71b2793aa"
 def is_authenticated(request: Request):
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
