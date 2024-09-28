@@ -96,14 +96,9 @@
                             Approved
                         </span>
                         {% endif %}
-                        {% if log.status == 0 %}
+                        {% if log.status == 0 or log.status == -1 %}
                         <span class="badge badge-warning  badge-md badge-outline min-w-24">
                             On-Hold
-                        </span>
-                        {% endif %}
-                        {% if log.status == -1 %}
-                        <span class="badge badge-md badge-outline badge-danger min-w-24">
-                            Rejected
                         </span>
                         {% endif %}
                         {% if log.status == 2 %}

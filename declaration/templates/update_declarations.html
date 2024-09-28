@@ -581,17 +581,45 @@
                             fileInput.name = `new_documents_${item}_${doc.id}`;
                             fileInput.required = true;
                             fileInput.classList.add('form-control','required-file',"custom-file-input","file-input");
-                            var label = document.createElement('label');
-                            label.classList.add('font-14'); 
-                            label.textContent = `${doc.name} (${doc.format})`;
-
-                            documentField.appendChild(label);
+                            var label = document.createElement("span");
+                            label.classList.add("form-hint");
+                            label.textContent = ` Only select (${doc.format}) format`;
                             documentField.appendChild(fileInput);
-                        });
-                    })
-                    .catch(error => console.error('Error:', error));
+                            documentField.appendChild(label);
+
+          fileInput.addEventListener("change", function () {
+            var file = fileInput.files[0];
+            if (file) {
+              var ext = file.name.split(".").pop().toLowerCase();
+              var validFormats = doc.format.split(",");
+
+              let errorSpan = fileInput.nextElementSibling.nextElementSibling; 
+              if (!validFormats.includes(ext)) {
+              
+                if (!errorSpan || !errorSpan.classList.contains("error-message")) {
+                  errorSpan = document.createElement("span");
+                  errorSpan.className = "error-message";
+                  errorSpan.style.color = "rgb(220, 53, 69)";
+                  fileInput.parentNode.insertBefore(
+                    errorSpan,
+                    fileInput.nextSibling.nextSibling
+                  );
+                }
+                errorSpan.textContent = `Invalid file format: .${ext}`;
+                errorSpan.style.display = "inline";
+                fileInput.value = "";
+              } else {
+                if (errorSpan && errorSpan.classList.contains("error-message")) {
+                  errorSpan.style.display = "none";
+                }
+              }
             }
+          });
         });
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+});
 
         // Form submission validation
 
