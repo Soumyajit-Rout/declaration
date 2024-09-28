@@ -205,7 +205,7 @@
                            <div class="menu-separator">
                            </div>
                            <div class="menu-item">
-                              <a class="menu-link" data-modal-toggle="#modal_2">
+                              <a class="menu-link" data-modal-toggle="#modal_{{ declaration.pk }}">
                               <span class="menu-icon">
                                  <i class="ki-filled ki-trash">
                                  </i>
@@ -219,36 +219,27 @@
                         </div>
                      </td>
                   </tr>
-                  <div class="modal" data-modal="true" id="modal_2">
-                    <div class="modal-content modal-center max-w-72 gap-4 text-center">
-                     <div class="modal-header justify-end">
-                      <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
-                       <i class="ki-outline ki-cross">
-                       </i>
-                      </button>
-                     </div>
-                     <div class="modal-body">
-                        <div class="text-2sm mb-px">
-                            <div class="font-medium text-lg text-gray-900">
-                             Delete Form
-                            </div>
-                            <span class="form-hint">
-                                Are you sure you want to delete the form?
-                            </span>
-                        </div>
-                     </div>
-                     <div class="modal-footer mb-2">
-                        <div class="flex gap-4 justify-center">
-                         <button class="btn btn-light btn-xs" data-modal-dismiss="true">
-                          Cancel
-                         </button>
-                         <button class="btn btn-danger btn-xs delete_button" data-declaration-id="{{ declaration.pk }}">
-                          Delete
-                         </button>
-                        </div>
-                     </div>
-                    </div>
-                   </div>
+    <div class="modal" data-modal="true" id="modal_{{ declaration.pk }}">
+      <div class="modal-content modal-center max-w-72 gap-4 text-center">
+        <div class="modal-header justify-end">
+          <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
+            <i class="ki-outline ki-cross"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="text-2sm mb-px">
+            <div class="font-medium text-lg text-gray-900">Delete Form</div>
+            <span class="form-hint">Are you sure you want to delete the form?</span>
+          </div>
+        </div>
+        <div class="modal-footer mb-2">
+          <div class="flex gap-4 justify-center">
+            <button class="btn btn-light btn-xs" data-modal-dismiss="true">Cancel</button>
+            <button class="btn btn-danger btn-xs delete_button" data-declaration-id="{{ declaration.pk }}">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
                   {% endif %}
             {% endfor %}
             {% else %}
@@ -355,12 +346,28 @@ $(document).ready(function() {
                        csrfmiddlewaretoken: '{{ csrf_token }}', 
                         
                    },
-                   success: function(response) {
-
-                           location.reload();
-                   },
-               });
-            });
+                success: function(response) {
+                // Use SweetAlert2 to show the success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deletion Successful',
+                    text: 'The declaration has been successfully deleted.',
+                    confirmButtonText: "OK",
+                }).then(function() {
+                    // Reload the page after the alert is closed
+                    location.reload();
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting declaration:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while deleting the declaration.',
+                });
+            }
+        });
+    });
 });
 </script>
 
