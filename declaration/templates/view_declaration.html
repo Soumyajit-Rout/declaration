@@ -123,6 +123,7 @@
 						</div>
 					</div>
                <tbody>
+            {% if declarations %} 
                 {% for declaration in declarations %}
                 {% if not declaration.is_deleted %}
                   <tr>
@@ -250,6 +251,13 @@
                    </div>
                   {% endif %}
             {% endfor %}
+            {% else %}
+    <tr>
+      <td colspan="4" class="text-center text-gray-500 py-4">
+        No items in the table.
+      </td>
+    </tr>
+  {% endif %}
             </tbody></table>
           </div>
           <div class="card-footer justify-end md:justify-end flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
