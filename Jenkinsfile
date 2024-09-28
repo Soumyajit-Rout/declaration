@@ -47,7 +47,7 @@ pipeline {
                     def scannerHome = tool 'SonarQube Scanner'
                     withSonarQubeEnv('SonarQube Server') {
                         sh(script: """
-                        ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=declaration-dev-server \
+                        ${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=declaration-staging-server \
                         -Dsonar.sources=. -Dsonar.host.url=http://54.147.128.77:9000 -Dsonar.login=${SONARQUBE_TOKEN} 2>&1
                         """)
                         // SonarQube logs are not appended to currentBuild.description
@@ -87,7 +87,7 @@ pipeline {
                 emailext(
                     subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
                     body: body,
-                    to: 'sreejesh@finloge.com,soumyarout567@gmail.com',
+                     to: 'krishna@finloge.com,samarth@finloge.com',
                     from: 'soumyajit.rout@finloge.com',
                     replyTo: 'soumyajit.rout@finloge.com',
                     mimeType: 'text/html'
