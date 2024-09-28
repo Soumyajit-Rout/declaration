@@ -593,49 +593,79 @@
     });
     attachValidationListeners(document);
 
-    // Add event listener for hs_code change
-    document.querySelector(".item").addEventListener("change", function (e) {
-      if (e.target.name.includes("hs_code")) {
-        var formGroup = e.target.closest(".form-group");
 
-        var hsCode = e.target.value;
+// Add event listener for hs_code change
+document.querySelector(".item").addEventListener("change", function (e) {
+  if (e.target.name.includes("hs_code")) {
+    var formGroup = e.target.closest(".form-group");
 
-        // var documentsField =
-        //   formGroup.parentElement.nextElementSibling.querySelector(
-        //     'input[type="file"]'
-        //   );
-        var documentform =
-          formGroup.parentElement.nextElementSibling.querySelector(
-            ".document-form"
+    var hsCode = e.target.value;
+
+    var documentform =
+      formGroup.parentElement.nextElementSibling.querySelector(
+        ".document-form"
+      );
+    var itemIndex = documentform.dataset.itemIndex;
+
+    fetch(`/get-required-docs/?hs_code=${hsCode}`)
+      .then((response) => response.json())
+      .then((data) => {
+        documentform.innerHTML = ""; 
+        requiredDocsData[hsCode] = data.required_docs;  
+        data.required_docs.forEach(function (doc) {
+         
+          var fileInput = document.createElement("input");
+          fileInput.type = "file";
+          fileInput.name = `documents_${itemIndex}_${doc.id}`;
+          fileInput.required = true;
+          fileInput.classList.add(
+            "form-control",
+            "custom-file-input",
+            "file-input",
+            "required-file"
           );
-        var itemIndex = documentform.dataset.itemIndex;
+          fileInput.placeholder = "";
+         
+          var label = document.createElement("span");
+          label.classList.add("form-hint");
+          label.textContent = ` Only select (${doc.format}) format`;
 
-        fetch(`/get-required-docs/?hs_code=${hsCode}`)
-          .then((response) => response.json())
-          .then((data) => {
-            documentform.innerHTML = "";
-            requiredDocsData[hsCode] = data.required_docs;
+          documentform.appendChild(fileInput);
+          documentform.appendChild(label);
 
-            data.required_docs.forEach(function (doc) {
+          fileInput.addEventListener("change", function () {
+            var file = fileInput.files[0];
+            if (file) {
+              var ext = file.name.split(".").pop().toLowerCase();
+              var validFormats = doc.format.split(",");
 
-              var fileInput = document.createElement("input");
-              fileInput.type = "file";
-              fileInput.name = `documents_${itemIndex}_${doc.id}`;
-              fileInput.required = true;
-              fileInput.classList.add("form-control","custom-file-input","file-input", "required-file");
-              fileInput.placeholder = "";
-
-              var label = document.createElement("span");
-              label.classList.add("form-hint");
-              label.textContent = ` Only select (${doc.format}) format`;
-
-              documentform.appendChild(fileInput);
-              documentform.appendChild(label);
-            });
-          })
-          .catch((error) => console.error("Error:", error));
-      }
-    });
+              let errorSpan = fileInput.nextElementSibling.nextElementSibling; 
+              if (!validFormats.includes(ext)) {
+              
+                if (!errorSpan || !errorSpan.classList.contains("error-message")) {
+                  errorSpan = document.createElement("span");
+                  errorSpan.className = "error-message";
+                  errorSpan.style.color = "rgb(220, 53, 69)";
+                  fileInput.parentNode.insertBefore(
+                    errorSpan,
+                    fileInput.nextSibling.nextSibling
+                  );
+                }
+                errorSpan.textContent = `Invalid file format: .${ext}`;
+                errorSpan.style.display = "inline";
+                fileInput.value = "";
+              } else {
+                if (errorSpan && errorSpan.classList.contains("error-message")) {
+                  errorSpan.style.display = "none";
+                }
+              }
+            }
+          });
+        });
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+});
 
     // Form submission validation
     document.querySelector("form").addEventListener("submit", function (e) {
