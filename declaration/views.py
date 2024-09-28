@@ -569,7 +569,7 @@ class ListDeclarations(generics.ListAPIView):
     serializer_class = DelcarationListSerilaizer
 
     def get_queryset(self):
-            return Declaration.objects.filter(is_verified__in=[0, 1]).order_by('-updated_at')
+            return Declaration.objects.filter(is_verified__in=[0, 1]).order_by('-created_at')
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
