@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Run Flake8 for code style checks
+echo "Running Flake8 for code style checks..."
+flake8 .
+
+if [ $? -ne 0 ]; then
+  echo "Flake8 failed. Push aborted."
+  exit 1
+fi
+
+# Run tests with pytest
+echo "Running unit tests..."
+pytest
+
+if [ $? -ne 0 ]; then
+  echo "Tests failed. Push aborted."
+  exit 1
+fi
+
+# Run Black for code formatting
+echo "Formatting code with Black..."
+black .
+
+if [ $? -ne 0 ]; then
+  echo "Code formatting failed. Push aborted."
+  exit 1
+fi
+
+echo "All checks passed. Proceeding with push."
+
